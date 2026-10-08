@@ -1,0 +1,12 @@
+{
+ "quote_checks": 2398,
+ "failed_spotchecks": [
+  "/home/evo/evolution/operations/knowledge/docs/chat-corpus/hermes/2026-09-12--compile-vara-folders-into-summary-logs--3_4be246.md",
+  "/home/evo/evolution/operations/knowledge/docs/chat-corpus/hermes/2026-09-18--audit-claude-desktop-purge-and-cowork-debt-claims--6_a3fc44.md",
+  "/home/evo/evolution/operations/knowledge/docs/chat-corpus/claude/2026-09-21--ollama-cloud-context-window-limits--c329e50c.md",
+  "/home/evo/evolution/operations/knowledge/docs/chat-corpus/claude/2026-10-01--build-progress-so-far--9f695aa5.md",
+  "/home/evo/evolution/operations/knowledge/docs/chat-corpus/claude/2026-10-03--ad9f8373--ad9f8373.md",
+  "/home/evo/evolution/operations/knowledge/docs/chat-corpus/claude/2026-09-25--5079bf4f--5079bf4f.md",
+  "/home/evo/evolution/operations/knowledge/docs/chat-corpus/hermes/2026-08-10--continue-design-system-implementation--3_a37f2d.md"
+ ]
+}

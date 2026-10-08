@@ -1,0 +1,16 @@
+{
+ "runbook": {
+  "exists": true,
+  "lines": 61,
+  "all_rules": true
+ },
+ "wired": [
+  "/home/evo/CLAUDE.md",
+  "/home/evo/AGENTS.md",
+  "/home/evo/evolution/engine/website/AGENTS.md",
+  "/home/evo/studio/AGENTS.md",
+  "/home/evo/sandbox/AGENTS.md"
+ ],
+ "gate_ok": true,
+ "model": "qwen3.8:27b-64k"
+}
