@@ -1,14 +1,14 @@
-BRIEF — Island Install: orca + ruflo (sandbox/rebuild)
+BRIEF — Island Install: ruflo (sandbox/rebuild)
+
+Orca was removed 2026-10-13. Do not install it. The orca half of this brief is dead.
 
 SCOPE: Plan/review only. No execution.
 
 PATH LOCK: /home/evo/sandbox/rebuild/src/island/
 LAYOUT:
   rebuild/src/island/
-    orca/              # Adapter + stubs
     ruflo/             # Adapter + local .mcp.json
     .venv/             # Python isolation
-    node_modules/      # Node isolation (Orca)
     package.json       # Island-only manifest
     Cargo.toml         # Rust isolation (Ruflo)
 
@@ -27,6 +27,6 @@ STEPS:
 5. Define just check gates
 
 RISKS:
-- Both repos ship with background workers (must stub)
-- Rust + Python + Node isolation requires separate lock files
+- Ruflo ships with background workers (must stub)
+- Rust + Python isolation requires separate lock files
 - Performance test valid only in ephemeral mode
