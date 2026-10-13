@@ -1,9 +1,10 @@
 # CONTINUE — sandbox (estate work: worksurface test / runbook / census)
 
 ## Next action
-Open `v2/PLAN.md` and `v2/OPERATIONS.md`. `Badders80/engine-v2` is private and empty. Do not clone or commit until the founder says build. Parent-file slim is agreed and not done (`/home/evo/CLAUDE.md`, `/home/evo/AGENTS.md`, `evolution/CLAUDE.md`). Leave the live website lock in place.
+Open `v2/OUTCOME.md`. The refund rule is the Refund section. `Badders80/engine-v2` is private and empty. Do not clone or commit until the founder says build. The Stripe monthly schedule discussed on 2026-10-14 is not in the spec: `OUTCOME.md` still says later monthly charges are manual. Parent-file slim is agreed and not done (`/home/evo/CLAUDE.md`, `/home/evo/AGENTS.md`, `evolution/CLAUDE.md`). Leave the live website lock in place.
 
 ## State
+- 2026-10-14 — Refund rule written once, in the Refund section of `v2/OUTCOME.md` and `evolution/engine_v2/OUTCOME.md` (copies match). `PLAN.md` and `OPERATIONS.md` point at it. No day count. A rule stays in the spec; the plan and the guide do not restate it. Execution protocol was discussed and not locked.
 - 2026-10-08 — 60-day corpus deep-dive complete: 73/73 sessions scored (ollama cloud deepseek-v4.1-flash + think:false), report + AMEND verdict at `audit/corpus-deep-dive/out/report.md`. The fix recorded that day was the six-guardrail bundle plus auditor separation. Orca was removed on 2026-10-13.
 - 2026-10-08 — RUNBOOK live: `docs/plans/RUNBOOK.md` (61 lines, distilled by local qwen3.8:27b-64k) + pointer wired into 5 boot files (CLAUDE.md, AGENTS.md, website, studio, sandbox). Gate: `audit/runbook-wiring/gate.json` all green.
 - 2026-10-08 — Skill library cut 192 → 50 (house method + superpowers + basics); 133 items archived at `~/.agents/skills-archive-2026-10-08/` (restore = mv).
@@ -16,6 +17,7 @@ Open `v2/PLAN.md` and `v2/OPERATIONS.md`. `Badders80/engine-v2` is private and e
 ## Ledger
 | date | what | repo | commit | state |
 |---|---|---|---|---|
+| 2026-10-14 | 14-day refund line removed; Refund section is the only copy | sandbox + engine_v2 | no commit | done |
 | 2026-10-13 | v2 plan, OPERATIONS.md, and engine-v2 remote locked; first commit still waits for build | sandbox | no commit | done |
 | 2026-10-13 | v2 plan placed in sandbox/v2; Orca removed; live-site lock kept | sandbox | this commit | done |
 | 2026-10-08 | corpus deep-dive audit + AMEND verdict | sandbox | (this repo) | done |

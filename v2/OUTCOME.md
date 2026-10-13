@@ -40,11 +40,15 @@ The promoter line on every document is Alex Baddeley, Evolution Stables Ltd.
 
 These are known. They live in the engine's rules module. The manual in that same repo is the readable copy. A DSL row holds one owner's terms. It does not restate the shared numbers.
 
-The same for every horse: listed price is wholesale cost × 1.05 × 1.03, rounded up to the next whole dollar. The float is 3 months reserve plus 2 months prepaid. Unused float is refunded within 14 business days. An investor must be paid up for two full months before a race to share in that race. The investor split must sit between 50% and 85%. 75% is the value an empty form shows, and it is not a substitute for a horse's own split. Close styles are `fourteen_day` and `three_x_remaining`.
+The same for every horse: listed price is wholesale cost × 1.05 × 1.03, rounded up to the next whole dollar. The float is 3 months reserve plus 2 months prepaid. An investor must be paid up for two full months before a race to share in that race. The investor split must sit between 50% and 85%. 75% is the value an empty form shows, and it is not a substitute for a horse's own split. Close styles are `fourteen_day` and `three_x_remaining`.
 
 Typed on the DSL, from the owner's deal: payment style, close style, investor split, wholesale cost, listed stake, step size, term start, end date, distribution schedule. The retail price and the monthly amount are calculated.
 
 Payment default, prize freeze, and forfeiture are written procedures. They are printed into the documents. A system that runs payouts and defaults is not part of this outcome. The first payment is recorded by the webhook. Later monthly charges, failed invoices, and default handling are done manually until that system exists.
+
+## Refund
+
+If the horse is retired or the lease ends early, the leaseholder receives a pro-rata refund of the unused lease fee for the full months remaining. The buy screen, the PDS, and the SA print that sentence. They do not print a day count. The amount is worked out after the owner and Evolution have agreed the termination date and reconciled the accounts.
 
 ## Horses in play
 

@@ -14,7 +14,7 @@ The buyer pays by hosted Stripe Checkout, on the existing Evolution Stables Limi
 
 The first payment is the one the webhook records. Later monthly charges, failed invoices, and default handling are done by hand. "Billed monthly on the 1st" is a label on the buy screen. It is not an automated charge job.
 
-The price is the rules module, copied from `sandbox/rebuild/src/lib/pricing.ts`. Listed price is wholesale cost times 1.05 times 1.03, rounded up to the next whole dollar. The first payment is five months: 3 months reserve plus 2 months prepaid. Unused float is refunded within 14 business days.
+The price is the rules module, copied from `sandbox/rebuild/src/lib/pricing.ts`. Listed price is wholesale cost times 1.05 times 1.03, rounded up to the next whole dollar. The first payment is five months: 3 months reserve plus 2 months prepaid. Refunds follow the Refund section of `OUTCOME.md`.
 
 ## Identity and private files
 
