@@ -1,6 +1,6 @@
 # V2 build plan
 
-Status: waiting for the word **build**. No repo until then.
+Status: waiting for the word **build**. No checkout of the repo until then. The operator guide is `OPERATIONS.md` in this folder.
 
 Read `OUTCOME.md`, then `CONTINUE.md`. Use `DoD.md` only to check a choice that was already dropped. If `DoD.md` and `OUTCOME.md` disagree, follow `OUTCOME.md`.
 
@@ -24,26 +24,153 @@ Change these before the first commit if you want a different shape. They are not
 - Signup and login use Supabase Auth. Google or email. The account row stores full name, email, and KYC status. Full name is collected at signup.
 - Stripe stays in test mode until the buy path is flipped on. Live mode flips at the swap, not before.
 
-## The one open decision
+## Legal authority
 
-Before the compiler is written: the NZTR pro forma Disclosure Statement and the two Syndicate Agreement templates in `evolution/engine/website/packages/legal_engine/reference/nztr-pro-forma/` are the legal source documents (three `.docx` files plus a README, about 504 KB). They are not the 26 MB content registry.
+Settled 2026-10-13. The compiler writes the PDS and the SA as markdown from the horse, the trainer, and the DSL. It does not fill the Word files, and it does not port `legal_engine`.
 
-Default if you say build without answering this: copy those four files into the new repo as the document authority, and write the compiler against them. Do not port `legal_engine`. Say "no" before build if those files must not be copied.
+The reference set lives in the new repo, read-only, copied in at build. It is three pieces:
+
+1. The Rules of Racing PDF, effective 21 September 2026: `https://nztr.co.nz/sites/nztrindustry/files/2026-09/RULES-OF-RACING_effective-from-September-2026.pdf`. This is the rules authority. The Bloodstock Syndication Code of Practice is inside it, as the Second Appendix, made under Rule 432 (the Code text itself is marked amended 1 January 2016). The disclosure-statement requirements follow that appendix. The other pages of the 209-page rules are not part of the compiler check.
+2. The three NZTR pro-forma `.docx` files now in `evolution/engine/website/packages/legal_engine/reference/nztr-pro-forma/`. They sit with the PDF as the official forms. They are a base reference. They are not the 26 MB content registry, and they are not templates to compile against. Fixed Monthly Contribution is the form that matches this product. The Monthly Invoiced form stays in the set so that difference stays visible.
+3. A principles note beside those files. The compiler's self-audit checks the generated markdown against this note. Each line in the note points at the PDF clause, or at the Fixed Monthly form, that it came from.
+
+The note carries these disclosure sections. Dropping one is a red flag:
+
+- About the syndicate: horse, trainer, share structure, monthly costs, prizemoney split, New Zealand training, governed by the SA, post-career plan
+- Upfront costs, including GST
+- Number of shares and cost per share
+- Estimated ongoing costs, stated as estimates, GST inclusive
+- Insurance: insurer, term, insured value, cover type
+- Valuation: still rendered; not required when the horse is leased or bought at public auction
+- Veterinary report: a vet examined the horse and certified it sound for racing
+- Material interests and commissions
+- Standard industry risks
+- Governing documents, with the SA attached
+- Declaration: Authorised Syndicator under the NZTR Code of Practice; NZTR does not endorse or guarantee the offer
+- Applicant acknowledgement: 18 or over, not prohibited from owning a racehorse, share percent, purchase price, personal details, signature
+
+The note carries these syndicate-agreement points, which the SA must not contradict:
+
+- Formed under the NZTR Bloodstock Syndication Code of Practice. The object is to acquire the horse, by purchase or lease, and to race it as a recreational pursuit.
+- Binding on the Promoter, the Syndicate Manager, and each shareholder. A change needs a 75% special resolution.
+- A signed acknowledgement or a ticked online box counts as signed.
+- Ends on death, disposal, or lease expiry of the last horse.
+- A share is an undivided tenant-in-common interest. It is not a partnership and not an agency.
+- Transfer: notice, first offer to existing shareholders, then Syndicate Manager approval. The Promoter may subscribe and transfer freely.
+- Manager appointed by the Promoter. Duties include the trust account, the register, and communication with shareholders.
+- Meetings are not required. A resolution can pass without a meeting.
+- Stakes money is held in trust and distributed pro-rata.
+- Complaints go to the Syndicate Manager first. A serious complaint goes to NZTR. Disputes run consultant, then an expert nominated through the NZTR CEO, and that decision binds.
+- Definitions in Code sections 1.1 and 1.2 are incorporated.
+- The Fixed Monthly form adds financial statements, prepared to GAAP, within five months of a 31 March balance date.
+
+Four differences are locked. The audit must keep them:
+
+- Stakes are 1%, with the owner's minimum and step. The pro-forma's 5% example is not ours.
+- Forfeiture is the stricter procedure already in the outcome: printed, not a system that runs it. The pro-forma's 14-day remedy, then sale at Fair Value less 20%, is not ours.
+- The fee is the 5% and the 3% already in the listed-price formula. The Monthly Invoiced form's $365 flat manager fee is not ours.
+- The investor split is the fixed percent on that DSL. An empty form shows 75%, and that is not a horse's split. The 16% statutory deduction is not the investor's return math.
+
+Insurance, the vet report, and the valuation line are not columns yet. They get a home when the compiler is written.
+
+## Search
+
+Settled 2026-10-13. A small search layer is built with the pages. The current site's shape is the one to keep: one site URL, a title and description on each page, an Open Graph image, `robots.txt`, a sitemap of the landing page plus each public horse, and structured data for the organisation and the website.
+
+The landing page carries the organisation and the website. The marketplace and each horse page carry their own title, description, and canonical URL. MyStable, login, and checkout stay out of the index. Press and the FAQ can be indexed later, as their own pages.
+
+Three current mistakes stay behind:
+
+- The public host is `https://www.evolutionstables.nz`. Canonicals, the sitemap, and structured data use that host. The apex `https://evolutionstables.nz` is not a second canonical. The current code uses the apex, and that mistake stays behind.
+- Horse structured data uses the real page, `/marketplace/[slug]`. The current data points at `/horses/[slug]`.
+- A horse's description is that horse's. An empty form's 75% is not copied into the site description as every horse's split. Each horse page has one `h1`.
+
+The sitemap lists the landing page, the marketplace, and every published DSL, including Coming Soon. An unpublished DSL is absent. Buyer documents stay private and unindexed. A rename changes the public URL, and there is no redirect table, so the legal-name slug is chosen before a horse is first published.
+
+The landing page and the horse page render as HTML. The first response contains the horse name, the status, and one sized hero image. Google Search Console is set up at the domain cutover, with the email sender and the second vendor login.
+
+## Accounts
+
+Settled 2026-10-13. The live site stays on its current connection. Vercel project `evolution-3-0` keeps deploying `Badders80/evo_02` (`apps/web`) to `www.evolutionstables.nz`. That repo, that project, its build command, and that domain are not changed during the build. The new build does not get linked to `evolution-3-0`.
+
+At the domain cutover, `www.evolutionstables.nz` stops being served from `Badders80/evo_02` and is served from the new repo. The GitHub repo itself stays. It is the archive of the current site. The build does not rewrite it, rename it, or turn it into the v2 repo.
+
+Talk to the vendors with the CLIs already logged in on this machine. No new connector is required for GitHub, Supabase, Vercel, or Stripe. The connected session tools are GitHub, Chrome DevTools, and Playwright.
+
+| Vendor | What build uses | What it must not touch |
+|---|---|---|
+| GitHub | `Badders80/engine-v2` exists: `https://github.com/Badders80/engine-v2`. Empty, created 2026-10-13. Public for review, and private again before the first code commit. Local path `evolution/engine_v2/website` is not a checkout yet. The plan review copy is the public repo `Badders80/sandbox`. | `Badders80/evo_02` |
+| Supabase | A new empty project in the existing org. Email auth first. | `evo-02-prod`, `Evolution-3.0`, `evolution-content-factory` |
+| Vercel | Two new projects on the new repo, one per app (`engine/`, `website/`). Previews only. | `evolution-3-0` and `www.evolutionstables.nz` |
+| Stripe | The existing Evolution Stables Limited account, test mode, through the Stripe CLI. | Live keys, and the live Mulan subscription |
+| Google | `gcloud` is already `alex@evolutionstables.nz`. Google login is the existing OAuth client plus one new redirect for the new site. The live site's redirect stays. | Repointing the live client |
+| Cloudflare R2 | A new bucket. This is the one missing login: no Cloudflare token is on this machine. Step 5 waits for that token. Steps 1 to 4, and the landing page, do not. | The old bucket and the old media keys |
+| DNS, Search Console, email sender, second vendor login | At the domain cutover. | Any change while the old site is still serving |
+
+## How the build session behaves
+
+Settled 2026-10-13. This section is the agent rule for the session that hears "build". It lives in this plan. The new repo gets no `AGENTS.md` and no `CLAUDE.md`.
+
+Follow this plan and `OUTCOME.md`. This plan outranks the parent `CLAUDE.md` and `AGENTS.md` files, which still point a session at the live site and at a design-token gate. Leave `Badders80/evo_02`, `evolution-3-0`, and the old Supabase projects alone. Stop at the end of a step. A choice that is not in this plan waits. It does not open a side task.
+
+One build. The ten steps are the spine. Design is a constraint on the website pages, not a second track, not a branch, and not a gate. The current landing page is the visual north star. `evolution/engine/brand` is the asset cupboard: the logos are copied into the website app with the landing page. `DESIGN.md` in that folder points at `brand_dna`, the generator, the shadcn slots, and the Python gates. Those stay behind. Where that file and the live landing page disagree, the landing page wins.
+
+The token values are copied once into one theme file in the website app while the landing page is built: canvas, gold, the type scale, the system sans, Geist Mono for figures, and Instrument Serif for the one italic word. At the end of the landing page, before Marketplace is started, a short `DESIGN.md` is written in that same app from the theme file and the finished page. It records colour, type, space, radius, the logos, and the voice. That file is the brand kit. Marketplace and MyStable use that theme file and that `DESIGN.md`. They do not add a colour, a type size, or a second kit. There is no token pass before the landing page and no token pass after it.
+
+When a page needs a look and this plan is silent, copy the landing page and continue the current step. There is no visual spec to finish, no lookbook, and no pause for a design pass.
+
+Website pages, in this order:
+
+1. The landing page, as soon as the empty website app exists. It is the current homepage, and it needs no rows, so it can sit beside steps 2 to 4. The nav is the current nav. About, Mission, Model, and FAQ are anchors on that page. Marketplace and MyStable are real routes with a plain placeholder until their own steps. No extra tabs. Press, partners, and updates that sit on the current homepage come with it. They are page content. They do not become horse, trainer, or owner fields.
+2. The marketplace and the horse listing, at step 6.
+3. MyStable, at step 8, after an account exists. It stays empty of sales until the purchase step writes one.
+
+The stack stays Next.js, React, and Tailwind. The website reads Supabase and renders pages. Checkout, the webhook, the compiler, and email stay in the engine. Landing motion stays on the landing page. Marketplace, the horse page, and MyStable are plain server-rendered pages. Legal documents use the same type scale. Horse images come from the new bucket. The landing page's own background art can stay as static files.
+
+## Reference: sandbox/rebuild
+
+Settled 2026-10-13. `/home/evo/sandbox/rebuild` is a reference. It does not become part of this plan's repo, and the new repo does not import it. Its README still aims the prototype at the live monorepo. That aim is ignored.
+
+Two things are taken from it. The price functions in `src/lib/pricing.ts` are copied into the engine at step 3. The screen copy below is the buy-workflow content. The React components, the Vite app, the drawer, and the old token package are not taken.
+
+The prototype's pay button and its confirm screen are not the flow. Pay leaves for hosted Stripe Checkout. The sale exists when the webhook writes it. A screen that says the buyer already owns the stake, before that write, is not built.
+
+## Buy workflow
+
+Settled 2026-10-13. Step 8 implements this sequence. This section is where the investor checkout is executed. Screen detail is added here, not in a second plan. The screen words come from the rebuild steps. The numbers come from the DSL and the rules module. A logged-out visitor signs in and returns to the same horse. Coming Soon has no Buy Now.
+
+One surface. The same five screens are used on a phone and on a desktop. The layout reflows. There is no second mobile flow and no separate drawer. Controls stay usable on a phone. Stripe Checkout is Stripe's own page.
+
+1. Terms. The horse's legal name. The monthly price for the chosen stake. A stepper bound to that DSL's minimum, step, and maximum. Four rows: initial payment, which is five months (3 months reserve plus 2 months prepaid); monthly thereafter; the lease period, from that DSL's term start and end date; the distribution share, which is that DSL's investor split, of stakes won, from official NZTR results. An empty form's 75% is not shown as this horse's split. The note under the rows: fixed monthly payment, no surprise capital calls, and at lease expiry or retirement the billing stops and the remaining float is refunded within 14 business days. The refund timing is the outcome's rule. "Billed monthly on the 1st" may be printed. It does not create an automated charge job. Later monthly charges stay manual. Footer: Evolution Stables is an NZTR-authorised syndicator. The button is "Review Legal Documents".
+
+2. Documents. Title "Review & Sign Documents", for this stake in this horse. The PDS, then the SA, each compiled with the account name. The buyer accepts the PDS, then the SA. The SA acceptance includes these four declarations: not disqualified or suspended under the NZTR Rules of Racing; acquiring the stake as the true beneficial owner; bound by the NZTR Rules of Racing and the Welfare Guidelines; Evolution Stables Limited is the syndicate manager. Both accepts are required. The button then reads "Continue to Identity Verification". The footer says the signed documents are hashed and stored for MyStable. The webhook is what writes the hashes.
+
+3. Identity. If the account is already verified, the buyer confirms they are the account's full name and continues. If not, the engine starts Stripe Identity. The screen asks for a current NZ driver licence or passport. It does not say the buyer is an NZTR-verified member. Identity is Stripe Identity on the account. A failure stops the sale, sends the buyer the KYC-failed email, and does not open Checkout. Footer: encrypted, handled under the NZ Privacy Act 2020.
+
+4. Pay. The screen repeats the initial payment, the monthly amount, the lease period, and the investor split, then says the card is processed by Stripe Checkout. The button sends the browser to the Checkout URL the engine returns. Cancelling Checkout returns to the horse page and writes no sale. A card decline writes no sale and sends no founder email.
+
+5. Return. The browser comes back to MyStable. If the webhook has not written the sale yet, MyStable shows that purchase as pending. It does not say the stake is owned. When the sale row exists, MyStable shows the stake, the amount, and the two documents. An our-fault failure of Checkout or the webhook sends the founder email and leaves no sale.
+
+## Operations
+
+Settled 2026-10-13. `OPERATIONS.md` in this folder is the one operator guide, and the operating law. `OUTCOME.md` remains the product law. `PLAN.md` remains the build law. If the guide and the outcome disagree, the outcome wins and the guide is corrected.
+
+On step 1 the file moves to `engine/OPERATIONS.md` inside `Badders80/engine-v2`. It does not go in the parent `evolution/engine_v2/` folder. The website app does not get a second copy. Each later step adds the click-path for the thing it just built. A procedure is written once, in that file.
 
 ## When you say build
 
 Do these in order. Stop at the end of a step if something in the outcome does not fit.
 
-1. Create the private repo at `evolution/engine_v2/website`. Do not `git init` `evolution/engine_v2`. Do not add `CLAUDE.md` or `AGENTS.md`. First commit is the two empty apps and CI that typechecks, lints, and tests.
+1. Use `Badders80/engine-v2` at `evolution/engine_v2/website`, as in "Accounts" above. Make it private before the first code commit. Move `sandbox/v2/OPERATIONS.md` to `engine/OPERATIONS.md`. Do not `git init` `evolution/engine_v2`. Do not add `CLAUDE.md` or `AGENTS.md`. Do not change `Badders80/evo_02` or its Vercel project. First commit is the two empty apps, that guide, and CI that typechecks, lints, and tests.
 2. New empty Supabase project. One migration series for the rows in `OUTCOME.md`: trainers, owners, horses, dsls, accounts, sales. No copied business data. No two migrations share a number. No slug-to-id table.
-3. Rules module. Shared numbers live there, not on each DSL. Listed price is wholesale cost × 1.05 × 1.03, rounded up to the next whole dollar. Float is 3 months reserve plus 2 months prepaid. Unused float is refunded within 14 business days. An investor must be paid up for two full months before a race to share in that race. Investor split is between 50% and 85%. An empty form shows 75%, and that is not a horse's split. Close styles are `fourteen_day` and `three_x_remaining`. The DSL stores the owner's terms. The engine writes the retail monthly figure.
+3. Rules module. Copy the price functions from `sandbox/rebuild/src/lib/pricing.ts`, as named in "Reference: sandbox/rebuild". Shared numbers live there, not on each DSL. Listed price is wholesale cost × 1.05 × 1.03, rounded up to the next whole dollar. Float is 3 months reserve plus 2 months prepaid. Unused float is refunded within 14 business days. An investor must be paid up for two full months before a race to share in that race. Investor split is between 50% and 85%. An empty form shows 75%, and that is not a horse's split. Close styles are `fourteen_day` and `three_x_remaining`. The DSL stores the owner's terms. The engine writes the retail monthly figure.
 4. DSL page on the engine. Create, edit, and view. Horse, trainer, and owner are written from that page. They do not get their own screens. A registered horse loads from a loveracing.nz link, then the operator confirms and fills the soft slots. An unregistered horse is typed by hand and cannot be published past Coming Soon. Branding fields from the page are not stored.
-5. New R2 bucket. Public images only, for the horses that go through this flow. Minimum three images before a DSL can be Available. `image_count` is the only image fact in the database. Private KYC and proof-of-address files stay in Supabase Storage, not R2.
-6. Website reads the rows. Marketplace and horse listing. Press, updates, and the FAQ do not live on the horse, trainer, or owner. Coming Soon is visible and cannot be bought. Available means Buy Now. Unpublished stays off the marketplace.
-7. Compiler, after the template decision above. PDS reads the horse soft text, the trainer bio, and the DSL terms. SA reads hard facts and commercial terms, no soft prose. Promoter line on every document: Alex Baddeley, Evolution Stables Ltd. Payment default, prize freeze, and forfeiture are printed procedures. A system that runs them is not part of this outcome.
-8. Purchase. Logged-in buyer. The website modal asks the engine for the PDS and SA compiled with the account name. Buyer accepts. Engine starts Stripe Identity if the account is not verified, and records the result on the account. Engine creates Checkout and returns the URL. Webhook writes the sale: stake, amount, Stripe session id, Identity id, both documents, both hashes. A later edit to the horse does not change a document already sold. Browser returns to MyStable. MyStable reads that account and that user's sales. Checkout does not create another profile.
+5. New R2 bucket, once the Cloudflare token in "Accounts" is present. Public images only, for the horses that go through this flow. Minimum three images before a DSL can be Available. `image_count` is the only image fact in the database. Private KYC and proof-of-address files stay in Supabase Storage, not R2.
+6. Website reads the rows. The landing page is already built, per "How the build session behaves". This step is the marketplace and the horse listing, with the search layer in "Search" above. Press, updates, and the FAQ do not live on the horse, trainer, or owner. Coming Soon is visible and cannot be bought. Available means Buy Now. Unpublished stays off the marketplace and out of the sitemap.
+7. Compiler, against the legal authority above. Copy the PDF, the three pro-formas, and the principles note into the repo as the read-only reference set. PDS reads the horse soft text, the trainer bio, and the DSL terms. SA reads hard facts and commercial terms, no soft prose. Promoter line on every document: Alex Baddeley, Evolution Stables Ltd. Payment default, prize freeze, and forfeiture are printed procedures. A system that runs them is not part of this outcome. The self-audit checks both documents against the principles note.
+8. Purchase, per "Buy workflow" above. Logged-in buyer. The website modal asks the engine for the PDS and SA compiled with the account name. Buyer accepts. Engine starts Stripe Identity if the account is not verified, and records the result on the account. Engine creates Checkout and returns the URL. Webhook writes the sale: stake, amount, Stripe session id, Identity id, both documents, both hashes. A later edit to the horse does not change a document already sold. Browser returns to MyStable. MyStable reads that account and that user's sales. Checkout does not create another profile. Do not import `sandbox/rebuild`.
 9. Four emails, sent by the engine, and no others. Buyer: sale written (stake, amount, link to MyStable). Buyer: KYC failed. Founder: sale succeeded. Founder: checkout or webhook failed for a reason that is ours. A card decline does not send that alert. Later monthly charges and defaults are manual.
-10. Preview with the buy path off. Listings may show Coming Soon. Prove the purchase wiring on a preview, not on the live domain. The flip to Buy Now is a readiness decision. The proof is one real sale after that flip. The old website keeps serving until then, and the new build does not call back into the old one.
+10. Preview with the buy path off, on the new Vercel projects. Listings may show Coming Soon. Prove the purchase wiring on a preview, not on the live domain. The flip to Buy Now is a readiness decision. The proof is one real sale after that flip. `evolution-3-0` keeps serving `www.evolutionstables.nz` until then, and the new build does not call back into the old one.
 
 ## Before any deletion of the old production data
 
@@ -69,11 +196,11 @@ Not code, and not step 1. These block cleanup only.
 | A6, content stream shape | First slice has the three soft columns only. |
 | A11, how many old GitHub repos are public | Re-verify before archiving. The Sep-14 count is stale. |
 | Observability vendor, and the email sender that replaces Gmail SMTP | Needed before the public buy path, not before the first commit. |
-| Second owner on Supabase, Stripe, R2, Vercel, GitHub, DNS, Google | Account task, before the public buy path. |
+| Second owner on Supabase, Stripe, R2, Vercel, GitHub, DNS, Google, and Search Console | Account task, at the domain cutover, before the public buy path. |
 | Fuller investor profile, reservations, race-by-race table, payout engine, automated monthly charges | Later. They attach to these rows. |
 
 ## Removed on 2026-10-13
 
 - `evolution/docs/superpowers/plans/2026-10-13-v2-build-plan.md` contradicted this layout and put O6 first. Deleted.
 - Empty `evolution/engine_v2/docs/superpowers/plans/` deleted.
-- `sandbox/v2/O6-inventory.md` treated the NZTR pro formas as the 26 MB registry. Deleted. The distinction is in "The one open decision" above.
+- `sandbox/v2/O6-inventory.md` treated the NZTR pro formas as the 26 MB registry. Deleted. The pro-formas are the legal reference set in "Legal authority" above.

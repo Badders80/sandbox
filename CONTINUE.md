@@ -1,7 +1,7 @@
 # CONTINUE — sandbox (estate work: worksurface test / runbook / census)
 
 ## Next action
-Open `v2/PLAN.md`. Parent-file slim is agreed and not done (`/home/evo/CLAUDE.md`, `/home/evo/AGENTS.md`, `evolution/CLAUDE.md`). Leave the live website lock in place.
+Open `v2/PLAN.md` and `v2/OPERATIONS.md`. `Badders80/engine-v2` is private and empty. Do not clone or commit until the founder says build. Parent-file slim is agreed and not done (`/home/evo/CLAUDE.md`, `/home/evo/AGENTS.md`, `evolution/CLAUDE.md`). Leave the live website lock in place.
 
 ## State
 - 2026-10-08 — 60-day corpus deep-dive complete: 73/73 sessions scored (ollama cloud deepseek-v4.1-flash + think:false), report + AMEND verdict at `audit/corpus-deep-dive/out/report.md`. The fix recorded that day was the six-guardrail bundle plus auditor separation. Orca was removed on 2026-10-13.
@@ -16,6 +16,7 @@ Open `v2/PLAN.md`. Parent-file slim is agreed and not done (`/home/evo/CLAUDE.md
 ## Ledger
 | date | what | repo | commit | state |
 |---|---|---|---|---|
+| 2026-10-13 | v2 plan, OPERATIONS.md, and engine-v2 remote locked; first commit still waits for build | sandbox | no commit | done |
 | 2026-10-13 | v2 plan placed in sandbox/v2; Orca removed; live-site lock kept | sandbox | this commit | done |
 | 2026-10-08 | corpus deep-dive audit + AMEND verdict | sandbox | (this repo) | done |
 | 2026-10-08 | RUNBOOK distilled + wired into 5 boot files | sandbox | (this repo) | done |
@@ -23,7 +24,7 @@ Open `v2/PLAN.md`. Parent-file slim is agreed and not done (`/home/evo/CLAUDE.md
 | 2026-10-08 | sandbox/rebuild git-inited + snapshot 89d3271 | rebuild | 89d3271 | done |
 
 ## Blocked
-- V2 code repo waits for the founder to say build.
+- V2 first commit waits for the founder to say build. The remote `Badders80/engine-v2` already exists, private and empty. Image upload still waits on a Cloudflare token.
 - OpenRouter paid lane — key budget exceeded (founder top-up only if needed; free lane works).
 - gemma-4-31b:free — persistent 429; alternatives: local qwen3.8:27b-64k (used today) or founder adds Google AI Studio key.
 - 2-week re-audit — waits on runbook usage (calendar item ~2026-10-22).
