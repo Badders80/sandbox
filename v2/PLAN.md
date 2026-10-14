@@ -11,7 +11,7 @@ These close contradictions in the old brief. They are not new product decisions.
 1. The repo root is `/home/evo/evolution/engine_v2/website`. One private repo, two hosted apps. `DoD.md` still lists an option to put the repo at `engine_v2/` level (O7). `OUTCOME.md` closed that: do not `git init` the parent. The parent keeps `OUTCOME.md`, `CONTINUE.md`, and `DoD.md`.
 2. Do not port the old packages, the monorepo, the alias map, or the 26 MB `engine/content` registry. Soft text is three columns on the horse. Audit item A1 does not block this build.
 3. Image files are named from the slug, `01` upward, in a folder for that slug. A rename moves the folder. There is no redirect table and no slug-to-path lookup. `DoD.md` also says to key media by uuid. The outcome wins.
-4. Design tokens live in the website app. They are not a gate that runs before the engine exists.
+4. Design tokens and brand skinning are parked out of the build critical path. Steps 1 to 8 run with functional, unstyled Tailwind utility wireframes. The visual north star is preserved in `apps/website`, but visual polish, token extraction, and custom font integration (`Geist Mono`, `Instrument Serif`) occur as a post-build visual pass.
 5. Shoulder brand, family number, DNA Typed, PV, and the blank BT field are not columns and are not printed. O9 stays parked.
 6. The first slice stores the three soft columns and the race record as one jsonb blob. It does not build a second content stream for updates and highlights (DoD A6).
 7. The three finished static horses stay static pages. I Stole A Manolo stays Coming Soon. Lady Ketchikan and Mulan The Brave are the two that can become Available.
@@ -107,31 +107,55 @@ Talk to the vendors with the CLIs already logged in on this machine. No new conn
 | Cloudflare R2 | A new bucket. This is the one missing login: no Cloudflare token is on this machine. Step 5 waits for that token. Steps 1 to 4, and the landing page, do not. | The old bucket and the old media keys |
 | DNS, Search Console, email sender, second vendor login | At the domain cutover. | Any change while the old site is still serving |
 
-## How the build session behaves
+## How the build session behaves (Execution Protocol)
 
-Settled 2026-10-13. This section is the agent rule for the session that hears "build". It lives in this plan. The new repo gets no `AGENTS.md` and no `CLAUDE.md`.
+Settled 2026-10-13. Updated 2026-10-14. This section is the sole operational law for any CLI model or agent session driving this build. The new repository receives NO `AGENTS.md`, NO `CLAUDE.md`, and NO separate `HOW-WE-WORK.md` or meta-rule files.
 
-Follow this plan and `OUTCOME.md`. This plan outranks the parent `CLAUDE.md` and `AGENTS.md` files, which still point a session at the live site and at a design-token gate. Leave `Badders80/evo_02`, `evolution-3-0`, and the old Supabase projects alone. Stop at the end of a step. A choice that is not in this plan waits. It does not open a side task.
+This plan and `OUTCOME.md` outrank all external estate instructions. Do not touch `Badders80/evo_02`, `evolution-3-0`, or legacy Supabase projects.
 
-One build. The ten steps are the spine. Design is a constraint on the website pages, not a second track, not a branch, and not a gate. The current landing page is the visual north star. `evolution/engine/brand` is the asset cupboard: the logos are copied into the website app with the landing page. `DESIGN.md` in that folder points at `brand_dna`, the generator, the shadcn slots, and the Python gates. Those stay behind. Where that file and the live landing page disagree, the landing page wins.
+### 1. Atomic Step Protocol
+- The build executes exactly ONE numbered step at a time from "When you say build" (Steps 1–10).
+- Multi-step execution across prompt boundaries is forbidden. A step must be committed to git, pass CI/tests, and display a verified diff before the next step begins.
+- If an instruction is ambiguous, halt and ask. Do not guess defaults or invent architectural glue.
 
-The token values are copied once into one theme file in the website app while the landing page is built: canvas, gold, the type scale, the system sans, Geist Mono for figures, and Instrument Serif for the one italic word. At the end of the landing page, before Marketplace is started, a short `DESIGN.md` is written in that same app from the theme file and the finished page. It records colour, type, space, radius, the logos, and the voice. That file is the brand kit. Marketplace and MyStable use that theme file and that `DESIGN.md`. They do not add a colour, a type size, or a second kit. There is no token pass before the landing page and no token pass after it.
+### 2. Session Hygiene & Fresh Lifecycle (Anti-Thrash Tripwire)
+- **One Step, One Session:** Every step executes in a fresh, clean CLI session. When a step is committed and verified on disk, exit the CLI. The next step boots in a brand-new turn with zero chat history.
+- **15-Turn Cap:** If a step exceeds 15 turns without completing its verification diff, terminate the session immediately. Do not attempt to debug or converse in a degraded context. Check `git status`, revert dirty partial edits, and relaunch fresh.
+- **Zero In-Memory State:** Progress is tracked strictly on disk (`git log`, passing tests, file diffs), never in LLM conversational memory.
 
-When a page needs a look and this plan is silent, copy the landing page and continue the current step. There is no visual spec to finish, no lookbook, and no pause for a design pass.
+### 3. Negative Constraints Precede Positive Rules
+- All models have strong priors toward standard web/SaaS boilerplate. Prompts and step executions must enforce negative constraints first: what NOT to import, what NOT to name, and what NOT to add as default values.
+- Shared pricing, splits, and schema structures are governed strictly by `OUTCOME.md` and this plan. Do not infer conventions from older packages or monorepo remnants.
 
-Website pages, in this order:
+### 4. Verification by Evidence (Disk & Diff Only)
+- Self-attestation is void. Statements such as "Done", "Completed", or summary checkmarks without terminal evidence are rejected.
+- To complete any step, the session must provide:
+  1. The exact file paths and line ranges modified.
+  2. The raw output of `git diff` demonstrating adherence to constraints.
+  3. The passing terminal output (exit code 0) of relevant tests, linters, or typechecks.
 
-1. The landing page, as soon as the empty website app exists. It is the current homepage, and it needs no rows, so it can sit beside steps 2 to 4. The nav is the current nav. About, Mission, Model, and FAQ are anchors on that page. Marketplace and MyStable are real routes with a plain placeholder until their own steps. No extra tabs. Press, partners, and updates that sit on the current homepage come with it. They are page content. They do not become horse, trainer, or owner fields.
-2. The marketplace and the horse listing, at step 6.
-3. MyStable, at step 8, after an account exists. It stays empty of sales until the purchase step writes one.
+### 5. Role Separation (Executor ≠ Auditor)
+- The model or session executing code changes NEVER audits its own output. Asking the builder model to "review your work" is prohibited.
+- When diff audits are required, dispatch the raw `git diff` to an independent reviewer turn/model (or founder inspection) using a strict pass/fail grading lens.
 
-The stack stays Next.js, React, and Tailwind. The website reads Supabase and renders pages. Checkout, the webhook, the compiler, and email stay in the engine. Landing motion stays on the landing page. Marketplace, the horse page, and MyStable are plain server-rendered pages. Legal documents use the same type scale. Horse images come from the new bucket. The landing page's own background art can stay as static files.
+### 6. Scope Fencing and Immediate Parking
+- A step cannot open side-tracks, create unapproved utility packages, or refactor previously settled files.
+- Any finding, edge case, or secondary question not strictly required to satisfy the active step is deferred immediately to the ## Parked table. No auto-expansion.
+
+### 7. Design and Asset Constraints
+- The landing page is the visual north star. There is NO separate design pass, design token gate, or lookbook.
+- Tokens (canvas, gold, type scale, system sans, Geist Mono, Instrument Serif) are transcribed once into a single theme file during the landing page build.
+- Logos copy from `evolution/engine/brand`. `DESIGN.md` in that folder stays behind.
+- Marketplace, horse listing, and MyStable reuse the established theme file. They do not introduce new tokens or palettes.
+
 
 ## Reference: sandbox/rebuild
 
-Settled 2026-10-13. `/home/evo/sandbox/rebuild` is a reference. It does not become part of this plan's repo, and the new repo does not import it. Its README still aims the prototype at the live monorepo. That aim is ignored.
+Settled 2026-10-13. Updated 2026-10-14. `/home/evo/sandbox/rebuild` is a reference only. It does not become part of this plan's repo, and the new repo does not import it. Its README still aims the prototype at the live monorepo. That aim is ignored.
 
-Two things are taken from it. The price functions in `src/lib/pricing.ts` are copied into the engine at step 3. The screen copy below is the buy-workflow content. The React components, the Vite app, the drawer, and the old token package are not taken.
+Two things are taken from it:
+1. The pricing ceiling math from `src/lib/pricing.ts` is copied into the engine at step 3. **Critical exception:** `investorReturnPctFrom` falling back to `'75'` is strictly forbidden. The function must return `null` on missing/unassigned split, matching `packages/legal_engine/src/commercial-rules.ts`.
+2. The screen copy below is the buy-workflow content. The React components, the Vite app, the drawer, and the old token package are not taken.
 
 The prototype's pay button and its confirm screen are not the flow. Pay leaves for hosted Stripe Checkout. The sale exists when the webhook writes it. A screen that says the buyer already owns the stake, before that write, is not built.
 
@@ -141,7 +165,7 @@ Settled 2026-10-13. Step 8 implements this sequence. This section is where the i
 
 One surface. The same five screens are used on a phone and on a desktop. The layout reflows. There is no second mobile flow and no separate drawer. Controls stay usable on a phone. Stripe Checkout is Stripe's own page.
 
-1. Terms. The horse's legal name. The monthly price for the chosen stake. A stepper bound to that DSL's minimum, step, and maximum. Four rows: initial payment, which is five months (3 months reserve plus 2 months prepaid); monthly thereafter; the lease period, from that DSL's term start and end date; the distribution share, which is that DSL's investor split, of stakes won, from official NZTR results. An empty form's 75% is not shown as this horse's split. The note under the rows: fixed monthly payment, no surprise capital calls, then the refund sentence in the Refund section of `OUTCOME.md`. "Billed monthly on the 1st" may be printed. It does not create an automated charge job. Later monthly charges stay manual. Footer: Evolution Stables is an NZTR-authorised syndicator. The button is "Review Legal Documents".
+1. Terms. The horse's legal name. The monthly price for the chosen stake. A stepper bound to that DSL's minimum, step, and maximum, with the dynamic rule: effective_min_stake = min(min_stake, stake_remaining). When stake_remaining < min_stake, allow purchasing the full remaining balance so inventory does not orphan. Four rows: initial payment: 5 months (3 months deposit reserve, 2 months prepaid) times the retail rate; monthly thereafter: 1× monthly share price, billed on the 1st starting Month 3; the lease period, from that DSL's term start and end date; the distribution share, which is that DSL's investor split, of stakes won, from official NZTR results. An empty form's 75% is not shown as this horse's split. The note under the rows: fixed monthly payment, no surprise capital calls, then the refund sentence in the Refund section of `OUTCOME.md`. "Billed monthly on the 1st" may be printed. It does not create an automated charge job. Later monthly charges stay manual. Footer: Evolution Stables is an NZTR-authorised syndicator. The button is "Review Legal Documents".
 
 2. Documents. Title "Review & Sign Documents", for this stake in this horse. The PDS, then the SA, each compiled with the account name. The buyer accepts the PDS, then the SA. The SA acceptance includes these four declarations: not disqualified or suspended under the NZTR Rules of Racing; acquiring the stake as the true beneficial owner; bound by the NZTR Rules of Racing and the Welfare Guidelines; Evolution Stables Limited is the syndicate manager. Both accepts are required. The button then reads "Continue to Identity Verification". The footer says the signed documents are hashed and stored for MyStable. The webhook is what writes the hashes.
 
@@ -161,13 +185,38 @@ On step 1 the file moves to `engine/OPERATIONS.md` inside `Badders80/engine-v2`.
 
 Do these in order. Stop at the end of a step if something in the outcome does not fit.
 
-1. Use `Badders80/engine-v2` at `evolution/engine_v2/website`, as in "Accounts" above. Make it private before the first code commit. Move `sandbox/v2/OPERATIONS.md` to `engine/OPERATIONS.md`. Do not `git init` `evolution/engine_v2`. Do not add `CLAUDE.md` or `AGENTS.md`. Do not change `Badders80/evo_02` or its Vercel project. First commit is the two empty apps, that guide, and CI that typechecks, lints, and tests.
-2. New empty Supabase project. One migration series for the rows in `OUTCOME.md`: trainers, owners, horses, dsls, accounts, sales. No copied business data. No two migrations share a number. No slug-to-id table.
-3. Rules module. Copy the price functions from `sandbox/rebuild/src/lib/pricing.ts`, as named in "Reference: sandbox/rebuild". Shared numbers live there, not on each DSL. Listed price is wholesale cost × 1.05 × 1.03, rounded up to the next whole dollar. Float is 3 months reserve plus 2 months prepaid. Refunds follow the Refund section of `OUTCOME.md`. An investor must be paid up for two full months before a race to share in that race. Investor split is between 50% and 85%. An empty form shows 75%, and that is not a horse's split. Close styles are `fourteen_day` and `three_x_remaining`. The DSL stores the owner's terms. The engine writes the retail monthly figure.
+1. Use `Badders80/engine-v2` at `evolution/engine_v2/website`, as in "Accounts" above. Make it private before the first code commit. Move `sandbox/v2/OPERATIONS.md` to `engine/OPERATIONS.md`. Do not `git init` `evolution/engine_v2`. Do not add `CLAUDE.md` or `AGENTS.md`. Do not change `Badders80/evo_02` or its Vercel project. First commit is the two empty apps, that guide, CI that typechecks, lints, and tests, and the pre-commit / CI script `scripts/assert-no-anti-patterns.sh` that scans for and fails on any banned legacy token (`INVENTORY_UUID_BY_SLUG`, `LEGACY_SLUG_ALIASES`, `slugCandidates`, `HORSE_STILLS`, `DEFAULT_CDN_HOST`, `CONTENT_DIR`, `resolveHorseSlug`, `REFUND_WINDOW_DAYS`, `brand_dna`, `orca`).
+2. New empty Supabase project. One migration series (`001_initial_schema.sql` upward) for the rows in `OUTCOME.md`: `trainers`, `owners`, `horses`, `dsls`, `accounts`, `sales`. No copied business data. No two migrations share a numeric prefix. No slug-to-id table. Encode Tier 1 Postgres physical constraints:
+   - `horses`: `id uuid primary key`, `microchip text unique`, `slug text unique not null`, `sire_name text`, `dam_name text`, `image_count integer not null default 0 check (image_count >= 0)`, `registered boolean not null`. Soft prose strictly limited to `about_horse`, `racing_outlook_and_pedigree`, `race_expectation` (text) and `race_record` (jsonb).
+   - `dsls`: `unique (horse_id, end_date)`. `payment_model` enum (`subscription_float`, `upfront`), `close_style` enum (`fourteen_day`, `three_x_remaining`). `status` enum (`coming_soon`, `available`, `fully_allocated`, `completed`), `published boolean not null default false`.
+   - `wholesale_monthly_per_percent numeric(10,2) not null check (wholesale_monthly_per_percent > 0)`.
+   - `retail_monthly_per_percent numeric(10,2) generated always as (ceil(wholesale_monthly_per_percent * 1.05 * 1.03)) stored`. Writers cannot store a second price.
+   - `wholesale_monthly_total numeric(10,2) generated always as (wholesale_monthly_per_percent * 100.0) stored`.
+   - `investor_split numeric(5,2)` with no default. `check (investor_split is null or (investor_split >= 50 and investor_split <= 85))`.
+   - `listed_stake`, `min_stake`, `step` numeric(5,2) check (`min_stake > 0 and step > 0 and min_stake <= listed_stake and mod(listed_stake, step) = 0`). No magic defaults (`?? 1.0`, `0.5`).
+   - Constraint trigger: `status = 'available'` requires `published = true`, `investor_split is not null`, `wholesale_monthly_per_percent > 0`, horse `registered = true`, and `horses.image_count >= 3`.
+3. Rules module in `engine/src/lib/pricing.ts`. Copy the ceiling price formula from `sandbox/rebuild/src/lib/pricing.ts`. Shared numbers live here, not on each DSL. Pure functions only. Do not copy the `'75'` fallback: empty input returns `null`. Implement unit test contracts failing CI on drift:
+   - `retailPerPercentFromWholesale(65) === 71` and per-1% rate is `71`. `totalForStake(71, 5) === 355`.
+   - `retailPerPercentFromWholesale(70) === 76` and per-1% rate is `76`. `totalForStake(76, 5) === 380`.
+   - Initial float strictly equals 5 months (3 reserve + 2 prepaid) times per-1% rate ($355 for $71, $380 for $76).
+   - `isInvestorReturnPctInRange` strictly accepts [50, 85] and rejects 49 and 86.
+   - Missing split returns `null`, never `'75'` or `"75%"`.
+   - Stake calculation throws if `stake % step !== 0`. Required step argument, no default.
+   - Refund text contract: asserts exact sentence from `OUTCOME.md § Refund` and regex fails on any day count (`/\d+\s+days?/i`).
 4. DSL page on the engine. Create, edit, and view. Horse, trainer, and owner are written from that page. They do not get their own screens. A registered horse loads from a loveracing.nz link, then the operator confirms and fills the soft slots. An unregistered horse is typed by hand and cannot be published past Coming Soon. Branding fields from the page are not stored.
-5. New R2 bucket, once the Cloudflare token in "Accounts" is present. Public images only, for the horses that go through this flow. Minimum three images before a DSL can be Available. `image_count` is the only image fact in the database. Private KYC and proof-of-address files stay in Supabase Storage, not R2.
+5. New R2 bucket configuration:
+   - **Production Bucket**: `evolution-v2-horse-images`
+   - **File Structure**: `{horse-slug}/{image-number}` (e.g., `lady-ketchikan/01`)
+   - **Access**: Public read for horse images, private write
+   - **Requirements**: Minimum three images before a DSL can be Available
+   - **Database**: Only `image_count` is stored - no image paths
+   - **Fallback**: If R2 access is delayed, use Supabase Storage temporarily
+   
+   Public images only, for the horses that go through this flow. `image_count` is the only image fact in the database. Private KYC and proof-of-address files stay in Supabase Storage, not R2.
+   
+   **Configuration**: See `/r2-config/README.md` for full setup details and access patterns.
 6. Website reads the rows. The landing page is already built, per "How the build session behaves". This step is the marketplace and the horse listing, with the search layer in "Search" above. Press, updates, and the FAQ do not live on the horse, trainer, or owner. Coming Soon is visible and cannot be bought. Available means Buy Now. Unpublished stays off the marketplace and out of the sitemap.
-7. Compiler, against the legal authority above. Copy the PDF, the three pro-formas, and the principles note into the repo as the read-only reference set. PDS reads the horse soft text, the trainer bio, and the DSL terms. SA reads hard facts and commercial terms, no soft prose. Promoter line on every document: Alex Baddeley, Evolution Stables Ltd. Payment default, prize freeze, and forfeiture are printed procedures. A system that runs them is not part of this outcome. The self-audit checks both documents against the principles note.
+7. Compiler, against the legal authority above. Copy the PDF, the three pro-formas, and the principles note into the repo as the read-only reference set. PDS reads the horse soft text columns (`about_horse`, `racing_outlook_and_pedigree`, `race_expectation`), the trainer bio, and the DSL terms. Strictly forbid filesystem content scans or frontmatter lookups. SA reads hard facts and commercial terms, no soft prose. Promoter line on every document: Alex Baddeley, Evolution Stables Ltd. Payment default, prize freeze, and forfeiture are printed procedures. A system that runs them is not part of this outcome. The self-audit checks both documents against the principles note.
 8. Purchase, per "Buy workflow" above. Logged-in buyer. The website modal asks the engine for the PDS and SA compiled with the account name. Buyer accepts. Engine starts Stripe Identity if the account is not verified, and records the result on the account. Engine creates Checkout and returns the URL. Webhook writes the sale: stake, amount, Stripe session id, Identity id, both documents, both hashes. A later edit to the horse does not change a document already sold. Browser returns to MyStable. MyStable reads that account and that user's sales. Checkout does not create another profile. Do not import `sandbox/rebuild`.
 9. Four emails, sent by the engine, and no others. Buyer: sale written (stake, amount, link to MyStable). Buyer: KYC failed. Founder: sale succeeded. Founder: checkout or webhook failed for a reason that is ours. A card decline does not send that alert. Later monthly charges and defaults are manual.
 10. Preview with the buy path off, on the new Vercel projects. Listings may show Coming Soon. Prove the purchase wiring on a preview, not on the live domain. The flip to Buy Now is a readiness decision. The proof is one real sale after that flip. `evolution-3-0` keeps serving `www.evolutionstables.nz` until then, and the new build does not call back into the old one.
@@ -198,6 +247,7 @@ Not code, and not step 1. These block cleanup only.
 | Observability vendor, and the email sender that replaces Gmail SMTP | Needed before the public buy path, not before the first commit. |
 | Second owner on Supabase, Stripe, R2, Vercel, GitHub, DNS, Google, and Search Console | Account task, at the domain cutover, before the public buy path. |
 | Fuller investor profile, reservations, race-by-race table, payout engine, automated monthly charges | Later. They attach to these rows. |
+| Brand & Design Token Skinning | Visual presentation layer. Steps 1-8 run with standard unstyled Tailwind wireframes. Custom typography (Geist Mono, Instrument Serif) and palette tokens apply after core engine, data model, checkout, and compiler pass CI. |
 
 ## Removed on 2026-10-13
 
