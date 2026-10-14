@@ -251,6 +251,7 @@ Not code, and not step 1. These block cleanup only.
 | Second owner on Supabase, Stripe, R2, Vercel, GitHub, DNS, Google, and Search Console | Account task, at the domain cutover, before the public buy path. |
 | Fuller investor profile, reservations, race-by-race table, payout engine, automated monthly charges | Later. They attach to these rows. |
 | Brand & Design Token Skinning | Visual presentation layer. Steps 1-8 run with standard unstyled Tailwind wireframes. Custom typography (Geist Mono, Instrument Serif) and palette tokens apply after core engine, data model, checkout, and compiler pass CI. |
+| Available gate on the horse side | The step 2 constraint trigger fires on `dsls` writes only. Turning a horse's `registered` off, or dropping `image_count` below three, leaves an already-Available DSL standing. Parked 2026-10-14; add the horse-side check when the horse editor is built. |
 
 ## Removed on 2026-10-13
 
