@@ -137,6 +137,9 @@ This plan and `OUTCOME.md` outrank all external estate instructions. Do not touc
 ### 5. Role Separation (Executor ≠ Auditor)
 - The model or session executing code changes NEVER audits its own output. Asking the builder model to "review your work" is prohibited.
 - When diff audits are required, dispatch the raw `git diff` to an independent reviewer turn/model (or founder inspection) using a strict pass/fail grading lens.
+- The designated auditor is `gemma4:31b` via Ollama Cloud. If it is unavailable, stop and ask the founder which model to use. Do not substitute another model on your own.
+- The audit runs BEFORE the commit, on the staged diff (`git diff --cached`, excluding `pnpm-lock.yaml`). A non-empty reply is required, ending strictly with `VERDICT: PASS` or `VERDICT: FAIL`. A FAIL must be fixed by the executor and re-audited. The executor never overrides a verdict; if the rubric itself is wrong, correct the rubric and re-run the audit — never self-grade.
+- The rubric evaluates one numbered requirement at a time, graded PASS/FAIL with a file:line citation. Scope-leakage checks apply only to code and configuration; prose inside `engine/OPERATIONS.md` is explicitly exempt, as that guide describes the whole product by design.
 
 ### 6. Scope Fencing and Immediate Parking
 - A step cannot open side-tracks, create unapproved utility packages, or refactor previously settled files.
