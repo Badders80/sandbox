@@ -5,11 +5,15 @@
 > marketplace, horse page, MyStable — is *assembled from decisions already made* rather
 > than re-invented.
 >
-> **Status:** spec written, not run. Needs one ruling (see **Ruling required**) before it
-> can land.
+> **Status:** **proposal, partially audited.** The per-page pass has run: STEP1 (landing
+> page) is closed and clean; STEP2 (marketplace) and STEP3 (MyStable) carry open items, one
+> of them critical — two competing status-badge systems over the same `public.status` enum.
+> Nothing lands until one ruling is written (see **Ruling required**); `PLAN.md` is still
+> unamended. Live state: `sandbox-design-audit-state.md`.
 >
-> **Shape:** README · SPEC · out/. Markdown only, per `v2/README.md:29` ("This folder is
-> markdown"). No venv, no imports, no scripts until the harvest is designed.
+> **Shape:** README · SPEC · STEP1–3 · ref-* · `sandbox-design-audit-state.md`. Markdown
+> only, per `v2/README.md:29` ("This folder is markdown"). No venv, no imports, no scripts —
+> the harvest so far is cited prose, not code, so there is no `out/` yet.
 
 ## Why this exists
 
@@ -21,11 +25,11 @@ designPath: null    productPath: null    hasVisualImplementation: false
 ```
 
 The only design system document in the estate is `evolution/engine/brand/DESIGN.md`, and
-`PLAN.md:233` rules that it **stays behind** — correctly, because it is V1-contaminated: it
+`PLAN.md:235` rules that it **stays behind** — correctly, because it is V1-contaminated: it
 cites `@evo/ui`, `app/horses/[slug]/about/page.tsx`, the token generator, and
 `comms/automated-comms/build-surface.mjs`.
 
-So `PLAN.md:233` tells 6a to "transcribe the tokens once into `website/src/app/globals.css`"
+So `PLAN.md:235` tells 6a to "transcribe the tokens once into `website/src/app/globals.css`"
 while nothing anywhere records **what those token values are**. They are named — canvas,
 gold `#c39853`, the system sans, Geist Mono, Instrument Serif — but never transcribed.
 
@@ -38,9 +42,9 @@ not prevent drift, so the deliverable is a document plus a mechanism.**
 
 ## Ruling required before this lands
 
-`PLAN.md:150` — *"The landing page is the visual north star. There is NO separate design pass,
+`PLAN.md:152` — *"The landing page is the visual north star. There is NO separate design pass,
 design token gate, or lookbook."*
-`PLAN.md:275` — parks *"per-page styling, a lookbook, and any token beyond the 6a theme file."*
+`PLAN.md:277` — parks *"per-page styling, a lookbook, and any token beyond the 6a theme file."*
 
 This audit **is** the lookbook, pulled forward from the post-build visual pass into the build
 critical path. That is an amendment to `PLAN.md`, not an extension of 6a. Per the house rule in
@@ -69,7 +73,7 @@ Until that amendment is written, this folder is a proposal.
 
 When two sources disagree, the winner is fixed:
 
-1. **The live landing page** — wins on *values*. `PLAN.md:150` makes it the visual north star,
+1. **The live landing page** — wins on *values*. `PLAN.md:152` makes it the visual north star,
    and the brand audit rules that where `brand/DESIGN.md` and the live landing page disagree,
    **the live landing page wins**.
 2. **`evolution/engine/brand/DESIGN.md`** — wins on *rulings*. It carries decisions that are not
@@ -109,8 +113,8 @@ block, both landing in the build repo.
 
 | Artifact | Home | Note |
 |---|---|---|
-| The V2 `DESIGN.md` | `evolution/engine_v2/website/website/DESIGN.md` | New file, in the build repo next to the app it describes. `PLAN.md:201` bans `CLAUDE.md` and `AGENTS.md` there — `DESIGN.md` is **not** on that list, and the brand audit treats it as the intended companion. |
-| The tokens | `evolution/engine_v2/website/website/src/app/globals.css` | `PLAN.md:151`. Currently 23 bytes: `@import 'tailwindcss';` |
+| The V2 `DESIGN.md` | `evolution/engine_v2/website/website/DESIGN.md` | New file, in the build repo next to the app it describes. `PLAN.md:203` bans `CLAUDE.md` and `AGENTS.md` there — `DESIGN.md` is **not** on that list, and the brand audit treats it as the intended companion. |
+| The tokens | `evolution/engine_v2/website/website/src/app/globals.css` | `PLAN.md:153`. Currently 23 bytes: `@import 'tailwindcss';` |
 | The enforcement check | `evolution/engine_v2/website/scripts/` | Alongside `assert-no-anti-patterns.sh` and `assert-operations-doc.sh`, chained in the root `pnpm test` |
 
 ## How this plugs into the build
@@ -118,9 +122,9 @@ block, both landing in the build repo.
 `PLAN.md` currently runs 6a → 6b → 7 → 8 → 9. This audit sits **before 6a** and changes what
 6a is: 6a becomes "consume the locked system" rather than "invent the token values".
 
-Downstream is already bound: `PLAN.md:153` — marketplace, horse listing, and MyStable
+Downstream is already bound: `PLAN.md:155` — marketplace, horse listing, and MyStable
 *"reuse the established theme file. They do not introduce new tokens or palettes."*
-`PLAN.md:243` — *"6b introduces no new tokens: it reuses the 6a theme file."*
+`PLAN.md:245` — *"6b introduces no new tokens: it reuses the 6a theme file."*
 
 So this is the one pass that sets the values, and every later step is forbidden from adding
 more. That is the point of doing it deliberately rather than during 6a.
