@@ -140,7 +140,9 @@ This plan and `OUTCOME.md` outrank all external estate instructions. Do not touc
 - The designated auditor is `gemma4:31b` via Ollama Cloud. If it is unavailable, stop and ask the founder which model to use. Do not substitute another model on your own.
 - The audit runs BEFORE the commit, on the staged diff (`git diff --cached`, excluding `pnpm-lock.yaml`). A non-empty reply is required, ending strictly with `VERDICT: PASS` or `VERDICT: FAIL`. A FAIL must be fixed by the executor and re-audited. The executor never overrides a verdict; if the rubric itself is wrong, correct the rubric and re-run the audit — never self-grade.
 - The rubric evaluates one numbered requirement at a time, graded PASS/FAIL with a file:line citation. Scope-leakage checks apply only to code and configuration; prose inside `engine/OPERATIONS.md` is explicitly exempt, as that guide describes the whole product by design.
+- **Pre-Numbered Diff (added 2026-10-15)**: The staged diff is pre-numbered (`108: + if (Math.round(...))`) before it is dispatched to the auditor. The auditor cannot perform unified-diff hunk arithmetic (`@@ -95,7 +99,12 @@`) and lands 3 to 6 lines off on comments and blank lines when forced to eyeball it. Pre-numbering removes the calculation: the auditor copies a literal line number instead of deriving one. Proven 2026-10-15 — eight dummy citations without it, 4/4 exact with it.
 - **Strict Citation Integrity**: The auditor must cite the exact modified line number (`path/to/file.ts:line`) in the staged diff where the behavior is implemented. Citations pointing to `file:1`, file headers, or import blocks for runtime logic are treated as hallucinated evidence and invalidate the audit. Any rubric item with a dummy citation must be graded FAIL.
+- Verification tiers, and the milestone-gated checks that are not step gates: `docs/plans/VERIFICATION-TIERS.md`.
 
 ### 6. Scope Fencing and Immediate Parking
 - A step cannot open side-tracks, create unapproved utility packages, or refactor previously settled files.
@@ -159,7 +161,7 @@ Applies to every remaining step (Steps 5–10). Every such step prompt handed to
 2. **Strict Negative Constraints**: Explicit scope fences, banned files (`AGENTS.md`, `CLAUDE.md`), banned standalone CRUD screens, prohibition against multi-step execution.
 3. **Deliverables & Physical Invariants**: Exact schemas, column names, formulas, and data boundaries.
 4. **Local Verification Protocol**: `pnpm verify` (exit code 0, `--max-warnings=0`).
-5. **Adversarial Audit Protocol**: Staged diff (`git diff --cached -- . ':(exclude)pnpm-lock.yaml'`), Ollama Cloud model `gemma4:31b` via `$OLLAMA_API_KEY`, self-contained literal expected values, mandatory non-dummy line citations, explicit exemption for `engine/OPERATIONS.md`, requiring literal `VERDICT: PASS`.
+5. **Adversarial Audit Protocol**: Staged diff (`git diff --cached -- . ':(exclude)pnpm-lock.yaml'`) **pre-numbered before dispatch**, Ollama Cloud model `gemma4:31b` via `$OLLAMA_API_KEY`, self-contained literal expected values, mandatory non-dummy line citations, explicit exemption for `engine/OPERATIONS.md`, requiring literal `VERDICT: PASS`. Tiers, and the milestone gates that are not step gates: `docs/plans/VERIFICATION-TIERS.md`.
 6. **Push & CI Gate**: Conventional commit, `git push origin main` from `/home/evo/evolution/engine_v2/website` — where `origin` is `Badders80/engine-v2`, not the sandbox planning repo — then `gh run watch --exit-status`.
 
 ## Reference: sandbox/rebuild
