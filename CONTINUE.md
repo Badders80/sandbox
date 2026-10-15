@@ -1,33 +1,31 @@
-# CONTINUE — sandbox (estate work: worksurface test / runbook / census)
+# CONTINUE — sandbox
+
+Scoped to this git root (`Badders80/sandbox`). Work in another repo belongs to that repo's `CONTINUE.md`. The folder map is `docs/plans/SANDBOX-MAP.md`, which `/wrap` does not write.
 
 ## Next action
-Continue quick-fire review of `audit/design/STEP1-LANDING-PAGE.md` — Question 2 (elevation model). Then complete questions 3–8, then resolve gaps across all three steps before drafting `DESIGN.md`.
+Open `audit/design/STEP1-LANDING-PAGE.md` and answer Question 2 (elevation model), then Q3–Q8, before drafting `DESIGN.md`.
 
 ## State
-- 2026-10-15 — Design audit begun: three-step empirical harvest of live surfaces (`/`, `/marketplace`, `/mystable`). Reference docs copied from `audit/website/` into `audit/design/`. Full source read: all landing page sections, marketplace components, MyStable dashboard, brand token source (`tokens.ts` + `theme.generated.css`). Findings written to `audit/design/STEP1-LANDING-PAGE.md`, `STEP2-MARKETPLACE.md`, `STEP3-MYSTABLE.md`. Quick-fire review in progress (8 questions posed, 1 answered).
-- 2026-10-14 — Refund rule written once, in the Refund section of `/home/evo/sandbox/v2/OUTCOME.md` and `evolution/engine_v2/OUTCOME.md` (copies match). `PLAN.md` and `OPERATIONS.md` point at it. No day count. A rule stays in the spec; the plan and the guide do not restate it. Execution protocol was discussed and not locked.
-- 2026-10-13 — V2 working plan is `/home/evo/sandbox/v2/README.md` and `/home/evo/sandbox/v2/PLAN.md`. The brief stays in `evolution/engine_v2/` (`OUTCOME.md`, `CONTINUE.md`, `DoD.md`). Code, after the word build, is `evolution/engine_v2/website`. Do not `git init` the parent. Live website `AGENTS.md` and the branch-law hook stay.
-- 2026-10-13 — Orca removed. The Windows app, the `sandbox/audit/orca` checkout, hooks, and the `orca-cli` skill are gone. Do not reinstall.
-- 2026-10-08 — 60-day corpus deep-dive complete: 73/73 sessions scored. Fix: six-guardrail bundle + auditor separation. Acceptance test still scheduled ~2026-10-22.
-- 2026-10-08 — RUNBOOK live: wired into 5 boot files. Gate all green.
-- 2026-10-08 — Skill library cut 192 → 50; census hygiene pass; dot-dir hygiene.
+- 2026-10-15 — Pruned to wrap's four slots and scoped to this root. The folder map moved out to `docs/plans/SANDBOX-MAP.md`.
+- 2026-10-15 — `docs/plans/VERIFICATION-TIERS.md` filed. `v2/PLAN.md` §5 and §8.5 now codify the pre-numbered diff audit, with a pointer to that file.
+- 2026-10-15 — Design audit harvest complete across all three surfaces (`/`, `/marketplace`, `/mystable`). Q1 answered (tagline style); 7 open. `audit/design/` is untracked.
+- 2026-10-13 — V2 working plan is `v2/README.md` and `v2/PLAN.md`. The brief stays in `evolution/engine_v2/` (`OUTCOME.md`, `CONTINUE.md`, `DoD.md`). Do not `git init` the parent.
+- 2026-10-13 — Orca removed. Do not reinstall.
+- 2026-10-08 — `docs/plans/RUNBOOK.md` live, wired into boot by `/home/evo/sandbox/AGENTS.md`.
+- 2026-10-08 — Corpus deep-dive complete, 73/73 sessions scored. Acceptance re-audit ~2026-10-22.
+
+Closed or out-of-scope, dropped 2026-10-15 so they are not re-added: the gemma-4-31b 429 row, the R2/Cloudflare token row (all five `R2_*` keys are set in `engine/.env.local`), the first-commit gate (steps 1–5 are pushed), and the 2026-10-14 refund row (that rule lives in `OUTCOME.md`).
 
 ## Ledger
 | date | what | repo | commit | state |
 |---|---|---|---|---|
-| 2026-10-15 | Design audit: 3-step harvest complete; Q1 answered (tagline style); 7 questions remain | sandbox | no commit | in progress |
-| 2026-10-14 | 14-day refund line removed; Refund section is the only copy | sandbox + engine_v2 | no commit | done |
-| 2026-10-13 | v2 plan, OPERATIONS.md, and engine-v2 remote locked | sandbox | no commit | done |
-| 2026-10-13 | v2 plan placed in sandbox/v2; Orca removed; live-site lock kept | sandbox | this commit | done |
-| 2026-10-08 | corpus deep-dive audit + AMEND verdict | sandbox | (this repo) | done |
-| 2026-10-08 | RUNBOOK distilled + wired into 5 boot files | sandbox | (this repo) | done |
-| 2026-10-08 | skills archive 192→50; census moves (44+10) | (home root) | n/a | done |
-| 2026-10-08 | sandbox/rebuild git-inited + snapshot 89d3271 | rebuild | 89d3271 | done |
+| 2026-10-15 | Verification tiers filed; pre-numbered diff audit codified in PLAN.md §5/§8.5 | sandbox | ae34ac9 | done |
+| 2026-10-15 | Wrap | sandbox | 5e6d0c8 | done |
+| 2026-10-15 | Three verification gaps parked in `v2/PLAN.md` §Parked | sandbox | ef071f4 | done |
+| 2026-10-15 | Design audit: harvest complete, Q1 answered, 7 open | sandbox | no commit | in progress |
 
 ## Blocked
-- V2 first commit waits for the founder to say build. The remote `Badders80/engine-v2` already exists, private and empty. Image upload still waits on a Cloudflare token.
-- OpenRouter paid lane — key budget exceeded (founder top-up only if needed; free lane works).
-- gemma-4-31b:free — persistent 429; alternatives: local qwen3.8:27b-27b-64k or founder adds Google AI Studio key.
-- Design review: 7 of 8 quick-fire questions still open (elevation, motion tokens, CollapsePanel, 64px heading, label roles, gold viewport cap, system sans stack).
-- `audit/design/DESIGN.md` not yet drafted — waiting on Q1–Q8 resolution.
+- Design review: 7 of 8 quick-fire questions open — elevation, motion tokens, CollapsePanel, 64px heading, label roles, gold viewport cap, system sans stack.
+- `audit/design/DESIGN.md` not drafted. Waits on Q1–Q8.
+- `audit/design/` untracked, so none of it is in git history yet.
 - 2-week re-audit — waits on runbook usage (~2026-10-22).
