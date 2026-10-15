@@ -1,5 +1,4 @@
 rebuild/
-audit/orca/
 node_modules/
 __pycache__/
 *.log
