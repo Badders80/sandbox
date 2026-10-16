@@ -1,8 +1,8 @@
 # §10 Do / Don't — the target `DESIGN.md`, section 10
 
 > **What this is:** the content of section 10 of the target `DESIGN.md` (README §7 row 12, README §9).
-> A collation of `DEFECT-HISTORY-2026-10-16.md`'s 24 defects into **21 rules**, each stated forward
-> and carrying the drift that is its reason.
+> A collation of `DEFECT-HISTORY-2026-10-16.md`'s 24 defects — **plus one found later, by the rhythm
+> ruling** — into **22 rules**, each stated forward and carrying the drift that is its reason.
 >
 > **Status:** ✅ ready. Written 2026-10-16. Verdicts marked `adopted` / `departs` per README §5.
 >
@@ -121,6 +121,12 @@ rules bind pages and chrome; a cap binds an overlay.
 **Don't put the only route to purchase at the end of a scroll. Do keep the mobile conversion bar.**
 *Drift:* the horse page's primary CTA sat at the bottom of a single-column mobile scroll.
 
+**Don't invent a fifth page-level padding scheme. If a section feels wrong at its rhythm, fix the
+section, not the rhythm.**
+*Drift:* `PressShowcaseSection` ran `py-24` (96px) on a marketing page because someone eyeballed the
+logo carousel and broke the 224px section rhythm. Fix component spacing inside the section, not by
+altering page rhythm.
+
 ### 10.5 Components and states
 
 **Don't write a hover state that matches its own base. Do make the hover change something.**
@@ -163,7 +169,7 @@ The first is recorded as README §18 item 10 and `SOURCE-TRUTH.md` C3.
 
 ---
 
-## The collation — 24 defects into 21 rules
+## The collation — 25 defects into 22 rules
 
 | Defect | Rule (§10.1–10.6) | Home before this file | Disposition |
 |---|---|---|---|
@@ -190,9 +196,16 @@ The first is recorded as README §18 item 10 and `SOURCE-TRUTH.md` C3.
 | 21 + 22 | Don't declare a token nothing consumes | README §6.5, §6.2 | restated — collated into one rule |
 | 23 | (folds into 15) | README §6.5 | restated — collated |
 | 24 | — | — | **excluded** (§10.7) |
+| **25** | Don't invent a fifth page-level padding scheme | **none** — found after the harvest, by the 2026-10-16 rhythm ruling | **new** |
 
 **Counted:** 8 restated from component locks · 11 restated from section rules (9 rules, after
-collating #21+#22 and folding #23 into #15) · **4 written new** · 1 excluded. 8 + 11 + 4 + 1 = 24.
+collating #21+#22 and folding #23 into #15) · **5 written new** · 1 excluded. 8 + 11 + 5 + 1 = 25,
+into **22 rules**.
+
+**Defect #25 is not in `DEFECT-HISTORY` and cannot be.** That file lives in the bridge, outside
+version control, and is the extraction's read-only record of 24 rows. #25 was found by the rhythm
+ruling — `PressShowcaseSection`'s `py-24` breaking the 224px section rhythm — and is logged here and
+in README §6.5.
 
 ---
 
@@ -253,6 +266,7 @@ holding `24px` at `:81-83`. Nothing in this section rests on a value found only 
 | Value or rule | Source |
 |---|---|
 | The 24 defects | `DEFECT-HISTORY-2026-10-16.md` (bridge folder, outside version control) |
+| The 25th (#25) | README §6.5 — the rhythm ruling, 2026-10-16. Not in `DEFECT-HISTORY` |
 | Container, gutters, touch law, hover guards, focus ring | `COMPONENTS.md` §3.1–3.5 |
 | Component do-nots | `COMPONENTS.md` §2, §6, §9, §10 |
 | Faces, label roles, colour, type, shape, depth, motion | README §6.1–6.5 |
