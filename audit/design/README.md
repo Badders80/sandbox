@@ -446,6 +446,60 @@ not declared anywhere, which is the same phantom this README carried until 2026-
 | touch target law | **44px** | `DEFECT-HISTORY` #5 |
 | durations | hover `200ms` · collapse `300ms` · shimmer `2000ms` | STEP1 |
 
+**The motion token set — ruled 2026-10-16 (decision 1, §18 item 1).** The shared core is tokenised;
+bespoke scroll scrubs and one-off keyframes stay in their components. Verdicts per §5.
+
+| Token | Value | Verdict |
+|---|---|---|
+| `--ease-enter` | `cubic-bezier(0.16, 1, 0.3, 1)` | **adopted** — live at `footer.tsx:74`, `:82`, four sites |
+| `--ease-modal` | `cubic-bezier(0.32, 0.72, 0, 1)` | **departs** — live modals fade in on a non-interruptible 0.8s keyframe; V2 uses an interruptible transition. `AUDIT-MOTION` principle **3, Interruptibility** |
+| `--duration-hover` | `200ms` | **adopted** — live ×8 |
+| `--duration-step` | `220ms` | **departs** — replaces instantaneous DOM swaps **between modal steps**; `AUDIT-MOTION` C1. It does **not** govern the stepper (see owed 1) |
+| `--duration-collapse` | `300ms` | **adopted** — live ×49 |
+| `--duration-modal-enter` | `240ms` | **departs** — replaces the 800ms `fadeIn` keyframe |
+| `--duration-modal-exit` | `160ms` | **departs** — asymmetric; exit finishes faster than enter to remove unmount lag |
+| `--duration-shimmer` | `2000ms` | **adopted** — `globals.css:211-213`, `animation: shimmer 2s linear infinite` |
+| `--scale-press` | `0.98` | **adopted** — live `active:scale-[0.98]`, `COMPONENTS.md` §9. `0.97` retired |
+| *retired* | `400ms` (×35) · `500ms` (×5) | **departs** — collapsed into 200ms (hover, actions) and 300ms (collapse, structural) |
+
+**How these bind, and this is the part that is easy to get wrong.** `duration-*` and `scale-*` are
+**not** Tailwind v4 theme namespaces, so they bind as `@utility` declarations — never as custom
+properties, which would generate no utility at all.
+
+- `@utility duration-hover { transition-duration: 200ms }` and the same for `step`, `collapse`,
+  `modal-enter`, `modal-exit`. **`duration-shimmer` is the exception**: the shimmer is driven by
+  `@keyframes`, not a transition, so it takes `animation-duration: 2000ms`. `transition-duration`
+  there would be dead CSS.
+- `@utility scale-press` in v4's own shape — `--tw-scale-x/y/z: 98%; scale: var(--tw-scale-x)
+  var(--tw-scale-y)`. **Never `transform: scale()`**: v4 emits scale through the standalone `scale`
+  property, and a `transform` body would clobber composition with `hover:-translate-y-1` and the
+  button's label lift.
+- `--ease-*` **is** a namespace. `ease-enter` and `ease-modal` work as written; no utility needed.
+
+**Two behaviour rulings that are not tokens, recorded so they are not lost.** `MIN_BEAT_MS = 1400` is
+**deleted** (`purchase-flow-modal.tsx:146`, enforced `:161-162`) — readability comes from the 220ms
+entered transition, and elapsed time is bounded by real network responses, per `AUDIT-MOTION` C1 and
+its *"things NOT to carry forward"* list. `REDIRECT_GRACE_MS = 8000` **survives** — it is a network
+safety-timeout for the Stripe redirect fallback, not an animation timer, and it is Step 8 runtime
+logic rather than a design token.
+
+**Three items owed, named rather than buried.**
+
+1. **The stepper's ± increments roll at "≤140ms" and have no token.** A ceiling is not a value, and a
+   control on every purchase step is not a one-off — so either `--duration-micro: 140ms` joins the
+   set or the micro-roll borrows one. `AUDIT-MOTION` 4a caps it at **<180ms**, which 140 satisfies
+   and `--duration-step: 220ms` would not.
+2. **`MIN_BEAT_MS`'s deletion is a behaviour ruling with no home in `DESIGN.md` yet.** It is not a
+   duration and not a token. The rule it produces — *no artificial minimum-hold timers on a
+   conversion flow* — is the kind of thing an agent will reintroduce, and it belongs in §9's Motion
+   as a stated principle. Not yet written.
+3. **None of the three new families closes its vocabulary.** Tailwind's bare-value `duration-<n>`,
+   `scale-<n>` and `z-<n>` utilities still compile, so `duration-450`, `scale-110` and `z-50` all
+   work and none is in the set — and `duration-400` is live proof, being outside Tailwind's own
+   scale. Radius is closed *because* `xl`/`2xl`/`3xl` are aliases and bare `rounded` is banned
+   (`DEFECT-HISTORY` #2). **Duration, scale and z are additive only** until §11's check bans the bare
+   forms — otherwise the token sets are advisory, which is how the last drift survived.
+
 **CollapsePanel:** the STEP1 version is canonical — pure grid rows, no JS measurement. Exit
 differentiates at 300ms/200ms, with a reduced-motion guard.
 
@@ -912,7 +966,7 @@ bridge stays read-only; what changes is that `#19` is no longer quotable as clos
 
 | # | Decision | Status |
 |---|---|---|
-| 1 | Token granularity past colour and type | **Resolved 2026-10-16 — the shared core is tokenised, one-offs stay local.** Easings, durations and the press scale become tokens; bespoke scroll scrubs and one-off keyframes stay in their components. **Three corrections, all verified against `tailwindcss@4.3.3`:** (a) **`--duration-*` and `--scale-*` are not Tailwind v4 theme namespaces** — only `animate aspect blur breakpoint color container ease font font-weight inset-shadow leading max-width perspective radius shadow text tracking` are, read from the package's own `theme.css`. So `--duration-hover` and `--scale-press` would generate **no utility** — the same "hard-coded value wearing a costume" trap as `--z-*` (§3.2), and the same remedy: `@utility`, or consume as `duration-[var(--duration-hover)]`. **`--ease-*` is a namespace and works as written.** (b) **`--scale-press: 0.98` — confirmed 2026-10-16, and `0.97` is retired.** 0.98 is the value `COMPONENTS.md` §9 locks and the value live uses (`active:scale-[0.98]`); 0.97 was the bridge's proposal, which §9 declined and this ruling now confirms as declined. The conflict this pass raised is closed. (c) **`--ease-modal: cubic-bezier(0.32, 0.72, 0, 1)` is not live** — the only curve in the build is `cubic-bezier(0.16, 1, 0.3, 1)` (`footer.tsx:74`, `:82`). It and `220ms` / `240ms` / `160ms` are **new values needing their argued line** under §5, and the live set's off-scale **400ms (×35) and 500ms (×5)** are unaccounted for. Closes §7 row 9 |
+| 1 | Token granularity past colour and type | **Resolved 2026-10-16 — the shared core is tokenised, one-offs stay local.** Easings, durations and the press scale become tokens; bespoke scroll scrubs and one-off keyframes stay in their components. **Three corrections, all verified against `tailwindcss@4.3.3`:** (a) **`--duration-*` and `--scale-*` are not Tailwind v4 theme namespaces** — only `animate aspect blur breakpoint color container ease font font-weight inset-shadow leading max-width perspective radius shadow text tracking` are, read from the package's own `theme.css`. So `--duration-hover` and `--scale-press` would generate **no utility** — the same "hard-coded value wearing a costume" trap as `--z-*` (§3.2), and the same remedy: `@utility`, or consume as `duration-[var(--duration-hover)]`. **`--ease-*` is a namespace and works as written.** (b) **`--scale-press: 0.98` — confirmed 2026-10-16, and `0.97` is retired.** 0.98 is the value `COMPONENTS.md` §9 locks and the value live uses (`active:scale-[0.98]`); 0.97 was the bridge's proposal, which §9 declined and this ruling now confirms as declined. The conflict this pass raised is closed. (c) `--ease-modal`, the `220ms` / `240ms` / `160ms` durations and the retirement of **400ms (×35) and 500ms (×5)** are all **departs, each now carrying its argued line** — the full set with verdicts is tabulated in §6.5. **The mechanisms were corrected a second time on 2026-10-16:** `@utility scale-press` must use v4's native `scale`-property form, not `transform: scale()`, and `duration-shimmer` takes `animation-duration`, because the shimmer is a keyframe and not a transition. **Three items remain owed** and are named in §6.5 — the stepper's untokenised ≤140ms roll, a home for `MIN_BEAT_MS`'s deletion, and the fact that bare `duration-<n>` / `scale-<n>` / `z-<n>` still compile so the three new families do not close their vocabularies. Closes §7 row 9 |
 | 2 | `@theme` in `globals.css`, or a separate `theme.css` it imports | **Resolved 2026-10-16 — `globals.css`**, per `PLAN.md:235`, and **the z-ladder binds as `@utility`** declared beneath the `@theme` block, not as `--z-*` custom properties. Five utilities: `z-grain -1`, `z-sticky 30`, `z-nav 40`, `z-drawer 50`, `z-modal 60` — the values `COMPONENTS.md` §3.2 already ruled. **This is the right mechanism and it generalises:** `@utility` is also what the durations and the press scale need for the same reason (item 1), since neither `--duration-*` nor `--scale-*` is a v4 namespace |
 | 3 | Enforcement strength | **Resolved 2026-10-16 — strict `FAIL`, exit code 1.** The gate fails CI on a raw hex/`rgb()`/`rgba()` outside `globals.css`, an unapproved Tailwind palette utility (`text-purple-400`, `bg-zinc-900`), and a bare `rounded`. Warn is how the last drift survived, and a warning is a rule nobody has to keep |
 | 4 | Keep the reference's *Agent Prompt Guide* section? | **Resolved 2026-10-16 — include it.** A one-pass build is the point, and a machine reader of `DESIGN.md` needs the no-debt rule and the token prohibitions stated for it rather than inferred. Section **11** of the skeleton (§9) ships. **The section is owed** — §7 row 13 is partial until it is written |
