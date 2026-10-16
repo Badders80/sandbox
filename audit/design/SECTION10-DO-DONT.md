@@ -1,9 +1,9 @@
 # §10 Do / Don't — the target `DESIGN.md`, section 10
 
 > **What this is:** the content of section 10 of the target `DESIGN.md` (README §7 row 12, README §9).
-> A collation of `DEFECT-HISTORY-2026-10-16.md`'s 24 defects — **plus two the audit produced later**
-> (#25 the `PressShowcase` rhythm break, #26 the 1400ms beat floor) — into **23 rules**, each stated
-> forward and carrying the drift that is its reason.
+> A collation of `DEFECT-HISTORY-2026-10-16.md`'s 24 defects — **plus three the audit produced later**
+> (#25 the `PressShowcase` rhythm break, #26 the 1400ms beat floor, #27 the pedigree zoom) — into
+> **24 rules**, each stated forward and carrying the drift that is its reason.
 >
 > **Status:** ✅ ready. Written 2026-10-16. Verdicts marked `adopted` / `departs` per README §5.
 >
@@ -122,6 +122,13 @@ rules bind pages and chrome; a cap binds an overlay.
 **Don't put the only route to purchase at the end of a scroll. Do keep the mobile conversion bar.**
 *Drift:* the horse page's primary CTA sat at the bottom of a single-column mobile scroll.
 
+**Don't scale a DOM node to make it fit. Do let the container scroll, or scale the SVG's
+`viewBox`.**
+*Drift:* the pedigree table ran `scale-[0.76] origin-top-left -mb-[24%] -mr-[24%]` — the node scaled
+down to fit a narrow viewport, with negative margins compensating for space the transform never freed.
+A transform shrinks the paint but not the box, so the tap targets and the layout flow keep the
+unscaled geometry. A transform is not a responsive layout.
+
 **Don't invent a fifth page-level padding scheme. If a section feels wrong at its rhythm, fix the
 section, not the rhythm.**
 *Drift:* `PressShowcaseSection` ran `py-24` (96px) on a marketing page because someone eyeballed the
@@ -177,7 +184,7 @@ The first is recorded as README §18 item 10 and `SOURCE-TRUTH.md` C3.
 
 ---
 
-## The collation — 26 defects into 23 rules
+## The collation — 27 defects into 24 rules
 
 | Defect | Rule (§10.1–10.6) | Home before this file | Disposition |
 |---|---|---|---|
@@ -206,12 +213,13 @@ The first is recorded as README §18 item 10 and `SOURCE-TRUTH.md` C3.
 | 24 | — | — | **excluded** (§10.7) |
 | **25** | Don't invent a fifth page-level padding scheme | **none** — found after the harvest, by the 2026-10-16 rhythm ruling | **new** |
 | **26** | Don't hold conversion steps behind artificial timers | **none** — `AUDIT-MOTION` C1, not `DEFECT-HISTORY`. Ruled to land in §9 and here on 2026-10-16 | **new** |
+| **27** | Don't scale a node to make it fit | **none** — found by the 2026-10-16 vocabulary ban | **new** |
 
 **Counted:** 8 restated from component locks · 11 restated from section rules (9 rules, after
-collating #21+#22 and folding #23 into #15) · **6 written new** · 1 excluded. 8 + 11 + 6 + 1 = 26,
-into **23 rules**.
+collating #21+#22 and folding #23 into #15) · **7 written new** · 1 excluded. 8 + 11 + 7 + 1 = 27,
+into **24 rules**.
 
-**Neither #25 nor #26 is in `DEFECT-HISTORY`, and neither can be.** That file lives in the bridge,
+**None of #25, #26 or #27 is in `DEFECT-HISTORY`, and none can be.** That file lives in the bridge,
 outside version control, and is the extraction's read-only record of 24 rows. #25 came from the
 rhythm ruling (`PressShowcaseSection`'s `py-24`); #26 from `AUDIT-MOTION`'s C1 (the 1400ms beat
 floor). Both are logged here and in README §6.5. **So this file is no longer purely a collation of

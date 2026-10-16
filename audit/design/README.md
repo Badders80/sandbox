@@ -510,24 +510,52 @@ the three new families are additive until §11's check bans the forms that actua
 | `scale-*` | **arbitrary values** — *all five* live scales are `scale-[…]`; zero are bare | `scale-[…]` and bare `scale-<n>` |
 | `z-*` | **arbitrary values** — `z-[9999]`, `z-[10000]`, `z-[9990]`, `z-[9995]` ×12 sites | `z-[…]`, with a carve-out below |
 
-**Two consequences the ban forces, both unresolved.**
+**Both consequences are now ruled — 2026-10-16.**
 
-- **`scale-[1.02]` is the locked label lift and it is an arbitrary value.** `solid-pill-button.tsx:36`,
-  `LABEL_LIFT`, and `COMPONENTS.md` §9's States table. So a `scale-<number>` ban catches **none** of
-  the real drift, and extending it to `scale-[…]` bans a locked value — unless **`--scale-lift: 1.02`
-  is tokenised first**, which nothing has ruled.
-- **`z-<number>` cannot be banned outright.** `z-10` appears at **19 sites in 10 files**, including the
-  badge-over-image on the listing card (`marketplace-listing-grid.tsx:68`), which `COMPONENTS.md` §3.2
-  *permits* — local stacking is "a local stacking context, not a ladder slot". A blanket ban would
-  break the locked pattern. Either bare `z-0`/`z-10`/`z-20` are carved out as the local-stacking
-  vocabulary, or §3.2 needs a stated alternative.
+- **`scale-lift` is tokenised, and the scale family is closed to two values.** `@utility scale-lift`
+  in v4's native form (`--tw-scale-x/y/z: 102%` + the `scale` property), so `scale-[1.02]` retires.
+  `scale-press` (0.98) and `scale-lift` (1.02) are the whole vocabulary, and CI can now ban every
+  `scale-[…]` and bare `scale-<n>` with nothing broken. **One correction to the reasoning:** it was
+  ruled as "buttons and cards use `group-hover:scale-lift`" — **cards do not.** `scale-[1.02]` has
+  exactly two sites: `solid-pill-button.tsx:36` (`LABEL_LIFT`, the button label) and
+  `design-lab/page.tsx:165`, a specimen. The listing card's hover is `hover:-translate-y-1` plus
+  `--shadow-card-hover` (`marketplace-listing-grid.tsx:134`) — a translate and a shadow, no scale. So
+  `scale-lift` has **one production consumer**, and the card is not one of them.
+- **`z-0` / `z-10` / `z-20` are carved out as the local intra-component tier.** Below 30 is local —
+  badges over images, background gradients, hairlines, local highlights, in-card popovers. At or above
+  30 is the ladder — `z-grain` (−1), `z-sticky` (30), `z-nav` (40), `z-drawer` (50), `z-modal` (60).
+  CI bans every `z-[…]` literal and every bare `z-<n>` where n ≥ 30. **Checked against live: this
+  catches all 12 arbitrary z sites (`z-[9999]`, `z-[10000]`, `z-[9990]`, `z-[9995]`, `z-[999]` ×2,
+  `z-10000`) and preserves all 24 legitimate ones (`z-10` ×19, `z-0` ×3, `z-20` ×2)** — zero false
+  positives, zero missed drift. The boundary is principled rather than arbitrary: below `z-sticky` is
+  inside a component, at and above it is the page's shared order.
 
-**And one defect the ban surfaced that nothing has ever counted: scale is a drift surface.** Five
-distinct arbitrary scales are live, and the audit has never tabulated them the way it tabulated 21
-shadows and 19 border opacities. `scale-[0.76]` on `pedigree-table.tsx:200` is the sharpest — a
-scale-to-fit with `-mb-[24%] -mr-[24%]` compensation, which is a zoom wearing a transform's clothes.
-`1.02`, `1.03` and `1.05` are design-lab specimens. So of five values, two are locked (`0.98` press,
-`1.02` lift) and one is a defect; the rest are lab. Needs a ruling, like §6.5's two unaccounted glows.
+**The mechanism detail worth keeping:** the tokenised form is *better* than what live emits.
+`scale-[1.02]` compiles to a bare `scale: 1.02`; the `@utility` sets `--tw-scale-x/y/z` first and
+composes through them, so `scale-lift` and `scale-press` can coexist on one element the way v4's own
+scale utilities do. Live's spelling could not.
+
+**The scale family is now fully accounted for.** Five arbitrary scales were live; two are locked
+(`0.98` press, `1.02` lift), `1.03` and `1.05` are design-lab specimens, and the fifth is defect #27
+below.
+
+**Defect #27 — the pedigree zoom, ruled 2026-10-16.** `pedigree-table.tsx:200` runs
+`scale-[0.76] origin-top-left -mb-[24%] -mr-[24%]` — a DOM node scaled down to fit a narrow viewport,
+with negative margins compensating for the space the transform did not free. **A transform is not a
+responsive layout:** it shrinks the paint without shrinking the box, so the tap bounds and the layout
+flow keep the unscaled geometry. It lands as §10.4's rule 24, and the ban on `scale-[…]` stays
+absolute — **no exemptions written into `assert-no-anti-patterns.sh`.** V2 uses `overflow-x-auto` or
+SVG `viewBox` scaling instead, which reflow rather than zoom.
+
+**And the ban has surfaced the next family: `translate` is wide open.** Six distinct values across
+**29 sites** — `translate-x-full` ×12 (the sweeps), `translate-y-1` ×9 (hover lifts), `translate-y-0`
+×3, `translate-x-1` ×3 (the CTA arrow), `translate-y-2` and `translate-y-4` ×1 each. Nothing bans them
+and nothing tokenises them. **This is the asymmetry inside a single interaction:** the listing card's
+hover is `hover:-translate-y-1` **plus** `--shadow-card-hover` — the shadow half is one of seven
+elevation tokens, the translate half is a bare value. Scale became visible only when the ban forced a
+look; translate has had no such look. It needs a ruling — either translate values are structural
+offsets that need no vocabulary, or it is the next drift surface. Named here rather than left to be
+discovered by the same route scale was.
 
 **CollapsePanel:** the STEP1 version is canonical — pure grid rows, no JS measurement. Exit
 differentiates at 300ms/200ms, with a reduced-motion guard.
@@ -605,7 +633,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 9 | Motion | ✅ | **Ruled 2026-10-16 — the shared core is tokenised, one-offs stay local.** Easings, durations and the press scale become tokens; bespoke scroll scrubs and one-off keyframes stay in their components. Durations already locked (§6.5); granularity was §18 item 1. **Two mechanisms still owed before this is buildable:** `--duration-*` and `--scale-*` are not Tailwind v4 namespaces, so they bind as `@utility` like the z-ladder (§18 item 2), and three of the proposed values are new rather than harvested (§18 item 1). The *decision* is made; those are implementation |
 | 10 | Layout — breakpoints | ✅ | **Ruled 2026-10-16 — not tokenised.** Breakpoints stay out of the `@theme` set: page layouts and responsive behaviour differ legitimately per view, and forcing breakpoints into tokens manufactures constraints the pages do not share. Standard Tailwind prefixes (`sm:` / `md:` / `lg:`) apply, mobile-first, under one rule. The single exception already ruled is the *chrome* collapse point (`COMPONENTS.md` §8, 768px) — one value, because the nav, the drawer and the bar must agree with each other. `SPEC` originally excluded breakpoints too; the reference pattern's inclusion is declined |
 | 11 | Components | ✅ | **9 components locked — Workstream C complete** (`COMPONENTS.md`). All six on the §8 list, plus the mobile conversion bar, the mobile menu drawer and the button hierarchy — three the six-item list never knew existed. Four consolidation jobs remain and none of them is a component |
-| 12 | Do / Don't | ✅ | **Written 2026-10-16** — `SECTION10-DO-DONT.md`. `DEFECT-HISTORY`'s 24 defects, **plus two the audit produced later** (#25 the `PressShowcase` rhythm break, #26 the 1400ms beat floor), collated into **23 rules**: 8 restated from the component locks, 11 from §6 (9 rules, after collating #21+#22 and folding #23 into #15), **6 written new** — #7, #11, #12, #17, #25 and #26 — and 1 excluded as build hygiene (#24). 8 + 11 + 6 + 1 = 26. Every rule is stated forward, carrying the drift that is its reason. Four corrections to `DEFECT-HISTORY` came out of the collation; see that file's §Corrections |
+| 12 | Do / Don't | ✅ | **Written 2026-10-16** — `SECTION10-DO-DONT.md`. `DEFECT-HISTORY`'s 24 defects, **plus three the audit produced later** (#25 the `PressShowcase` rhythm break, #26 the 1400ms beat floor, #27 the pedigree zoom), collated into **24 rules**: 8 restated from the component locks, 11 from §6 (9 rules, after collating #21+#22 and folding #23 into #15), **7 written new** — #7, #11, #12, #17, #25, #26 and #27 — and 1 excluded as build hygiene (#24). 8 + 11 + 7 + 1 = 27. Every rule is stated forward, carrying the drift that is its reason. Four corrections to `DEFECT-HISTORY` came out of the collation; see that file's §Corrections |
 | 13 | Agent Prompt Guide | ✅ | **Written 2026-10-16** — `SECTION11-AGENT-PROMPT-GUIDE.md`, and it is **section 11** of `DESIGN.md` since Provenance was cut. Decision 4 closed: the section ships, because a one-pass build is the point and a machine reader needs the rules stated rather than inferred. Ten rules: the six as ruled, plus the touch law, the elevation vocabulary and the vertical rhythm. **Three corrections and three additions, all marked in that file's §What was changed** — the significant one being rule 2, which as drafted called Geist Mono financial-only against §6.1's explicit second job for the face |
 
 **A row was removed from this table on 2026-10-16, and the tally below is recomputed from what
