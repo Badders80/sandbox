@@ -210,7 +210,7 @@ canvas and the card surface; every structural token clears 3:1. Ratios below are
 | Token | Value | Ratios | Role |
 |---|---|---|---|
 | `--color-status-active` | `#10b981` | 8.13 / 7.80 | Active, verified, live availability, positive returns |
-| `--color-status-pending` | `#f59e0b` | 9.60 / 9.22 | Warning, pending, **fully allocated** |
+| `--color-status-pending` | `#f59e0b` | 9.60 / 9.22 | **Fully allocated** — sold out, waitlist. Read as *demand still standing*, not as closure. `pending` is not a status name; `coming_soon` is green |
 | `--color-status-closed` | `#738396` | 5.32 / 5.11 | Terminal — **completed**. Neutral slate |
 | `--color-destructive` | `#ef4444` | 5.48 / 5.26 | Error, cancelled, declined |
 
@@ -279,6 +279,10 @@ Weights: **300 and 500 only.** No 600 — `font-semibold` maps to 500.
 **CollapsePanel:** the STEP1 version is canonical — pure grid rows, no JS measurement. Exit
 differentiates at 300ms/200ms, with a reduced-motion guard.
 
+**One row above is not locked.** The `--spacing-section` and container values are the *harvest*
+values, and they are contested (§7 row 7). The rest of this table is settled. Do not read
+`224px` as a locked token until Open decision 6 resolves.
+
 ---
 
 ## 7 · The bill of materials — readiness for play
@@ -294,7 +298,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 4 | Colours | ✅ | §6.3 — 24 tokens, contrast-verified on canvas and surface, including the legal set |
 | 5 | Typography | ✅ | §6.4 — seven roles, two weights |
 | 6 | Shapes — radius & borders | ✅ | §6.5 — 5-tier radius, 3 border opacities |
-| 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl` |
+| 7 | Layout — spacing & container | ⚠️ open | Harvest is fixed: `224px` (`py-56`) and `px-12 md:px-16 lg:px-20`. The bridge proposes fluid: `clamp(5rem, 12vw, 14rem)` and `px-6 sm:px-10 lg:px-16`. **These are not the same rule.** The clamp equals 224px only at ≥1867px; at 1440px it is 172.8px, at 375px it is 80px. Adopting it overrides §5 rather than reconciling with it. Blocked on measurement — Open decision 6 |
 | 8 | Elevation & Depth | ⚠️ partial | `--shadow-card-hover` locked. The archive proposes **4 elevation + 1 bevel + 2 glow** (`panel`, `modal`, `float`, `card-hover`; `bevel`; `glow-success`, `glow-gold`) — **unreviewed, needs a ruling** |
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
 | 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
@@ -303,7 +307,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
 | 14 | Agent Prompt Guide | ⚠️ open | The richer refero pattern has it; the leaner x.ai pattern does not. Open decision 4 |
 
-**Reading it plainly:** five sections are ready, four are partial or open, three are not started.
+**Reading it plainly:** four sections are ready, five are partial or open, three are not started.
 **We are not at play.** The two heaviest gaps are **Components (#11)** and **Do/Don't (#12)** — and
 both are the kind of thing that, left until drafting time, guarantees a second pass.
 
@@ -385,8 +389,19 @@ Do-not            — the explicit anti-patterns, each naming the drift it cause
 
 1. **Listing card** — the marketplace unit. Highest drift exposure.
 2. **Status badge** — the four statuses are already a database enum; the badge must not invent a
-   fifth look. ✅ *Decided:* green + glow = active (`available`, `coming_soon`); muted grey =
-   terminal (`fully_allocated`, `completed`). One component, one map.
+   fifth look. ✅ *Decided 2026-10-16:* one component, one map, three treatments — green + glow
+   (`available`, `coming_soon`); **amber, no glow** (`fully_allocated`); slate, no glow
+   (`completed`).
+
+   This reverses the muted-grey treatment the old build gave `fully_allocated`, and it supersedes
+   the mapping recorded at `STEP2-MARKETPLACE.md:50-55`. That answers the two questions STEP2 left
+   open at `:146` and `:148`. It also moves §6.3 and this list onto the same answer — they
+   disagreed for one commit, and amber is the side that won.
+
+   Two names to stop carrying: **`draft` is not a status** — it is the `published` boolean
+   (`PLAN.md:206`, `FORENSIC-AUDIT.md:97`), and the bridge spec folds it into the status map. And
+   **`listed` / `fully_subscribed` are bridge aliases**, not database values; they are retired
+   rather than translated.
 3. **Button hierarchy** — primary, secondary, and the disabled/loading forms of each.
 4. **Figure row** — the mono-figures pattern. `brand/DESIGN.md:79` puts Geist Mono on financials and
    tabular figures specifically, so this is a token decision, not a styling choice. Weight 500.
@@ -541,12 +556,20 @@ F  → gate check written and chained
 
 | File | What it holds |
 |---|---|
-| `STEP1-LANDING-PAGE.md` | Landing page harvest. **Closed, clean.** Colours, 7 type roles, 2 label roles, radius scale, spacing rhythm, motion |
-| `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, badge treatment, display heading, card hover shadow, tag tracking, container width |
+| `STEP1-LANDING-PAGE.md` | Landing page harvest. **Closed, clean** — except its spacing rhythm, which is contested (Open decision 6). Colours, 7 type roles, 2 label roles, radius scale, motion |
+| `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, display heading, card hover shadow, tag tracking. Its **badge treatment is superseded** — `:50-55` is the old-build map, and its open questions at `:146`/`:148` were answered 2026-10-16 (§8). Container width is contested like STEP1's |
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
+| `DEFECT-HISTORY-2026-10-16.md` | The old build's 24 defects, each with the ruling that closed it. The source for §7 row 12 — `Do/Don't` is a collation of this file, not new work. Lives in the bridge folder |
+| `AUDIT-MISSING-PRIMITIVES-2026-10-16.md` | Texture utilities, keyframes, dead classes, raw hex, and **21 arbitrary shadows across 14 distinct values**. The material for §7 row 8 (Elevation) and §18 decision 5. Uncited until now. Lives in the bridge folder |
 
 Read-only source material. The findings are cited above; these files hold the full detail and the
 file:line provenance behind each value.
+
+**Careful with the last two, and with the bridge spec.** Everything in
+`/home/evo/audit/website/` — including `V2-DESIGN-SPEC-2026-10-16.md` and
+`V2-THEME-2026-10-16.css`, which §7 row 8 calls "the archive" — sits **outside version control**:
+that path is not a git repository. §5 keeps it reference-only and mined decision-by-decision, which
+is exactly why it needs watching: a value copied from there is a value with no commit behind it.
 
 ---
 
@@ -559,6 +582,7 @@ file:line provenance behind each value.
 | 3 | Enforcement strength | Open — proposed **fail**, not warn |
 | 4 | Keep the reference's *Agent Prompt Guide* section? | Open — refero has it, x.ai does not |
 | 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | Open — see §7 line 8 |
+| 6 | Layout rhythm and gutters: 224px and `px-12→20`, or the fluid clamp and `px-6→16`? | **Open, blocked on measurement.** The live page wins on values (§5), and nobody has recorded its section padding or gutter at 375 / 768 / 1440. Measure first. If the harvest holds up at mobile, keep it and the clamp is a proposal we decline. If it does not, the clamp is an override of §5 and needs to be argued as one |
 
 ---
 
@@ -568,8 +592,11 @@ file:line provenance behind each value.
 else, and leaving it until drafting time guarantees the second pass that the one-pass goal exists
 to avoid.
 
-Alongside it, two smaller jobs:
+Alongside it, three smaller jobs:
 
+- **Measure the layout values** — the live page's section padding and container gutter at 375,
+  768 and 1440. One read of the running site, and Open decision 6 stops being open. Until it is
+  done, §6.5's `224px` and §7 row 7 stay contested.
 - **Collate provenance** into `SOURCE-TRUTH.md` from STEP1–3 and `DEFECT-HISTORY`. The values are
   known and closed; the job is to gather each next to the element it came from.
 - **Rule on §18 items 5 and 2** — elevation, and where the `@theme` block lives.
