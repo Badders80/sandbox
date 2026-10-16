@@ -228,8 +228,11 @@ canvas. `stage-black #000000` has no call sites. The `l1–l4` ladder was retire
 ### Two traps
 
 - **`text-muted` is not muted text.** The compatibility slot maps `--color-muted` to the *raised
-  surface* `#111111`, so `text-muted` renders near-black type on a near-black canvas. The token is
-  correct as a surface; only its name is a trap. Dim type is `muted-foreground`.
+  surface* `#111111`, so `text-muted` renders near-black type on a near-black canvas. **`--color-muted`
+  is SURFACE ONLY and must never carry type.** It is not deprecated and must not be removed: shadcn
+  components are written against that name, so deleting it means patching every future `shadcn add`.
+  The token is correct; only its name is a trap. Dim type is always `muted-foreground` (`#7c7c7c`), and
+  where a surface is meant, name `--color-raised` directly.
 - **`--color-accent` is an alias for gold and is used widely in existing code.** The prohibition is on
   *new* names, not a reason to rewrite a working alias.
 
@@ -447,13 +450,33 @@ fix that banned bare `rounded`.
 | `--radius-pill` | `9999px` | Pills, badges, status dots |
 
 **Three steps plus pill — and the aliases exist so nothing falls through.** Tailwind's own scale
-would render `rounded-2xl` at 16px and `rounded-3xl` at 24px; pinning them to `lg` means a numeric tier
-cannot quietly reintroduce a fourth radius. **`rounded-xs` does not exist** and falls through to
-Tailwind's ~2px. Do not use it.
+renders `rounded-xl` at 12px and `rounded-2xl` at 16px; pinning them to `lg` means a numeric tier cannot
+quietly reintroduce a fourth radius. The theme declares them explicitly, all four at `24px`:
+`--radius-lg`, `--radius-xl`, `--radius-2xl`, `--radius-3xl`.
+
+**Three doors are still open, and closing them is a decision, not an oversight.** Tailwind v4 also
+supplies radius values this set does not pin:
+
+| Utility | Tailwind's value | Status |
+|---|---|---|
+| `rounded` (bare) | `--radius: 0.25rem` — **4px** | **Unpinned.** This is the exact fall-through §10's rule 10 was written for: bare `rounded` shipped to 17 call sites at 4px |
+| `rounded-xs` | `--radius-xs: 0.125rem` — **2px** | **Unpinned.** The theme has no `xs` step, so the utility falls through |
+| `rounded-4xl` | `--radius-4xl: 2rem` — **32px** | **Unpinned.** A fifth radius, arriving by a name nobody watched |
+
+Pinning all three onto real steps would make the vocabulary self-closing — the theme file's own
+comment already claims this ("*so no utility can fall through to Tailwind's scale and reintroduce a
+fifth*"), and it is not yet true. Until they are pinned, the ban is the only thing standing between a
+habit and a wrong radius.
 
 ### Borders
 
-**Three opacity steps: `/20`, `/40`, `/60`.** A fourth is a defect.
+**Three opacity steps: `/20` whisper, `/40` default, `/60` emphasis.** A fourth is a defect.
+
+**The step and the colour token are separate axes.** A border may change *token* at a constant step —
+`border-border/60` → `hover:border-heading/60` is a legal hover, because `/60` is one of the three
+steps and only the colour moved. Enforcement reads the **step**, never the pair: `heading/60` is not a
+fourth opacity, and a check that flags it is a false positive. What is banned is a *new step* —
+`/30`, `/45`, `/70` — anywhere.
 
 ---
 
