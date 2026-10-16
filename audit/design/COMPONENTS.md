@@ -566,25 +566,52 @@ a button fill, in any variant.**
 
 ### Variants — a CLOSED list of two
 
-| Variant | Treatment | Label role | Used on |
+| Variant | Treatment | Label role | Production call sites |
 |---|---|---|---|
-| **`solid`** — *SolidPill* | Near-white fill (`bg-heading`), dark text (`on-light`) | `.label-action` — 11px / **500** / 0.2em | The **purchase flow's primary**: the rail, the modal, design-lab |
-| **`ghost`** — *GhostPill* | Outline only, no fill | `.label-eyebrow` — 11px / **300** / 0.2em | The flow's **secondary** — the modal's dismiss and cancel forms |
+| **`solid`** — *SolidPill* | Near-white fill (`bg-heading`), dark text (`on-light`) | `.label-action` — 11px / **500** / 0.2em | The flow's primary: the rail, the purchase modal |
+| **`ghost`** — *GhostPill* | Outline only, no fill. Base `border-border/60` → hover `border-heading/60` | `.label-eyebrow` — 11px / **300** / 0.2em | **None yet** — one specimen, `design-lab/system/page.tsx:155` |
 
 **The weight *is* the hierarchy** — 500 primary, 300 secondary, same size, same tracking. That is an
 existing decision in the live build and it is adopted as-is.
 
-**And there is a third treatment, with its own component and its own surfaces.** `GlowPillButton` is
-not a variant of this one — it is a separate component that owns the **nav's CTA** (`Get Started`,
-`Sign Out` — `NavBar.tsx:217,227`) and the marketing hero. Its treatment is `bg-surface` +
-`border-edge/70`, with gold as a bottom hairline and a shimmer overlay. It has its own hover-guard
-rule and it must never appear in the purchase flow.
+**A correction to the previous version of this table.** It claimed `ghost` was "the flow's secondary
+— the modal's dismiss and cancel forms". It is not. `ghost` has exactly **one** call site in the
+whole app, and it is a design-lab specimen; the modal never passes it. The variant is *specified but
+not shipped*. It stays in the closed list because a flow with a cancel path needs a secondary, and
+leaving it out is how the cancel gets hand-rolled — but the first real consumer is still to come, and
+claiming otherwise was a guess wearing a citation.
 
-So the system has **three button treatments and exactly one of each job**: SolidPill for the flow's
-primary, GhostPill for the flow's secondary, GlowPill for chrome and marketing. Adding a fourth is a
-ruling. The bridge names three *components* (`SolidPillButton`, `GhostPillButton`, `GlowPillButton`)
-where live has one component with a `ghost` prop plus GlowPill — ghost is a variant, not a component,
-and that naming is retired.
+### The third treatment — `GlowPillButton`
+
+A **separate component**, not a variant of this one. Treatment: `bg-surface` + `border-edge/70`, gold
+as a bottom hairline, a shimmer overlay, and its own hover guard.
+
+| Where | What it is |
+|---|---|
+| `NavBar.tsx:217,227` — `Get Started`, `Sign Out` | the **nav's CTA** |
+| `design-lab/page.tsx`, `design-lab/system/page.tsx` | specimens |
+
+**Not the marketing hero.** The bridge spec calls this the "marketing hero button", but
+`HeroSection.tsx` and `MarketplaceSection.tsx` contain **no button at all** — the landing hero is a
+brand lockup. `GlowPillButton` is the **chrome** button. It never appears in the purchase flow.
+
+### The three treatments, plainly
+
+Because this is the question that keeps being asked, and the answer has three parts, not two:
+
+```
+SolidPill   flow primary       rail · purchase modal        bg-heading, dark text    label-action 500
+GlowPill    chrome             NavBar CTA                   bg-surface, gold hairline hover-guarded
+GhostPill   not yet shipped    design-lab specimen only     outline, no fill         label-eyebrow 300
+```
+
+Two have production call sites. The third is specified and waiting for its first. Adding a fourth
+treatment is a ruling.
+
+And the bridge names three *components* — `SolidPillButton`, `GhostPillButton`, `GlowPillButton` —
+where live has one component with a `ghost` prop plus `GlowPill`. Ghost is a **variant, not a
+component**; that naming is retired. (`marketplace-cta.tsx` is not a treatment either — it is
+orchestration, wiring the sign-up popup to the auth card.)
 
 ### States
 
