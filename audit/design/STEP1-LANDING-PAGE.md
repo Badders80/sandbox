@@ -4,6 +4,20 @@
 **Source:** `evolution/engine/website/apps/web/src/app/page.tsx` + all `components/sections/`, `components/ui/`, `packages/brand_dna/src/theme.generated.css`
 **Frame:** Empirical harvest. No guess. Every value cited from source.
 
+> **Corrected 2026-10-16 — read this before citing.** One table here is wrong and superseded. §3's
+> status colours record `--color-status-closed` as `#64748b` — a value that **failed AA** and is now
+> `#738396` (README §6.3) — and map `--color-status-pending` to *Coming soon* and
+> `--color-status-closed` to *fully allocated / completed*. That mapping is the **opposite** of the
+> ruling: `coming_soon` is green, `fully_subscribed` is amber (`COMPONENTS.md` §2).
+>
+> Everything else was re-verified against the live source on 2026-10-16 and holds — including the
+> two things two later files lost: **the nav link recipe** (`:133`, `tracking-[0.15em]` at 12px/300)
+> and **four label roles** (`:61`, including `.label-spec` at weight 400).
+>
+> §13's "three shadow tokens" predates the archive's 4 + 1 + 2 elevation proposal; elevation is
+> still open (README §18 item 5). And `:141` names the class `py-56` where the source says
+> `py-section` — the value, 224px, is right.
+
 ---
 
 ## 1 · Surfaces

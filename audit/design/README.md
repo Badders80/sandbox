@@ -177,15 +177,27 @@ looking for a `.woff2` will not find one, and must not conclude the face is miss
 
 | Class | Size | Weight | Tracking | Face | Used for |
 |---|---|---|---|---|---|
-| `.label-eyebrow` | 11px | 300 | 0.2em | sans | section labels, eyebrows, nav — the workhorse |
+| `.label-eyebrow` | 11px | 300 | 0.2em | sans | section labels, eyebrows — the workhorse |
 | `.label-action` | 11px | 500 | 0.2em | sans | caps that are clicked, and gold status |
-| `.label-badge` | 10px | 500 | **0.05em** | sans | status pills only |
+| `.label-spec` | 10px | **400** | 0.2em | **mono** | card titles, spec strips, cap table |
+| `.label-badge` | 10px | 500 | **0.05em** | sans | status pills and highlight tags |
 
-**Three roles, three tracking steps, and the third is the one that keeps getting lost.**
-`DEFECT-HISTORY` #20 found the split — spec `0.2em` against `tracking-wider`'s `0.05em` on the same
-button types — and ruled: action labels `0.2em`, badge pills `0.05em`. The live badge ignores that
-and renders at 8px with `tracking-widest` (0.1em), which is a fourth step, below the 10px floor, and
-the reason `COMPONENTS.md` §2 names the badge role explicitly.
+**Four roles, not two — and the second one was missing from this table until 2026-10-16.**
+`.label-spec` is live and in active use (`cap-table-card.tsx:27`, `data-room-card.tsx:15`,
+`horses/[slug]/about/page.tsx:99`). STEP1 and STEP3 both recorded it; this table did not.
+
+**The nav is not an eyebrow role.** This table used to say the eyebrow's job was "section labels,
+eyebrows, **nav**". That came from the bridge spec's prose, not from the build. Live nav links are
+`text-[12px] font-[300] tracking-[0.15em]` (`NavBar.tsx:192`) — a 12px size that is not a type role,
+an inline arbitrary weight, and a **fourth tracking step**. The nav's link treatment is its own
+decision and is recorded in `COMPONENTS.md` §4.
+
+**And the tracking count is the thing that keeps drifting.** Four steps are live: `0.2em` (eyebrow,
+action, spec), `0.15em` (nav), `0.05em` (tags and pills), `-0.04em` (the display heading). STEP2
+already proposed `--tracking-tag` for the `0.05em` step and `--tracking-display` for `-0.04em`;
+those names are owed, not invented. `DEFECT-HISTORY` #20 found the split on one button type alone.
+
+`DEFECT-HISTORY` #22 dropped `--label-mono-intro` — zero consumers. It is not a role.
 
 ### 6.3 Colour — the locked set
 
@@ -312,17 +324,26 @@ hand-typed as `md:text-[64px]` into `marketplace/page.tsx:67` and `marketplace/[
 before it is written down; the two copies are drift mechanism #6 in the file this section was
 harvested from.
 
-Weights: **300 and 500 only.** No 600 — `font-semibold` maps to 500.
+**Three weights, and one of them is not a choice — it is a live value this section did not know
+about.** `300` body and headings · `500` clicked caps, the hero tagline · **`400` the
+`.label-spec` role**, which is live in `cap-table-card.tsx`, `data-room-card.tsx` and the horse
+about page. "300 and 500 only" was wrong for as long as `.label-spec` has existed. `DEFECT-HISTORY`
+#18 maps `font-semibold` (600) to 500 and says nothing about 400, because it was looking at MyStable
+financials rather than at the label roles.
+
+So the rule is **300 / 400 / 500**, and `600` maps to 500. Either `.label-spec` moves to 300 or 500,
+or the scale admits 400 — that is a ruling, and it is owed.
 
 ### 6.5 Shape, depth, motion
 
 | Token | Value | Source |
 |---|---|---|
-| `--radius-xs` | `4px` | micro — checkbox, chip |
 | `--radius-sm` | `8px` | inputs, steppers, image frames |
 | `--radius-md` | `16px` | inner cards, accordion panels |
 | `--radius-lg` | `24px` | outer cards, rail, modals |
+| `--radius-xl` / `--radius-2xl` / `--radius-3xl` | `24px` **each** | **Aliases onto `lg`**, declared in the theme. This is why `rounded-2xl` and `rounded-3xl` render 24px and not Tailwind's 16px/24px defaults |
 | `--radius-pill` | `9999px` | pills, badges, status dots |
+| `--radius-xs` | **does not exist** | `rounded-xs` falls through to Tailwind's own ~2px. The bridge spec's checkbox uses it; nothing in the theme backs it |
 | border opacities | three steps: `/20`, `/40`, `/60` | `DEFECT-HISTORY` #16 |
 | `--shadow-card-hover` | `0 20px 40px rgba(0,0,0,0.45)` | listing card, on hover |
 | `--spacing-section` | `224px` | `py-section`; six wrappers use `py-56` |
@@ -366,7 +387,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 3 | Non-negotiables | ✅ | §6.1–6.2 — retired faces, the one serif word, the label roles |
 | 4 | Colours | ✅ | §6.3 — 24 tokens, contrast-verified on canvas and surface, including the legal set |
 | 5 | Typography | ✅ | §6.4 — seven roles, two weights |
-| 6 | Shapes — radius & borders | ✅ | §6.5 — 5-tier radius, 3 border opacities |
+| 6 | Shapes — radius & borders | ✅ | §6.5 — three radius **steps** (8 / 16 / 24) plus pill, with `xl`/`2xl`/`3xl` as aliases onto `lg`; 3 border opacities |
 | 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl`. **Confirmed against the live source 2026-10-16**: `brand_dna/src/theme.generated.css:87` declares `--spacing-section: 224px` — fixed, not a clamp — and every page section uses `px-12 md:px-16 lg:px-20`. The bridge's fluid values are declined, not missing. The container is ruled for the chrome and all page content (`COMPONENTS.md` §3.1); the dashboard's `max-w-7xl` is a separate open item — decision 7 |
 | 8 | Elevation & Depth | ⚠️ partial | `--shadow-card-hover` locked. The archive proposes **4 elevation + 1 bevel + 2 glow** (`panel`, `modal`, `float`, `card-hover`; `bevel`; `glow-success`, `glow-gold`) — **unreviewed, needs a ruling** |
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
@@ -645,6 +666,33 @@ F  → gate check written and chained
   but must be re-derived in the website family, never copied across.
 - **Do not call the output a lookbook.** `PLAN.md:150,275` ban the word. This produces an audit and
   a `DESIGN.md`.
+
+### Keeping the runsheet true
+
+`README.md` is the runsheet — §7's readiness table is the bill of materials. `COMPONENTS.md` is the
+component ledger. Three constraints keep them honest, and they are stated so they can be **checked
+in one command**, because a rule that lives in prose is a remembered rule:
+
+- **A decision and its record ride the same commit.** Any commit that changes a decision, a
+  readiness row, or a component lock updates these files in *that* commit — not a later one, and not
+  only when someone remembers to. A commit that changes no decision needs no update; "every commit
+  touches the README" is how a rule becomes noise and then becomes ignored.
+- **Derived sentences are recomputed, never carried forward.** Count §7's table and write the
+  sentence from the count. Both were wrong at once already: the summary claimed five of fourteen
+  when the table showed seven, and Components was "two of six" with six locked. The failure is the
+  document disagreeing with *itself*, which no push rule would have caught.
+- **Push at a checkpoint; do not batch.** Six commits sat unpushed through 2026-10-16 while this
+  repo was being read on GitHub. Committing is local; a runsheet nobody can read is not a runsheet.
+
+**Why these are three rules and not one.** The proposal that prompted them was "every push updates
+the README", which conflates two separate axes — record currency, which belongs to the commit, and
+push cadence, which belongs to the checkpoint. It would also have missed every staleness found on
+2026-10-16, because all of it was *internal*: a summary contradicting its own table, and a component
+list contradicting a correction ten lines below it.
+
+Whether this ever becomes mechanical rather than remembered is Workstream F's question — §11's
+checks run in the build repo, and this folder is markdown-only. Until then it is the one rule in this
+document kept by discipline, and it should be read that way.
 
 ---
 

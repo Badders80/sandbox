@@ -92,7 +92,8 @@ duration, hover-guarded.
    surface. Featured differs by gap and image width. *Drift:* it makes "what is our card padding"
    unanswerable, which is how a spacing scale stops existing.
 2. **Do not use Tailwind's numeric radius names.** Live uses `rounded-3xl` and `rounded-2xl` while
-   the theme defines five named tiers. `DEFECT-HISTORY` #2 banned bare `rounded` for exactly this
+   the theme declares three radius **steps** (8 / 16 / 24) plus pill, with `xl`/`2xl`/`3xl` as
+   aliases onto `lg`. `DEFECT-HISTORY` #2 banned bare `rounded` for exactly this
    reason; the named tiers are the same fix, completed.
 3. **Do not write the hover shadow as an arbitrary value.** Live writes
    `shadow-[0_20px_40px_rgba(0,0,0,0.45)]` while `--shadow-card-hover` holds that exact value.
@@ -276,10 +277,33 @@ is a ruling.
 `link-current` · `disabled` — the last only for the account slot.
 
 ### Tokens consumed
-`canvas` with alpha, `border`, `heading`, `ink`, `gold` for a CTA, the label-eyebrow role for link
-text, the container (§3.1), `z-nav` (§3.2), the state duration, and a named easing. Height: **80px**
+`canvas` with alpha, `border`, `heading`, `ink`, `gold` for a CTA, the **nav link role** (below),
+the container (§3.1), `z-nav` (§3.2), the state duration, and a named easing. Height: **80px**
 (`adopted` — live `h-20`; there is no nav spec anywhere, so this is the first height decision and
 there is no reason to move it).
+
+### The link role — `departs`
+
+Live desktop nav links are `text-[12px] font-[300] tracking-[0.15em] uppercase`, with a gold
+hairline underneath (`h-[0.5px] origin-left scale-x-0 bg-accent`, scaling in on hover) and a focus
+ring already present — `focus-visible:outline-2 outline-offset-4 outline-primary/50`
+(`NavBar.tsx:192`).
+
+**Ruled:** the nav link is **`--text-label` (11px) at weight 300, tracking `0.15em`**. The departure
+is the size — 12px is not on the seven-role scale, and 11px is the label role sitting right there.
+Tracking `0.15em` is **adopted**: it is a fourth tracking step and it is deliberate, because `0.2em`
+at this size reads too wide for a nav. `0.15em` gets a name with the other tracking tokens
+(README §6.2).
+
+**A correction to an earlier line in this file.** This section previously said nav links used the
+`.label-eyebrow` role. They do not. That came from the bridge spec's prose — *"section labels,
+eyebrows, nav — the workhorse"* — and was never checked against `NavBar.tsx`. STEP1 `:133` had it
+right all along (`tracking-[0.15em]` at 12px/300). It is the same error this file warns about in
+README §5, made in this file.
+
+**One thing owed:** the current route carries `aria-current="page"` but has **no visual
+treatment** — the gold hairline is hover-only. Whether the active link looks different is a ruling,
+and it is not made.
 
 ### Content rules
 - Five primary links, maximum. More than five is a footer's job.
@@ -294,9 +318,10 @@ there is no reason to move it).
 1. **Do not set the logo in Instrument Serif, or in any font.** Instrument Serif is reserved for
    one italic gold word in a page headline (README §6.1). Setting the wordmark in it spends that
    budget on every page, in the chrome, forever.
-2. **Do not hand-type the link recipe.** Live mobile links are `text-[14px] font-light
-   tracking-wide` — an arbitrary size, a third weight-adjacent value, and an untokenised tracking
-   step, all against `DEFECT-HISTORY` #1 (a dead class on every FAQ question) and #20.
+2. **Do not hand-type the link recipe.** Live writes the size, the weight and the tracking inline on
+   both the desktop and the mobile link (`text-[12px] font-[300] tracking-[0.15em]` and
+   `text-[14px] font-light tracking-wide`) — arbitrary values and untokenised tracking steps, against
+   `DEFECT-HISTORY` #1 (a dead class on every FAQ question) and #20.
 3. **Do not use a duration off the scale.** Live is `duration-400`.
 4. **Do not ship an unguarded hover.** Live nav links hover unguarded (#10).
 5. **Do not write a z literal.** `z-[9999]` is why modals open under the bar (§3.2).

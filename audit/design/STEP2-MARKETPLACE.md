@@ -4,6 +4,22 @@
 **Source:** `evolution/engine/website/apps/web/src/app/marketplace/page.tsx`, `marketplace-listing-grid.tsx`, `campaign-status-badge.tsx`, `marketplace-cta.tsx`, `OwnershipFAQSection.tsx`, `horse-page-shell.tsx`
 **Frame:** New elements and deviations from Step 1. Conflicts and gaps flagged explicitly.
 
+> **Corrected 2026-10-16 — read this before citing.** §1's status table (`:50-55`) is the **old
+> build's** map and is **superseded**: `fully_subscribed` is amber, not muted grey, and `completed`
+> is slate. The ruling is `COMPONENTS.md` §2. The *names* in that table were right and this audit's
+> own were not — `available` and `fully_allocated` exist nowhere in the code.
+>
+> **All four questions in §5 are answered**: one badge component and one map (README §8); 64px
+> intentional and kept (Q1 — the look stays); the card-hover shadow tokenised as
+> `--shadow-card-hover` (§6.5); and `coming_soon` stays green on `status-active` (not amber).
+>
+> The four tokens proposed in §4 all landed: `--shadow-card-hover` is locked (§6.5);
+> `--text-display` and `--tracking-display` are **owed names** for the 64px heading and its
+> `-0.04em` (§6.4); `--tracking-tag` is the `0.05em` step, now shared with the status badge (§6.2).
+>
+> §1's radius note is **correct** and was re-checked: `rounded-2xl` really does render 24px, because
+> the theme declares `xl`/`2xl`/`3xl` as aliases onto `lg` (§6.5).
+
 ---
 
 ## 1 · New patterns not on the landing page

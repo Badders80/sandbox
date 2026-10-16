@@ -4,6 +4,18 @@
 **Source:** `evolution/engine/website/apps/web/src/app/mystable/page.tsx`, `mystable-dashboard.tsx`
 **Frame:** New elements and deviations from Steps 1 and 2. Conflicts and gaps flagged explicitly.
 
+> **Corrected 2026-10-16 — read this before citing.** Three of §5's five questions are answered
+> elsewhere: `font-semibold` maps to **500** (`DEFECT-HISTORY` #18), `text-purple-400` is **purged**
+> (#17), and `shadow-success-glow` is folded into `--shadow-glow-success` (#21 — note the name flip:
+> this file writes `success-glow`, the defect log writes `glow-success`; one token, two orders).
+>
+> §2's label-role rows are the most complete in the folder and were used to correct README §6.2:
+> `.label-spec` is live at weight **400**, which the "300 and 500 only" rule did not admit. That
+> makes the weight scale three values, not two.
+>
+> Still genuinely open here: the `aspect-[16/10]` holdings image (Q4), the `gap-4` stat-card step
+> (Q3), and the alpha-fill tokens §4 proposes — `--color-status-active-10` and `--color-accent-10`.
+
 ---
 
 ## 1 · New patterns not on Steps 1 or 2
