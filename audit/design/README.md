@@ -165,28 +165,85 @@ looking for a `.woff2` will not find one, and must not conclude the face is miss
 | `.label-eyebrow` | 11px | 300 | 0.2em | sans | section labels, eyebrows, nav — the workhorse |
 | `.label-action` | 11px | 500 | 0.2em | sans | caps that are clicked, and gold status |
 
-### 6.3 Colour
+### 6.3 Colour — the locked set
 
-| Role | Value | Rule |
+**Verified 2026-10-16 by measurement.** Every text token clears WCAG AA (4.5:1) on **both** the
+canvas and the card surface; every structural token clears 3:1. Ratios below are canvas / surface.
+
+**Surfaces**
+
+| Token | Value | Role |
 |---|---|---|
-| canvas | `#030303` | page |
-| surface | `#0a0a0a` | card |
-| raised | `#111111` | hover, inset |
-| border | `rgba(255,255,255,0.1)` | decorative containment, ~1.2:1 |
-| edge | `#9a9aa0` | WCAG 3:1 floor — interactive controls only |
-| heading | `#f8fafc` | headings, crisp |
-| muted | `#7c7c7c` | secondary text, labels |
-| **gold** | **`#d4a964`** | **3–5% of the viewport. Never a surface. Never called `accent`.** |
-| gold hover | `#c39853` | hover only |
-| on-gold / on-light | `#0a0a0a` | dark-on-gold; white-on-gold fails AA |
-| mint | `#00e599` | one display word per page |
-| status active | `#10b981` | semantic only, never adjacent to mint |
-| status pending | `#f59e0b` | " |
-| status closed | `#64748b` | " |
-| destructive | `#ef4444` | " |
+| `--color-canvas` | `#030303` | page |
+| `--color-surface` | `#0a0a0a` | card |
+| `--color-raised` | `#111111` | elevated / hover / inset |
 
-**Retired greyscale — do not use:** `ash #575757` and `smoke #454545` (fail contrast),
-`hairline #050505` and `stage-black #000000` (zero call sites).
+**Structure**
+
+| Token | Value | Ratios | Rule |
+|---|---|---|---|
+| `--color-border` | `rgba(255,255,255,0.1)` | — | Translucent. Works over any surface — never replace with an opaque grey |
+| `--color-edge` | `#9a9aa0` | 7.37 / 7.07 | Control floor, secondary metadata |
+| `--color-disabled` | `#62666d` | 3.58 / 3.43 | **Non-text only** — disabled borders and inactive structure. Never text |
+
+**Text**
+
+| Token | Value | Ratios | Rule |
+|---|---|---|---|
+| `--color-heading` | `#f8fafc` | 19.71 / 18.92 | Headings, hero |
+| `--color-ink` | `rgba(255,255,255,0.5)` | 5.29 / 5.33 | **Body copy.** Composites to ≈`#818181`. Translucent so it adapts to the surface beneath it |
+| `--color-hover` | `#b9b3a9` | 9.90 / 9.51 | Warm hover tone. Hover only — never a surface, never a border |
+| `--color-muted-foreground` | `#7c7c7c` | 4.94 / 4.74 | Secondary metadata, timestamps, helper text. Static |
+| `--color-foreground` | `= var(--color-ink)` | — | shadcn compatibility mapping, one direction. Do not delete |
+
+**Accents**
+
+| Token | Value | Ratios | Rule |
+|---|---|---|---|
+| `--color-gold` | `#d4a964` | 9.49 / 9.11 | **The sole brand accent. 3–5% of the viewport. Never a surface. Never called `accent`.** |
+| `--color-gold-hover` | `#c39853` | 7.79 / 7.48 | Hover only |
+| `--color-on-gold` / `--color-on-light` | `#0a0a0a` | 9.11 on gold | Dark text for any gold or light fill. **White on gold is 2.17:1 and fails** |
+| `--color-spot-mint` | `#00e599` | 12.44 / 11.94 | One display word per page |
+
+**Status — semantic only, never adjacent to mint**
+
+| Token | Value | Ratios | Role |
+|---|---|---|---|
+| `--color-status-active` | `#10b981` | 8.13 / 7.80 | Active, verified, live availability, positive returns |
+| `--color-status-pending` | `#f59e0b` | 9.60 / 9.22 | Warning, pending, **fully allocated** |
+| `--color-status-closed` | `#738396` | 5.32 / 5.11 | Terminal — **completed**. Neutral slate |
+| `--color-destructive` | `#ef4444` | 5.48 / 5.26 | Error, cancelled, declined |
+
+**Legal document surface** — the white PDS/SA read inside the dark flow, scoped to `.legal-doc`
+
+| Token | Value | Ratio | Note |
+|---|---|---|---|
+| `--color-legal-surface` | `#ffffff` | — | |
+| `--color-legal-ink` | `#111111` | 18.88 | |
+| `--color-legal-surface-alt` | `#f5f5f5` | — | Table headers |
+| `--color-legal-border` | `#dddddd` | 1.36 | **Deliberate** — a document hairline, not a control boundary. Do not "fix" it |
+| `--color-legal-checkbox` | `#b98a2f` | 3.12 | Clears the 3:1 control floor |
+
+**Eight opaque neutrals** (canvas, surface, raised, heading, edge, muted, disabled, hover) plus two
+translucent whites (`border`, `ink`). That is the greyscale, counted by job rather than by ramp.
+
+**Retired — do not use:** `ash #575757`, `smoke #454545` (fail contrast — 2.85:1 and 2.15:1),
+`hairline #050505`, `stage-black #000000` (zero call sites). The bridge theme still declares all
+four; they do not survive into V2.
+
+**Three notes for whoever reads this next.**
+
+1. **`ink` and `muted-foreground` are ~5 RGB units apart.** The distinction is mechanical and
+   semantic, not visual — `ink` is translucent and adapts, `muted` is static. Do not expect a
+   visible hierarchy step between body copy and secondary metadata, and do not push them apart to
+   manufacture one.
+2. **`status-closed` is a slate, not a true neutral** — it measures B−R **+35**. The name is
+   "neutral slate". Do not neutralise it: blue is what the original defect looked like, and the
+   value was chosen to pass AA while staying in the terminal family.
+3. **These values are the website palette.** The estate also carries a comms/wireframe family
+   (`--ink #eceae6`, `--ink-soft #9c9a96`, `--ink-faint #6a6865`, green `#5fca8f`, gold
+   `#c49a5a`) that lives in `comms/automated-comms/` and `website/docs/wire/`. It is a different
+   medium. It has tried to cross into this set four times — see §16.
 
 ### 6.4 Type
 
@@ -234,7 +291,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 1 | Frontmatter tokens | ✅ | §6.3–6.5 — values locked |
 | 2 | Overview / posture | ✅ | *"Dark, quiet, editorial."* Gold carries 3–5%, never a surface |
 | 3 | Non-negotiables | ✅ | §6.1–6.2 — retired faces, the one serif word, the label roles |
-| 4 | Colours | ✅ | §6.3, incl. the four status colours and the accent budget |
+| 4 | Colours | ✅ | §6.3 — 24 tokens, contrast-verified on canvas and surface, including the legal set |
 | 5 | Typography | ✅ | §6.4 — seven roles, two weights |
 | 6 | Shapes — radius & borders | ✅ | §6.5 — 5-tier radius, 3 border opacities |
 | 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl` |
@@ -471,6 +528,10 @@ F  → gate check written and chained
   venv, and `just check` stays 10/10. Markdown does not affect it.
 - **Markdown only.** No venv, no dependencies, no scripts.
 - **Never reintroduce a banned legacy token** — §3.
+- **Do not import the comms/wireframe palette.** The estate carries a second colour family in
+  `comms/automated-comms/` and `website/docs/wire/`. It has been proposed for adoption four times
+  (`#eceae6`, `#5fca8f`, `#c49a5a`, `#6a6865`). It is a different medium. Values may be *considered*
+  but must be re-derived in the website family, never copied across.
 - **Do not call the output a lookbook.** `PLAN.md:150,275` ban the word. This produces an audit and
   a `DESIGN.md`.
 
