@@ -17,8 +17,9 @@ rule. Live code is cited only as evidence — for what exists, and for what went
 - **`departs`** — the value differs from the live build on purpose. One line says why. §5 makes
   the live page the winner on values, so a departure is a ruling, and it has to be argued.
 
-**Status: 7 locked** — listing card, status badge, button hierarchy, navigation, footer, mobile
-conversion bar, mobile menu drawer. Remaining: figure row, form field (§10).
+**Status: 9 locked — Workstream C complete.** Listing card, status badge, button hierarchy, figure
+row, form field, navigation, footer, mobile conversion bar, mobile menu drawer. Four consolidation
+and naming jobs remain and none is a component (§12).
 
 ---
 
@@ -258,6 +259,26 @@ purchase-critical. Anything in the chrome that can be tapped clears it.
 **Every hover rule is wrapped in `@media (hover: hover)`.** `DEFECT-HISTORY` #10: zero guards
 anywhere, every hover rule shipped to every touch device, and an infinite shimmer ran on phones.
 Unconditional in this batch: nav links, footer links, drawer links.
+
+### 3.5 One focus ring
+
+**One ring: 2px outline, 4px offset, in `--color-edge`.** Live has three, and they disagree:
+
+| Where | Live ring |
+|---|---|
+| nav links, the menu toggle | `focus-visible:outline-2 outline-offset-4 outline-primary/50` — **gold at 50%** |
+| `fieldInputClasses` | `ring-2 ring-muted-foreground/40` plus a border recolour |
+| `PillField`'s input | the same muted pair |
+
+`edge` is the token whose documented job this is — STEP1:19, *"the WCAG 3:1 contrast floor for
+interactive controls, **focus rings**, pill outlines."* Gold is the brand accent at 3–5% of the
+viewport and is not spent on focus. Three rings means three answers to "is this focused"; one means
+one.
+
+**And the rule that makes it safe:** never write `focus:outline-none` without proving a replacement
+**on the same line**. `field.tsx` documents why — it removes the only affordance a keyboard user has
+and turns a visible control into an invisible one. The `21st review` flags every call site that does
+it, and found two. A border recolour alone does not count; the ring is what proves it.
 
 ---
 
@@ -545,28 +566,32 @@ a button fill, in any variant.**
 
 ### Variants — a CLOSED list of two
 
-| Variant | Treatment | Label role |
-|---|---|---|
-| `solid` | Near-white fill, dark text | `.label-action` — 11px / **500** / 0.2em |
-| `ghost` | Outline only, no fill | `.label-eyebrow` — 11px / **300** / 0.2em |
+| Variant | Treatment | Label role | Used on |
+|---|---|---|---|
+| **`solid`** — *SolidPill* | Near-white fill (`bg-heading`), dark text (`on-light`) | `.label-action` — 11px / **500** / 0.2em | The **purchase flow's primary**: the rail, the modal, design-lab |
+| **`ghost`** — *GhostPill* | Outline only, no fill | `.label-eyebrow` — 11px / **300** / 0.2em | The flow's **secondary** — the modal's dismiss and cancel forms |
 
 **The weight *is* the hierarchy** — 500 primary, 300 secondary, same size, same tracking. That is an
-existing decision in the live build and it is adopted as-is: two label roles, one component.
+existing decision in the live build and it is adopted as-is.
 
-**`glow` is not a variant.** `GlowPillButton` lives in the app, is marketing-only (hero, the rail's
-nav, design-lab), and never appears in the purchase flow. The button hierarchy is two variants; the
-glow pill is outside it.
+**And there is a third treatment, with its own component and its own surfaces.** `GlowPillButton` is
+not a variant of this one — it is a separate component that owns the **nav's CTA** (`Get Started`,
+`Sign Out` — `NavBar.tsx:217,227`) and the marketing hero. Its treatment is `bg-surface` +
+`border-edge/70`, with gold as a bottom hairline and a shimmer overlay. It has its own hover-guard
+rule and it must never appear in the purchase flow.
 
-**And `ghost` is a variant, not a component.** The bridge names a third component
-(`GhostPillButton`); live has a `ghost` prop on one component. Variant, not component — that naming
-is retired.
+So the system has **three button treatments and exactly one of each job**: SolidPill for the flow's
+primary, GhostPill for the flow's secondary, GlowPill for chrome and marketing. Adding a fourth is a
+ruling. The bridge names three *components* (`SolidPillButton`, `GhostPillButton`, `GlowPillButton`)
+where live has one component with a `ghost` prop plus GlowPill — ghost is a variant, not a component,
+and that naming is retired.
 
 ### States
 
 | State | Rule |
 |---|---|
 | `hover` | The lift rides the **label**, never the box — `scale-[1.02]` on a `group-hover` |
-| `focus-visible` | One ring, one offset, everywhere: 2px outline, 4px offset, in `--color-edge` |
+| `focus-visible` | One ring, one offset, everywhere — **per §3.5**: 2px, 4px offset, `--color-edge` |
 | `active` / pressed | `scale-[0.98]` — `departs`; live has 0.98 on the nav and 0.90 in the modal, and the bridge proposed 0.97. One value for a button. The modal's 0.90 belongs to the **stepper's** small ± controls, which are a different job |
 | `disabled` | **`opacity-45`, one treatment for both variants** (`departs` — live uses two mechanisms, see do-not 5) |
 | `loading` | Same footprint, label replaced or preceded by a spinner. The button never resizes |
@@ -611,28 +636,183 @@ never a fill**, `radius-pill`, the 44px touch law, the state duration, and the t
 
 ---
 
-## 10 · Still to lock
+## 10 · Figure row
 
-**Two left, and neither is blocked.** The elevation ruling closed on 2026-10-16, which unblocked the
-button hierarchy; nothing now stands between Workstream C and done.
+### Name and job
+One labelled figure — a label, a number, and its unit — on a card or a rail. This is how the system
+shows money, and it is a token decision rather than a styling choice, because
+`brand/DESIGN.md:79` puts Geist Mono on financials and tabular figures specifically.
 
-| # | Component | Live basis | The drift risk |
-|---|---|---|---|
-| 1 | **Figure row** | `packages/ui/src/stat-row.tsx` | Already has a canonical label (`label-spec` at 10px/400/0.2em mono) and a founder audit behind it — the unit was 16px beside a 30px value and was ruled unreadable, so the unit now sits below at body size. Rule from that |
-| 2 | **Form field** | `packages/ui/src/field.tsx` | The file's own header is the case study: the sign-in card hand-spelled the same input **four times inside itself**, and two popups hand-rolled the capsule a fifth and sixth time. The error state is the piece not yet ruled |
+Live basis: `packages/ui/src/stat-row.tsx`, with a founder audit of 2026-09-11 behind it.
 
-**Three jobs that are not components and are owed:**
+### Anatomy
 
-- **Consolidate the status renderers.** Four sites, four answers (`§2`, do-not 1). One survives.
-- **Consolidate the accordion.** Live ships `ui/CollapsePanel.tsx` and `ui/AccordionList.tsx` against
-  a rule that permits one implementation (README §6.5). One survives, and it is the STEP1
-  `CollapsePanel` — pure grid rows, no JS measurement. `DEFECT-HISTORY` #13's shape a second time.
-- **Name the spacing tokens and the easing.** The footer's four vertical values (§5), the chrome's
-  heights, and one easing consumed by the nav and the bar (§4, §6). The easing is Motion granularity
-  (README §7 row 9); the spacing is README §18 item 1. Both are *named*, not invented — the values
-  above are already decided; only the token names are owed.
+| Slot | Requirement |
+|---|---|
+| Label | **Required** — the `label-spec` role |
+| Value | **Required** — a single figure |
+| Unit | Optional |
+| Sub | Optional — one qualifier line |
 
-**One thing this pass turned up that is not Workstream C's:** `packages/ui/src/` already holds
-`stat-row`, `field`, `stepper`, `status-pill`, `modal-shell`, `eyebrow`, `back-link` and
-`countdown`. The V2 primitives are further along than any file in this folder recorded — the work
-left is ruling on spellings that already exist, not inventing components.
+### Variants — a CLOSED list of two
+
+| Variant | Treatment |
+|---|---|
+| `default` | Label muted, value in `heading` |
+| `money` | Label **and** value in `status-active` — a positive return |
+
+**`departs`.** Live does this by passing class strings from the call site — `labelClassName` and
+`valueClassName`, with the step-1 rail passing `text-status-active` so Price and Return go green.
+That is §2's do-not 4 (`variantClassOverride`) wearing a different hat: one component silently
+growing looks the variant list never sees. Naming it `money` keeps the list closed.
+
+### Unit position — a second closed axis, two permitted
+
+| Position | Rule |
+|---|---|
+| `stacked` | Unit **below** the value, at `--text-body-small`. **The default** |
+| `inline` | Unit **beside** the value, at `--text-body-small`. Added 2026-10-02 for the flow's rail |
+
+The 2026-09-11 founder audit found the unit at 16px beside a 30px value **unreadable**. Stacked is
+the default precisely so every existing call site is unchanged. A third position is a ruling.
+
+### The value's face and weight — `departs`
+
+Live renders the value in the **sans stack**: `text-section-heading font-light tracking-tight` —
+36px, weight 300, proportional.
+
+**Ruled: `--font-mono` at weight 500.** `brand/DESIGN.md:79` is a *ruling*, not an observation, and
+§5 makes `brand/DESIGN.md` the authority on rulings. STEP3 found MyStable already keeping mono on
+figures; this file is the one that missed it, and a proportional face gives unequal digit widths so
+the numbers stop aligning down a column — which is the entire reason the role exists.
+
+Size is **adopted** at `--text-section-heading` (36px), with one honest note: a figure sharing the
+section-h2 role means a change to section headings moves every figure with it.
+
+### Tokens consumed
+`muted-foreground` for label, unit and sub; `heading` for the value; `status-active` for `money`;
+the `label-spec` role; `--font-mono` at weight 500; `--text-section-heading`; `--text-body-small`.
+
+### Content rules
+- The label is spec text, one line. The value is one figure. A figure never wraps.
+- The unit is never inside the value string — it is a slot, so it can be positioned.
+- **Green means a positive return, not merely a number.** Zero and negative values take `heading` or
+  the destructive token; never `status-active`.
+- `text-muted` never appears here — it resolves to `#111111`.
+
+### Do-not
+1. **Do not recolour from the call site.** Live exposes three class-string props to do exactly that.
+   A variant the list does not know about is how the status badge ended up with four mappings.
+2. **Do not render the value in the sans stack.** Geist Mono is the ruled face for financials; the
+   point is that digits align down a column.
+3. **Do not put the unit at body size beside a large value.** A founder audit already ruled that
+   unreadable, which is why `stacked` is the default.
+4. **Do not use `text-muted`.** `stat-row.tsx` warns about this in its own comment: it resolves to
+   `#111111` and is never legible as type in this palette.
+5. **Do not use `font-semibold`.** 600 maps to 500 (`DEFECT-HISTORY` #18).
+6. **Do not add a third colour variant.** Green is money. Everything else is `default`.
+
+---
+
+## 11 · Form field
+
+### Name and job
+The input control and its error. `packages/ui/src/field.tsx` exists because the sign-in card
+hand-spelled the same input **four times inside itself** and two popups hand-rolled the capsule a
+fifth and sixth time — so the rule is one spelling. **The file currently contains two**, which is the
+first thing locked below.
+
+### Anatomy
+
+| Slot | Requirement |
+|---|---|
+| Field | **Required** |
+| Label, or an `aria-label` | **Required.** A placeholder is never a label |
+| Leading icon | Optional — the caller renders it, because the caller owns the meaning |
+| Inline error | Optional |
+| Submit | Optional — only in the capsule arrangement |
+
+### Variants — a CLOSED list of two
+
+| Variant | Shape |
+|---|---|
+| `field` | The bordered text input |
+| `capsule` | One rounded capsule holding field and button. Below the collapse point it unfolds to a stacked field and a full-width button — **the same control, two arrangements** |
+
+### States
+`default` · `hover` · `focus-visible` · `filled` · `disabled` · `error` · `loading` (submit in flight)
+
+### The focus ring
+**Per §3.5** — one ring, `--color-edge`, and never `focus:outline-none` without a proven replacement
+on the same line. This section is where that rule is load-bearing.
+
+### Tokens consumed
+`border` at one of three steps; `canvas` / `surface` for fills; `foreground` for input text;
+`muted-foreground` at 60% for the placeholder; `destructive` for the error; `edge` for the ring;
+`--radius-sm` for the field and `--radius-pill` for the capsule; `--text-body-small`; the
+`label-action` role for the submit.
+
+**Three departures, all argued:**
+
+1. **The input radius is `--radius-sm` (8px), not `rounded-lg`.** Live uses `rounded-lg` — 24px —
+   while §6.5 rules `--radius-sm` for "inputs, steppers, image frames". A 24px radius on a
+   single-line input is nearly a pill and competes with the capsule's own pill shape.
+2. **The capsule drops its two arbitrary shadows.** Live adds
+   `hover:shadow-[0_0_24px_rgba(255,255,255,0.06)]` and
+   `focus-within:shadow-[0_0_24px_rgba(255,255,255,0.08)]` — two values outside the seven ruled
+   hours earlier in §6.5. Removed rather than tokenised: focus is already carried by the ring, and
+   one affordance per state is the rule.
+3. **The inline error is `--text-label` at `text-destructive`.** The bridge says `text-micro` (10px).
+   10px is below a readable size for an error a person must act on, and `--text-micro` is documented
+   as tag and metadata text.
+
+### Content rules
+- A placeholder is never the label. Every field carries a label or an `aria-label`.
+- **The error is the caller's message when the caller has one.** `PillField` already does this
+  correctly: `api/subscribe` answers with a reason, and a control that swallows it for a generic line
+  throws away the only thing that helps the visitor.
+- The submit label swaps while in flight and the control never resizes.
+- The caller keeps the ref, so a dialog still focuses its own field.
+
+### Do-not
+1. **Do not spell the same input twice in one file.** `field.tsx`'s header says "one spelling" and it
+   ships two: `fieldInputClasses` recolours its border gold on focus and hover, while `PillField`'s
+   input uses the muted ring pair. Two controls wearing one name.
+2. **Do not recolour the border gold on focus or hover.** The file's own comment is the ruling —
+   *"a gold border on this control read as an alarm on the surface where the visitor has already
+   decided to act"* — while `fieldInputClasses` sets `hover:border-accent/50 focus:border-accent/50`
+   anyway. A documented decision contradicted by the code beside it.
+3. **Do not remove the outline without a replacement on the same line** (§3.5).
+4. **Do not hand-roll a submit button.** `PillField`'s submit is a fourth button spelling — not
+   `solid`, not `ghost`, not `glow`. It is the `ghost` variant (§9) and must not carry its own
+   classes.
+5. **Do not signal `disabled` with a cursor alone.** That submit has `disabled:cursor-not-allowed`
+   and no visual disabled state at all. `opacity-45`, per §9.
+6. **Do not invent a shadow for focus.** `focus-within:shadow-*` is a second focus affordance
+   competing with the ring, and an eighth elevation value in a set of seven.
+
+---
+
+## 12 · Owed — nothing left to lock
+
+**Workstream C is complete.** All six components on README §8's list are locked, plus three the
+inventory found that the six-item list never knew about: the mobile conversion bar, the mobile menu
+drawer, and the button hierarchy.
+
+Four jobs remain and **none of them is a component** — they are consolidations of things the live
+build does twice, plus two naming debts:
+
+| # | Job | What it is |
+|---|---|---|
+| 1 | **One status renderer** | Four sites, four answers on colour and on words (§2, do-not 1). `packages/ui/src/status-pill.tsx` is the sharpest: written to unify two systems, it became a third. One survives |
+| 2 | **One accordion** | `ui/CollapsePanel.tsx` and `ui/AccordionList.tsx` against a rule permitting one. The survivor is the STEP1 `CollapsePanel` — pure grid rows, no JS measurement |
+| 3 | **One field spelling** | `field.tsx`'s own header asks for one and ships two (§11, do-not 1) |
+| 4 | **Name the tokens** | The footer's four vertical values (§5), the chrome's heights, one easing for the nav and the bar (§4, §6), the tracking steps (`0.15em` nav, `0.05em` tags and pills, `-0.04em` display — README §6.2), and `--text-display` |
+
+**Named, not invented.** Every value in those four jobs is already decided in this file; only the
+token names are owed. The easing and the spacing are open decisions 1 and 4 in the README's §18.
+
+**One thing this pass turned up that is not Workstream C's.** `packages/ui/src/` already holds
+`stat-row`, `field`, `stepper`, `status-pill`, `modal-shell`, `eyebrow`, `back-link` and `countdown`.
+The V2 primitives are further along than any file in this folder recorded. The remaining work is
+ruling on spellings that already exist and deleting the duplicates — not inventing components.

@@ -4,7 +4,8 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** gathering — **eight of §7's fourteen sections are ready**. STEP1 (landing), STEP2
+> **Status:** gathering — **nine of §7's fourteen sections are ready**, and **Workstream C is
+> complete**: nine components locked in `COMPONENTS.md`. STEP1 (landing), STEP2
 > (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut; Workstream C has
 > six components locked in `COMPONENTS.md`. The document itself is **not yet written** — see **§7,
 > the bill of materials**, for exactly what is still missing before we can write it in one pass.
@@ -217,7 +218,7 @@ canvas and the card surface; every structural token clears 3:1. Ratios below are
 | Token | Value | Ratios | Rule |
 |---|---|---|---|
 | `--color-border` | `rgba(255,255,255,0.1)` | — | Translucent. Works over any surface — never replace with an opaque grey |
-| `--color-edge` | `#9a9aa0` | 7.37 / 7.07 | Control floor, secondary metadata |
+| `--color-edge` | `#9a9aa0` | 7.37 / 7.07 | Control floor, secondary metadata, **and the one focus ring** (`COMPONENTS.md` §3.5) |
 | `--color-disabled` | `#62666d` | 3.58 / 3.43 | **Non-text only** — disabled borders and inactive structure. Never text |
 
 **Text**
@@ -402,7 +403,7 @@ not declared anywhere, which is the same phantom this README carried until 2026-
 differentiates at 300ms/200ms, with a reduced-motion guard.
 
 **But the live build ships two accordions**, against a rule that permits one:
-`ui/CollapsePanel.tsx` and `ui/AccordionList.tsx`. Consolidated in `COMPONENTS.md` §10's owed list as
+`ui/CollapsePanel.tsx` and `ui/AccordionList.tsx`. Consolidated in `COMPONENTS.md` §12's owed list as
 owed work, not yet locked. This is `DEFECT-HISTORY` #13's shape a second time — two implementations
 of one job, which is how the badge problem started.
 
@@ -439,15 +440,15 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 8 | Elevation & Depth | ✅ | §6.5 — **ruled 2026-10-16**: 4 elevation + 1 bevel + 2 glow, derived from the live literals, with the two near-duplicate success glows folded and the one-off blue dropped. Bevel composes, never concatenates |
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
 | 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
-| 11 | Components | ⚠️ partial | **7 components locked** in `COMPONENTS.md` — listing card, status badge, button hierarchy, nav, footer, mobile conversion bar, mobile menu drawer. Of the six-item list in §8, two remain: figure row and form field, both unblocked, both with live primitives in `packages/ui/src/` to rule from |
+| 11 | Components | ✅ | **9 components locked — Workstream C complete** (`COMPONENTS.md`). All six on the §8 list, plus the mobile conversion bar, the mobile menu drawer and the button hierarchy — three the six-item list never knew existed. Four consolidation jobs remain and none of them is a component |
 | 12 | Do / Don't | ❌ | **Not written.** Derivable — `DEFECT-HISTORY` carries 24 defects, each already paired with the rule that prevents it |
 | 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
 | 14 | Agent Prompt Guide | ⚠️ open | The richer refero pattern has it; the leaner x.ai pattern does not. Open decision 4 |
 
-**Reading it plainly:** eight sections are ready, four are partial or open, two are not started.
-**We are not at play.** The two heaviest gaps are **Components (#11)** and **Do/Don't (#12)**.
-Components has six components locked and three to go; Do/Don't has not started. Both are the kind of
-thing that, left until drafting time, guarantees a second pass.
+**Reading it plainly:** nine sections are ready, three are partial or open, two are not started.
+**We are not at play.** The remaining gaps are **Do/Don't (#12)** and **Provenance (#13)** — both
+collation jobs with their source material already in hand, plus three partial rows (motion
+granularity, breakpoints, the agent prompt guide).
 
 ---
 
@@ -457,7 +458,7 @@ thing that, left until drafting time, guarantees a second pass.
 |---|---|---|---|
 | A | **Harvest** — read the real values off the live landing page | A ground-truth table: every colour, size, weight, tracking, radius, spacing, with provenance | Substantially done; needs **collation** into `SOURCE-TRUTH.md` |
 | B | **Token model** — how those values compile | The `@theme` block, its categories, its naming | Values ready; naming conventions settled in Tailwind v4 terms |
-| C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ⚠️ **7 components locked** in `COMPONENTS.md` — the whole chrome, the button hierarchy, and the mobile surfaces the old build never had |
+| C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ✅ **Complete — 9 components locked** in `COMPONENTS.md`: the whole chrome, the button hierarchy, the data and form primitives, and the mobile surfaces the old build never had. Four consolidation jobs remain, none a component |
 | D | **Drift mechanisms** — why it went wrong before | A catalogue of causes, each with the guard that prevents it | Done — §10 |
 | E | **Target `DESIGN.md`** | The document, in the pattern of §1 | ❌ Blocked on §7 |
 | F | **Enforcement** — how it stays true | A gate check in the `assert-*.sh` style, plus the audit rubric hook | Designed — §11 |
@@ -560,18 +561,22 @@ Do-not            — the explicit anti-patterns, each naming the drift it cause
    ✅ *Locked* — `COMPONENTS.md` §9. Two variants, solid and ghost; **the primary CTA is white, not
    gold**, because §6.3 rules gold never a surface.
 4. **Figure row** — the mono-figures pattern. `brand/DESIGN.md:79` puts Geist Mono on financials and
-   tabular figures specifically, so this is a token decision, not a styling choice. Weight 500.
-   ❌ Open, blocked on nothing.
+   tabular figures specifically, so this is a token decision, not a styling choice.
+   ✅ *Locked* — `COMPONENTS.md` §10. Live renders the value in the **sans stack at 300**; ruled to
+   mono at 500, because §5 makes `brand/DESIGN.md` the authority on rulings.
 5. **Nav and footer** — shared across every page, so the first place a per-page variant appears.
    ✅ *Locked* — `COMPONENTS.md` §4, §5. Neither had a spec anywhere in the estate, so both were
    ruled from source.
 6. **Form field** — buyer and operator inputs share a look; the error state is the drift risk.
-   ❌ Open, blocked on nothing.
+   ✅ *Locked* — `COMPONENTS.md` §11. `field.tsx`'s header asks for one spelling and ships two.
 
 **Two components were not on this list and are now locked**, both from the 38-item inventory rather
 than the six: the **mobile conversion bar** (`COMPONENTS.md` §6, which the old build never had —
 `DEFECT-HISTORY` #6) and the **mobile menu drawer** (§7, pulled out of the nav because a focus trap,
 an Esc handler and a scroll lock are a component's worth of work).
+
+**And one shared ruling cut across three of them:** there were three different focus rings in the
+live build. One now — §3.5.
 
 **The "closed list" rule is the whole mechanism.** The drift was not one wrong colour; it was a
 second and third variant of the same thing. A variant list closed by default means adding one
@@ -751,7 +756,7 @@ document kept by discipline, and it should be read that way.
 | `STEP1-LANDING-PAGE.md` | Landing page harvest. **Closed, clean** — spacing rhythm and container width re-verified against the live source 2026-10-16 (§6.5, decision 6). Colours, 7 type roles, 2 label roles, radius scale, motion |
 | `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, display heading, card hover shadow, tag tracking, container width. Its **badge treatment is superseded** — `:50-55` is the old-build map, and its open questions at `:146`/`:148` were answered 2026-10-16 (§8) |
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
-| `COMPONENTS.md` | **Workstream C.** The decision-level locks. Seven written — listing card, status badge, button hierarchy, and the Batch 1 chrome: nav, footer, mobile conversion bar, mobile menu drawer. Also carries the shared rulings: the single container, the z-ladder, the touch law, hover guards. A working file — it does not leave this folder |
+| `COMPONENTS.md` | **Workstream C.** The decision-level locks — **complete at 9 components**, plus the shared rulings: the single container, the z-ladder, the touch law, hover guards, one focus ring. A working file; it does not leave this folder |
 | `DEFECT-HISTORY-2026-10-16.md` | The old build's 24 defects, each with the ruling that closed it. The source for §7 row 12 — `Do/Don't` is a collation of this file, not new work. Lives in the bridge folder |
 | `AUDIT-MISSING-PRIMITIVES-2026-10-16.md` | Texture utilities, keyframes, dead classes, raw hex, and **21 arbitrary shadows across 14 distinct values**. The material for §7 row 8 (Elevation) and §18 decision 5. Uncited until now. Lives in the bridge folder |
 
@@ -791,10 +796,11 @@ yet, and the moment there is, it will be in `engine_v2`.
 
 ## 19 · Next action
 
-**Workstream C — pattern locks.** It is the largest gap in §7, it is independent of everything
-else, and leaving it until drafting time guarantees the second pass that the one-pass goal exists
-to avoid. **Seven components are locked** in `COMPONENTS.md`, including the whole chrome and the
-button hierarchy; two remain, and neither is blocked.
+**Workstream C — pattern locks. ✅ Complete.** Nine components locked in `COMPONENTS.md`: the whole
+chrome, the button hierarchy, the figure row and form field, and the mobile surfaces the old build
+never had. Four consolidation jobs remain there and none is a component. **Do/Don't (#12) is now the
+largest gap that is still open**, and it is a collation of `DEFECT-HISTORY`'s 24 rows rather than new
+work.
 
 Alongside it, four smaller jobs:
 
