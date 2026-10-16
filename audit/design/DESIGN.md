@@ -481,12 +481,13 @@ rather than themeable, and both are legal.
   pinned, exactly as `scale-[…]`, `leading-[…]` and `z-[…]` bypass theirs. Nothing in the theme can
   stop it; **the CI ban is what closes that door**, and it is why the ban is not redundant now that
   the pins exist. There are zero arbitrary radii live, so the door is unwalked — but it is open.
-- **The aliases are load-bearing, not a fail-safe.** `rounded-xl` is the single most-used radius
-  spelling in the build at **58 sites**, with `rounded-2xl` ×19 and `rounded-3xl` ×5 — **82 sites that
-  render correctly only because these aliases exist.** Remove them as unused-looking and 82 sites
-  change radius, most of them to something smaller. The authoring standard is `sm` / `md` / `lg` /
-  `pill`; **live mostly writes `xl`.** Migrating those 82 sites to `lg` is V2 work, and until it
-  happens the aliases are a dependency rather than a safety net.
+- **The aliases are permanent, and they are load-bearing rather than a safety net.** `rounded-xl` is
+  the single most-used radius spelling in the build at **58 sites**, with `rounded-2xl` ×19 and
+  `rounded-3xl` ×5 — **82 sites that render correctly only because these aliases exist.** Remove them
+  as unused-looking and 82 sites change radius, most of them to something smaller. **So they stay:
+  pinned permanently, not migrated away.** The authoring standard is `sm` / `md` / `lg` / `pill`, and
+  the aliases are the compiler's guarantee that the rest of Tailwind's scale lands inside it too.
+  Code written against this document uses `lg`; code that already says `xl` is correct and stays.
 
 ### Borders
 
