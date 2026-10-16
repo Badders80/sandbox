@@ -18,7 +18,7 @@ rule. Live code is cited only as evidence — for what exists, and for what went
   the live page the winner on values, so a departure is a ruling, and it has to be argued.
 
 **Status: 6 locked** — listing card, status badge, navigation, footer, mobile conversion bar,
-mobile menu drawer. Remaining: button hierarchy, figure row, form field (§7).
+mobile menu drawer. Remaining: button hierarchy, figure row, form field (§9).
 
 ---
 
@@ -200,7 +200,7 @@ Live runs **four** schemes:
 | pages | `max-w-6xl px-12 md:px-16 lg:px-20` (15×) | **adopted** — the container |
 | nav | `max-w-[1440px] px-6 sm:px-10 lg:px-12` (1×) | retired |
 | footer | `max-w-6xl px-8 md:px-16` — no `lg` step, base of 8 | retired |
-| dashboard | `max-w-7xl` (4×) | **open**, §7 |
+| dashboard | `max-w-7xl` (4×) | **open** — decision 7 |
 
 **Why the departure.** `DEFECT-HISTORY` #8 is *"Hero and body grid on different gutters (`px-12`
 vs `px-6`) — two left edges on one page"*, and its resolution is *"One container pattern."* The
@@ -232,7 +232,7 @@ Rules:
 **The binding is owed, not decided.** `--z-*` is not a Tailwind v4 namespace, so these tokens
 generate no utility — the trap §Workstream B names as "a hard-coded value wearing a costume". The
 ladder above is the decision; the mechanism (a real utility declared with `@utility`, or
-consumption as `z-[var(--z-nav)]`) settles with §18 item 2, where the `@theme` block lives.
+consumption as `z-[var(--z-nav)]`) settles with README §18 item 2, where the `@theme` block lives.
 
 ### 3.3 The touch law
 **44px.** `DEFECT-HISTORY` #5: stepper buttons at 24×28px and a 16×16px acceptance checkbox, both
@@ -342,7 +342,7 @@ Vertical padding — **asymmetric, and `adopted`:** `64px` top / `48px` bottom, 
 the collapse point. Live is `pt-16 pb-12 md:pt-24 md:pb-16` and it is asymmetric on purpose: the
 footer's top edge separates it from content, its bottom edge only has to clear the viewport. A
 symmetric value here was invented once already and matched nothing. *Named spacing tokens for these
-four values are owed* (§18 item 1 — the scale past `--spacing-section` is not yet decided).
+four values are owed* (README §18 item 1 — the scale past `--spacing-section` is not yet decided).
 
 ### Content rules
 - Two to four link columns. Beyond four, the footer is doing the nav's job.
@@ -359,7 +359,7 @@ four values are owed* (§18 item 1 — the scale past `--spacing-section` is not
    claim needs the founder's confirmation before it appears anywhere as settled text.
 3. **Do not use an 800ms entrance.** Live's tagline block runs `opacity 800ms … 600ms` delay.
    `DEFECT-HISTORY` #12 already reduced the hero's entrance to 0.2s / 0.32s for LCP — the footer's
-   entrance is a Motion decision and is owed (§7 row 9), not a value this lock invents.
+   entrance is a Motion decision and is owed (README §7 row 9), not a value this lock invents.
 4. **Do not ship an unguarded hover** (#10).
 5. **Do not give the footer its own gutter.** Live's `px-8 md:px-16` is a scheme of one — no `lg`
    step, and a base of 8 where every page uses 12 (§3.1).
@@ -393,7 +393,7 @@ is a ruling.
 
 ### Tokens consumed
 `surface` with alpha, `border`, the label-spec role and the financial role (mono, weight 500) for
-the price, the primary button (§7, owed), `z-sticky` (§3.2), the container's gutter (§3.1).
+the price, the primary button (§9, owed), `z-sticky` (§3.2), the container's gutter (§3.1).
 
 **Departures, both argued:**
 - **Bottom inset compensation is required** — `env(safe-area-inset-bottom)`. Live has no `env()`
@@ -478,7 +478,7 @@ it. Live is evidence, so the panel is kept, and the work here is the accessibili
 The nav's toggle, the drawer and the conversion bar all appear and disappear at the same width.
 **That width is 768px**, and it is one token consumed by all three — never three literals.
 
-`departs`: live's drawer has no stated breakpoint, and §7 row 10 leaves breakpoints open. The
+`departs`: live's drawer has no stated breakpoint, and README §7 row 10 leaves breakpoints open. The
 broader breakpoint tokenisation stays open; the *chrome* collapses at one value, and having one
 value is the entire point.
 
@@ -488,12 +488,17 @@ value is the entire point.
 
 | # | Component | Blocked on |
 |---|---|---|
-| 1 | **Button hierarchy** | The **elevation ruling** (§7 row 8, Open decision 5). A primary button's pressed state and the gold hover both want a shadow decision that is not made. **This ruling comes first** — the bar's CTA (§6) and every modal consume it |
+| 1 | **Button hierarchy** | The **elevation ruling** (README §7 row 8, Open decision 5). A primary button's pressed state and the gold hover both want a shadow decision that is not made. **This ruling comes first** — the bar's CTA (§6) and every modal consume it, and it is the last thing standing between Workstream C and done |
 | 2 | **Figure row** | Nothing. The mono-figures pattern at weight 500; Geist Mono is already ruled onto financials |
 | 3 | **Form field** | Nothing. Buyer and operator inputs share a look; the error state is the drift risk |
 
-Two things below are owed by these locks and are not components:
+**Two jobs that are not components and are owed by these locks:**
 
-- **Named spacing tokens** for the footer's four vertical values (§5) and the chrome's heights —
-  §18 item 1.
-- **A named easing**, consumed by the nav and the bar (§4, §6). Motion granularity is §7 row 9.
+- **Consolidate the accordion.** Live ships `ui/CollapsePanel.tsx` and `ui/AccordionList.tsx` against
+  a rule that permits one implementation (README §6.5). One survives, and it is the STEP1
+  `CollapsePanel` — pure grid rows, no JS measurement. This is `DEFECT-HISTORY` #13's shape a second
+  time, and it is not on the six-item list because the six-item list did not know it existed.
+- **Name the spacing tokens and the easing.** The footer's four vertical values (§5), the chrome's
+  heights, and one easing consumed by the nav and the bar (§4, §6). The easing is Motion granularity
+  (README §7 row 9); the spacing is README §18 item 1. Both are *named*, not invented — the values
+  above are already decided; only the token names are owed.

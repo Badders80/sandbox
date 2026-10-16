@@ -4,12 +4,14 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** gathering. STEP1 (landing), STEP2 (marketplace) and STEP3 (MyStable) are closed. The
-> document itself is **not yet written** — see **§7, the bill of materials**, for exactly what is
-> still missing before we can write it.
+> **Status:** gathering — **seven of §7's fourteen sections are ready**. STEP1 (landing), STEP2
+> (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut; Workstream C has
+> six components locked in `COMPONENTS.md`. The document itself is **not yet written** — see **§7,
+> the bill of materials**, for exactly what is still missing before we can write it in one pass.
 >
 > **Shape:** this README, plus `STEP1-LANDING-PAGE.md`, `STEP2-MARKETPLACE.md`,
-> `STEP3-MYSTABLE.md` as the evidence files. Markdown only. No venv, no imports, no scripts.
+> `STEP3-MYSTABLE.md` as the evidence files, and `COMPONENTS.md` as the Workstream C working file.
+> Markdown only. No venv, no imports, no scripts.
 
 ---
 
@@ -177,6 +179,13 @@ looking for a `.woff2` will not find one, and must not conclude the face is miss
 |---|---|---|---|---|---|
 | `.label-eyebrow` | 11px | 300 | 0.2em | sans | section labels, eyebrows, nav — the workhorse |
 | `.label-action` | 11px | 500 | 0.2em | sans | caps that are clicked, and gold status |
+| `.label-badge` | 10px | 500 | **0.05em** | sans | status pills only |
+
+**Three roles, three tracking steps, and the third is the one that keeps getting lost.**
+`DEFECT-HISTORY` #20 found the split — spec `0.2em` against `tracking-wider`'s `0.05em` on the same
+button types — and ruled: action labels `0.2em`, badge pills `0.05em`. The live badge ignores that
+and renders at 8px with `tracking-widest` (0.1em), which is a fourth step, below the 10px floor, and
+the reason `COMPONENTS.md` §2 names the badge role explicitly.
 
 ### 6.3 Colour — the locked set
 
@@ -290,9 +299,18 @@ reserved** — it is in active use (pedigree, cap table, right rail, MyStable). 
 | Token | Size | Use |
 |---|---|---|
 | `--text-micro` | 10px | tags, meta, pedigree, cap table |
-| — | 36px `--text-section-heading` | section h2, base breakpoint |
-| — | 48px `--text-section-heading-wide` | same role, `md:` |
-| `--text-display` | 64px | marketplace + MyStable page heading. Weight 300, tracking `-0.04em`, leading 1.05 |
+| `--text-label` | 11px | the label roles — §6.2 |
+| `--text-body-small` | 15px | dense body — card hooks, helper text |
+| `--text-body` | 16px | default body |
+| `--text-card-heading` | 18px | card and panel headings |
+| `--text-section-heading` | 36px | section h2, base breakpoint |
+| `--text-section-heading-wide` | 48px | same role, `md:` |
+
+**The 64px page heading is a role without a token.** `--text-display` does not exist. 64px is
+hand-typed as `md:text-[64px]` into `marketplace/page.tsx:67` and `marketplace/[slug]/page.tsx:116`
+— one recipe, two files, typed twice. Weight 300, tracking `-0.04em`, leading 1.05. It needs a name
+before it is written down; the two copies are drift mechanism #6 in the file this section was
+harvested from.
 
 Weights: **300 and 500 only.** No 600 — `font-semibold` maps to 500.
 
@@ -314,6 +332,11 @@ Weights: **300 and 500 only.** No 600 — `font-semibold` maps to 500.
 
 **CollapsePanel:** the STEP1 version is canonical — pure grid rows, no JS measurement. Exit
 differentiates at 300ms/200ms, with a reduced-motion guard.
+
+**But the live build ships two accordions**, against a rule that permits one:
+`ui/CollapsePanel.tsx` and `ui/AccordionList.tsx`. Consolidated in `COMPONENTS.md` §9's owed list as
+owed work, not yet locked. This is `DEFECT-HISTORY` #13's shape a second time — two implementations
+of one job, which is how the badge problem started.
 
 **Section rhythm, confirmed and ruled on 2026-10-16.** `--spacing-section: 224px` is declared in
 `brand_dna/src/theme.generated.css:87` and is **fixed** — the live build has no fluid section rule
@@ -344,7 +367,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 4 | Colours | ✅ | §6.3 — 24 tokens, contrast-verified on canvas and surface, including the legal set |
 | 5 | Typography | ✅ | §6.4 — seven roles, two weights |
 | 6 | Shapes — radius & borders | ✅ | §6.5 — 5-tier radius, 3 border opacities |
-| 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl`. **Confirmed against the live source 2026-10-16**: `brand_dna/src/theme.generated.css:87` declares `--spacing-section: 224px` — fixed, not a clamp — and every page section uses `px-12 md:px-16 lg:px-20`. The bridge's fluid values are declined, not missing |
+| 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl`. **Confirmed against the live source 2026-10-16**: `brand_dna/src/theme.generated.css:87` declares `--spacing-section: 224px` — fixed, not a clamp — and every page section uses `px-12 md:px-16 lg:px-20`. The bridge's fluid values are declined, not missing. The container is ruled for the chrome and all page content (`COMPONENTS.md` §3.1); the dashboard's `max-w-7xl` is a separate open item — decision 7 |
 | 8 | Elevation & Depth | ⚠️ partial | `--shadow-card-hover` locked. The archive proposes **4 elevation + 1 bevel + 2 glow** (`panel`, `modal`, `float`, `card-hover`; `bevel`; `glow-success`, `glow-gold`) — **unreviewed, needs a ruling** |
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
 | 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
@@ -355,8 +378,8 @@ where it comes from. When every line reads ✅, we write the document in one pas
 
 **Reading it plainly:** seven sections are ready, five are partial or open, two are not started.
 **We are not at play.** The two heaviest gaps are **Components (#11)** and **Do/Don't (#12)**.
-Components has started and is two of six; Do/Don't has not, and both are the kind of thing that,
-left until drafting time, guarantees a second pass.
+Components has six components locked and three to go; Do/Don't has not started. Both are the kind of
+thing that, left until drafting time, guarantees a second pass.
 
 ---
 
@@ -434,11 +457,11 @@ Do-not            — the explicit anti-patterns, each naming the drift it cause
 
 **Components to lock, in priority order:**
 
-1. **Listing card** — the marketplace unit. Highest drift exposure.
+1. **Listing card** — the marketplace unit. Highest drift exposure. ✅ *Locked* — `COMPONENTS.md` §1
 2. **Status badge** — the four statuses are already a database enum; the badge must not invent a
    fifth look. ✅ *Decided 2026-10-16:* one component, one map, three treatments — green + glow
-   (`available`, `coming_soon`); **amber, no glow** (`fully_allocated`); slate, no glow
-   (`completed`).
+   (`listed`, `coming_soon`); **amber, no glow** (`fully_subscribed`); slate, no glow
+   (`completed`). Locked in full at `COMPONENTS.md` §2.
 
    This reverses the muted-grey treatment the old build gave the sold-out state, and it supersedes
    `STEP2-MARKETPLACE.md:50-55` — **on the colour only.** STEP2's *names* were right all along; the
@@ -465,11 +488,21 @@ Do-not            — the explicit anti-patterns, each naming the drift it cause
 
    §5 makes `PLAN.md` the authority on *scope*, never on values. `918e197` treated it as both and
    wrote `draft` off as "not a status" — it is one. Read the schema, not the plan, for values.
-3. **Button hierarchy** — primary, secondary, and the disabled/loading forms of each.
+3. **Button hierarchy** — primary, secondary, and the disabled/loading forms of each. ❌ Open, and
+   **blocked on the elevation ruling** — decision 5.
 4. **Figure row** — the mono-figures pattern. `brand/DESIGN.md:79` puts Geist Mono on financials and
    tabular figures specifically, so this is a token decision, not a styling choice. Weight 500.
+   ❌ Open, blocked on nothing.
 5. **Nav and footer** — shared across every page, so the first place a per-page variant appears.
+   ✅ *Locked* — `COMPONENTS.md` §4, §5. Neither had a spec anywhere in the estate, so both were
+   ruled from source.
 6. **Form field** — buyer and operator inputs share a look; the error state is the drift risk.
+   ❌ Open, blocked on nothing.
+
+**Two components were not on this list and are now locked**, both from the 38-item inventory rather
+than the six: the **mobile conversion bar** (`COMPONENTS.md` §6, which the old build never had —
+`DEFECT-HISTORY` #6) and the **mobile menu drawer** (§7, pulled out of the nav because a focus trap,
+an Esc handler and a scroll lock are a component's worth of work).
 
 **The "closed list" rule is the whole mechanism.** The drift was not one wrong colour; it was a
 second and third variant of the same thing. A variant list closed by default means adding one
@@ -491,7 +524,7 @@ them, and they are the three that do the most work here.
 5    Layout              spacing scale · container · breakpoints · touch targets
 6    Elevation & Depth   table: Level | Treatment | Use
 7    Shapes              radius scale · border opacity steps
-8    Components          buttons · cards · inputs · nav · signature · listing card
+8    Components          buttons · cards · inputs · nav · footer · drawer · mobile bar · badge · listing card
 9    Motion              durations, easings, and what is allowed to move
 10   Do / Don't          the anti-patterns, each naming the drift it caused
 11   Provenance          value → source element, so it can be re-verified
@@ -635,6 +668,14 @@ file:line provenance behind each value.
 that path is not a git repository. §5 keeps it reference-only and mined decision-by-decision, which
 is exactly why it needs watching: a value copied from there is a value with no commit behind it.
 
+**One cross-reference to correct.** `DEFECT-HISTORY:11` points the rulings at
+`sandbox/audit/design/DESIGN.md`, and `:46-48` puts them at "`DESIGN.md` §§5–8". Neither is where
+this audit is going: §13 lands the document at `evolution/engine_v2/website/website/DESIGN.md`, and
+the skeleton in §9 has Components at 8, Motion at 9 and Do/Don't at 10. The file is right that the
+rulings live with us and the defects live there; only the path is stale. Nothing to fix over there
+— the bridge is read-only — but do not go looking for a `DESIGN.md` in this folder. There isn't one
+yet, and the moment there is, it will be in `engine_v2`.
+
 ---
 
 ## 18 · Open decisions
@@ -647,6 +688,8 @@ is exactly why it needs watching: a value copied from there is a value with no c
 | 4 | Keep the reference's *Agent Prompt Guide* section? | Open — refero has it, x.ai does not |
 | 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | Open — see §7 line 8 |
 | 6 | Layout rhythm and gutters: 224px and `px-12→20`, or the fluid clamp and `px-6→16`? | **Resolved 2026-10-16 — the harvest wins.** `theme.generated.css:87` declares `--spacing-section: 224px`, fixed; the page container is `px-12 md:px-16 lg:px-20` in every section. The clamp is declined and the `px-6 sm:px-10` family belongs to `NavBar.tsx:159`, not to a page container. No measurement was needed once the source was read — see §6.5 |
+| 7 | The dashboard container — `max-w-7xl` (4×) against the ruled `max-w-6xl` | Open. `COMPONENTS.md` §3.1 rules one container for the chrome and all page content; `/mystable` may legitimately need a wider grid than a marketing page. One ruling, either way |
+| 8 | `coming_soon_details` — its label and its treatment | Open. The sixth database status, absent from every map in the estate. `COMPONENTS.md` §2 has it sharing `coming_soon`'s; that may be right, but it is not yet a recorded decision |
 
 ---
 
