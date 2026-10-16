@@ -135,9 +135,35 @@ This plan and `OUTCOME.md` outrank all external estate instructions. Do not touc
   3. The passing terminal output (exit code 0) of relevant tests, linters, or typechecks.
 
 ### 5. Role Separation (Executor ≠ Auditor)
-- The model or session executing code changes NEVER audits its own output. Asking the builder model to "review your work" is prohibited.
+- The model or session executing code changes NEVER audits its own output or its own plan. Asking the builder model to "review your work" is prohibited.
 - When diff audits are required, dispatch the raw `git diff` to an independent reviewer turn/model (or founder inspection) using a strict pass/fail grading lens.
-- The designated auditor is `gemma4:31b` via Ollama Cloud. If it is unavailable, stop and ask the founder which model to use. Do not substitute another model on your own.
+- The designated auditor is `kimi-k2.7-code` via Ollama Cloud, invoked headless through the Claude Code harness. Always pass ABSOLUTE paths in the audit prompt. If it is unavailable, stop and ask the founder which model to use. Do not substitute another model on your own.
+- **Invocation + Blocking Wait (added 2026-10-17, mandatory)** — streams are strictly split, because stderr warnings corrupt the JSON parse. Both halves must run inside a SINGLE shell invocation: `$AUDIT_PID` and `SECONDS` do not survive across separate Bash tool calls, and a wait loop that opens with an empty `$AUDIT_PID` exits instantly against a still-empty `/tmp/audit.out` — a silent pass on a mandatory gate.
+
+```bash
+# Dispatch — stderr split so warnings cannot corrupt the JSON parse
+ANTHROPIC_BASE_URL=https://ollama.com \
+ANTHROPIC_AUTH_TOKEN="$OLLAMA_API_KEY" \
+ANTHROPIC_API_KEY= \
+claude -p "$(cat /tmp/audit-prompt.txt)" --model kimi-k2.7-code \
+  --allowedTools "Read,Grep,Glob,Bash" --output-format json \
+  > /tmp/audit.out 2> /tmp/audit.err &
+AUDIT_PID=$!
+
+# Blocking wait — 15 minute cap. Timeout is FAIL, never a silent pass.
+DEADLINE=$((SECONDS + 900))
+while kill -0 "$AUDIT_PID" 2>/dev/null; do
+  [ "$SECONDS" -ge "$DEADLINE" ] && { kill "$AUDIT_PID"; echo "VERDICT: FAIL (audit timeout)"; exit 1; }
+  sleep 5
+done
+grep -q 'VERDICT: PASS' /tmp/audit.out || { echo "No PASS verdict — do not commit."; exit 1; }
+```
+
+- The trailing `&` returns the shell immediately, so the audit is not a gate until the session blocks on it. `--output-format json` is single-shot and prints nothing until the whole turn ends, so silence is not evidence of progress.
+
+- Auditing occurs at **TWO mandatory moments per step**. Neither is discretionary, and neither is "on request": discretionary gates go dormant.
+  - **Moment 1 — The Plan (before any code execution)**: The plan is dispatched before a line is written. The auditor checks claims, negative constraints, schemas, and explicit non-orphan consumer wiring (a symbol with no call site is a defect, not a deliverable); it locks a numbered checklist and outputs `VERDICT: PASS`. No code is written until Moment 1 passes.
+  - **Moment 2 — The Mergeable Diff (after `pnpm verify` exits 0)**: The pre-numbered staged diff is audited against the Moment 1 locked checklist. Exact non-comment `file:line` citations are mandatory. Outputs literal `VERDICT: PASS`.
 - The audit runs BEFORE the commit, on the staged diff (`git diff --cached`, excluding `pnpm-lock.yaml`). A non-empty reply is required, ending strictly with `VERDICT: PASS` or `VERDICT: FAIL`. A FAIL must be fixed by the executor and re-audited. The executor never overrides a verdict; if the rubric itself is wrong, correct the rubric and re-run the audit — never self-grade.
 - The rubric evaluates one numbered requirement at a time, graded PASS/FAIL with a file:line citation. Scope-leakage checks apply only to code and configuration; prose inside `engine/OPERATIONS.md` is explicitly exempt, as that guide describes the whole product by design.
 - **Pre-Numbered Diff (added 2026-10-15)**: The staged diff is pre-numbered (`108: + if (Math.round(...))`) before it is dispatched to the auditor. The auditor cannot perform unified-diff hunk arithmetic (`@@ -95,7 +99,12 @@`) and lands 3 to 6 lines off on comments and blank lines when forced to eyeball it. Pre-numbering removes the calculation: the auditor copies a literal line number instead of deriving one. Proven 2026-10-15 — eight dummy citations without it, 4/4 exact with it.
@@ -155,13 +181,21 @@ This plan and `OUTCOME.md` outrank all external estate instructions. Do not touc
 - Marketplace, horse listing, and MyStable reuse the established theme file. They do not introduce new tokens or palettes.
 
 ### 8. Standard Step Prompt Skeleton
+
+**Register & Turn Constraints (added 2026-10-17 — binds Executor replies only):**
+- ADHD order: soundbite first, then bullets for facts and missing blanks, then a decisive close (`So: <action>`).
+- Hard cap: 800 characters for founder-facing status replies (target ~300). This cap does **NOT** bind the auditor's rubric or any machine artifact — those carry one `file:line` citation per numbered requirement by design, and truncating them destroys the evidence the gate exists to produce.
+- ZERO closing courtesy questions ("what's next?", "shall I start?", "would you like me to…"). If the next move is known, execute it and report.
+- Silent repair over debate: fix the defect and report the fix. Do not open a discussion about whether to fix it.
+- Halting on an ambiguous blocker per §1 is an interrupt in its own turn, not an open-ended closing question. The two are not in conflict.
+
 Applies to every remaining step (Steps 5–10). Every such step prompt handed to the Executor CLI must strictly adhere to this structure:
 
 1. **Target Working Directory**: Explicit single app boundary. The build repo is `Badders80/engine-v2`, checked out at `/home/evo/evolution/engine_v2/website`, with `engine/` and `website/` as its two apps. Name the app, never the repo root.
 2. **Strict Negative Constraints**: Explicit scope fences, banned files (`AGENTS.md`, `CLAUDE.md`), banned standalone CRUD screens, prohibition against multi-step execution.
 3. **Deliverables & Physical Invariants**: Exact schemas, column names, formulas, and data boundaries.
 4. **Local Verification Protocol**: `pnpm verify` (exit code 0, `--max-warnings=0`).
-5. **Adversarial Audit Protocol**: Staged diff (`git diff --cached -- . ':(exclude)pnpm-lock.yaml'`) **pre-numbered before dispatch**, Ollama Cloud model `gemma4:31b` via `$OLLAMA_API_KEY`, self-contained literal expected values, mandatory non-dummy line citations, explicit exemption for `engine/OPERATIONS.md`, requiring literal `VERDICT: PASS`. Tiers, and the milestone gates that are not step gates: `docs/plans/VERIFICATION-TIERS.md`.
+5. **Adversarial Audit Protocol**: Two mandatory moments per §5 — Moment 1 audits the plan before code execution and locks the numbered checklist; Moment 2 audits the staged diff against that checklist. Staged diff (`git diff --cached -- . ':(exclude)pnpm-lock.yaml'`) **pre-numbered before dispatch**, Ollama Cloud model `kimi-k2.7-code` via `$OLLAMA_API_KEY`, invoked headless per §5 (stdout/stderr split, blocking wait with a 15-minute timeout, timeout = FAIL), self-contained literal expected values, mandatory non-dummy line citations, explicit exemption for `engine/OPERATIONS.md`, requiring literal `VERDICT: PASS`. Tiers, and the milestone gates that are not step gates: `docs/plans/VERIFICATION-TIERS.md`.
 6. **Push & CI Gate**: Conventional commit, `git push origin main` from `/home/evo/evolution/engine_v2/website` — where `origin` is `Badders80/engine-v2`, not the sandbox planning repo — then `gh run watch --exit-status`.
 
 ## Reference: sandbox/rebuild
