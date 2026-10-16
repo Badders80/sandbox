@@ -4,7 +4,7 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** gathering — **seven of §7's fourteen sections are ready**. STEP1 (landing), STEP2
+> **Status:** gathering — **eight of §7's fourteen sections are ready**. STEP1 (landing), STEP2
 > (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut; Workstream C has
 > six components locked in `COMPONENTS.md`. The document itself is **not yet written** — see **§7,
 > the bill of materials**, for exactly what is still missing before we can write it in one pass.
@@ -281,6 +281,13 @@ none of it is in the locked set above. Recorded 2026-10-16 because the next read
   `--color-accent` → gold is **used 127 times in the app**, while §6.3's own rule says the accent
   is "never called `accent`". The prohibition is not enforceable against the live build as
   written; it needs restating as a rule about *new* names, or dropping.
+- **`text-muted` is a landmine, and it is live.** The shadcn block maps `--color-muted` →
+  `--color-raised` = **`#111111`**, so `text-muted` — which reads as "muted text" in every Tailwind
+  habit — actually renders *near-black text on a near-black canvas*. `packages/ui/src/stat-row.tsx`
+  carries a comment warning about exactly this. The token is correct as a **surface**; only its name
+  is a trap. Anything wanting dim text wants `muted-foreground`.
+- **A stale secondary value to catch:** `stat-row.tsx`'s comment cites `muted-foreground` as
+  `#737373`. The theme and this document both say `#7c7c7c`. The comment is wrong; the token is right.
 - **Four more type roles** than §6.4 lists: `--text-label` 11px, `--text-body-small` 15px,
   `--text-body` 16px, `--text-card-heading` 18px. §6.4's "seven roles" is right — it just is not the
   seven in its own table, which lists a `display 64px` role that **is not a token at all**:
@@ -346,6 +353,44 @@ or the scale admits 400 — that is a ruling, and it is owed.
 | `--radius-xs` | **does not exist** | `rounded-xs` falls through to Tailwind's own ~2px. The bridge spec's checkbox uses it; nothing in the theme backs it |
 | border opacities | three steps: `/20`, `/40`, `/60` | `DEFECT-HISTORY` #16 |
 | `--shadow-card-hover` | `0 20px 40px rgba(0,0,0,0.45)` | listing card, on hover |
+
+**Elevation — ruled 2026-10-16, decision 5 closed.** Four elevation, one bevel, two glow. Derived
+from the live literals by `AUDIT-MISSING-PRIMITIVES` §5.2 — *not* copied from the bridge, which
+proposes the same set; the two agree because both read the same 14 distinct values.
+
+| Token | Value | Use |
+|---|---|---|
+| `--shadow-panel` | `0 0 60px rgba(0,0,0,0.6)` | rail card, modal shell |
+| `--shadow-modal` | `0 0 120px rgba(0,0,0,0.98)` | dialog shells — all three |
+| `--shadow-float` | `0 30px 80px rgba(0,0,0,0.6)` | auth card, rail error card |
+| `--shadow-card-hover` | `0 20px 40px rgba(0,0,0,0.45)` | listing card, on hover |
+| `--shadow-bevel` | `inset 0 1px 0 rgba(255,255,255,0.05)` | top highlight — **composes**, never concatenated |
+| `--shadow-glow-success` | `0 0 8px rgba(16,185,129,0.6)` | the status dot, and nothing else |
+| `--shadow-glow-gold` | `0 0 12px rgba(212,169,100,0.25)` | selected pedigree node |
+
+**The bevel is a separate concern from depth.** Two live values concatenate a depth shadow and a
+highlight into one string, which is why they could not be tokenised as-is. They are written
+`shadow-[var(--shadow-panel),var(--shadow-bevel)]` and never as one hand-written value.
+
+**Three adjudications, so they are not re-opened:**
+
+1. **One success glow, not two.** Live carries `--shadow-success-glow` at `20px/0.35` *and*
+   `-strong` at `32px/0.55`, while three inline literals use `8px/0.6`. `DEFECT-HISTORY` #21 already
+   folds the strong variant in. The survivor is the **8px** one, and the checkout banner — currently
+   the `20px` token's only consumer — **drops its glow entirely** and takes `--shadow-panel`. Its
+   green is already carried by `border-status-active/40` and `bg-status-active/10`; the bloom was
+   saying it twice. This is also what makes the glow single-purpose: it marks *motion*, per §2.6 of
+   the badge rule.
+2. **The blue glow is dropped.** `0 0 8px rgba(96,165,250,0.6)` has one call site and introduces an
+   info-blue that appears in none of the locked 24. §6.3 already rules there is no fourth status
+   colour. The call site moves to `--shadow-glow-gold` or loses the glow.
+3. **Tailwind's named shadows are banned, like bare `rounded`.** Eleven live uses with no token
+   backing — `shadow-sm` ×5, `shadow-xl` ×3, `shadow-2xl` ×2, `shadow-md` ×1 — five of them on one
+   orphan page. The elevation table above is the whole vocabulary, exactly as `DEFECT-HISTORY` #2
+   made five tiers the whole radius vocabulary.
+
+**One correction to the bridge's own table:** its §5.1 lists `--radius-xs: 4px` as a token. It is
+not declared anywhere, which is the same phantom this README carried until 2026-10-16.
 | `--spacing-section` | `224px` | `py-section`; six wrappers use `py-56` |
 | container | `max-w-6xl` (1152px) | padding `px-12 md:px-16 lg:px-20` |
 | touch target law | **44px** | `DEFECT-HISTORY` #5 |
@@ -355,7 +400,7 @@ or the scale admits 400 — that is a ruling, and it is owed.
 differentiates at 300ms/200ms, with a reduced-motion guard.
 
 **But the live build ships two accordions**, against a rule that permits one:
-`ui/CollapsePanel.tsx` and `ui/AccordionList.tsx`. Consolidated in `COMPONENTS.md` §9's owed list as
+`ui/CollapsePanel.tsx` and `ui/AccordionList.tsx`. Consolidated in `COMPONENTS.md` §10's owed list as
 owed work, not yet locked. This is `DEFECT-HISTORY` #13's shape a second time — two implementations
 of one job, which is how the badge problem started.
 
@@ -389,15 +434,15 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 5 | Typography | ✅ | §6.4 — seven roles, two weights |
 | 6 | Shapes — radius & borders | ✅ | §6.5 — three radius **steps** (8 / 16 / 24) plus pill, with `xl`/`2xl`/`3xl` as aliases onto `lg`; 3 border opacities |
 | 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl`. **Confirmed against the live source 2026-10-16**: `brand_dna/src/theme.generated.css:87` declares `--spacing-section: 224px` — fixed, not a clamp — and every page section uses `px-12 md:px-16 lg:px-20`. The bridge's fluid values are declined, not missing. The container is ruled for the chrome and all page content (`COMPONENTS.md` §3.1); the dashboard's `max-w-7xl` is a separate open item — decision 7 |
-| 8 | Elevation & Depth | ⚠️ partial | `--shadow-card-hover` locked. The archive proposes **4 elevation + 1 bevel + 2 glow** (`panel`, `modal`, `float`, `card-hover`; `bevel`; `glow-success`, `glow-gold`) — **unreviewed, needs a ruling** |
+| 8 | Elevation & Depth | ✅ | §6.5 — **ruled 2026-10-16**: 4 elevation + 1 bevel + 2 glow, derived from the live literals, with the two near-duplicate success glows folded and the one-off blue dropped. Bevel composes, never concatenates |
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
 | 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
-| 11 | Components | ⚠️ partial | **6 components locked** in `COMPONENTS.md` — listing card, status badge, nav, footer, mobile conversion bar, mobile menu drawer. Of the six-item list in §8, three remain: button hierarchy (blocked on the elevation ruling), figure row, form field |
+| 11 | Components | ⚠️ partial | **7 components locked** in `COMPONENTS.md` — listing card, status badge, button hierarchy, nav, footer, mobile conversion bar, mobile menu drawer. Of the six-item list in §8, two remain: figure row and form field, both unblocked, both with live primitives in `packages/ui/src/` to rule from |
 | 12 | Do / Don't | ❌ | **Not written.** Derivable — `DEFECT-HISTORY` carries 24 defects, each already paired with the rule that prevents it |
 | 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
 | 14 | Agent Prompt Guide | ⚠️ open | The richer refero pattern has it; the leaner x.ai pattern does not. Open decision 4 |
 
-**Reading it plainly:** seven sections are ready, five are partial or open, two are not started.
+**Reading it plainly:** eight sections are ready, four are partial or open, two are not started.
 **We are not at play.** The two heaviest gaps are **Components (#11)** and **Do/Don't (#12)**.
 Components has six components locked and three to go; Do/Don't has not started. Both are the kind of
 thing that, left until drafting time, guarantees a second pass.
@@ -410,7 +455,7 @@ thing that, left until drafting time, guarantees a second pass.
 |---|---|---|---|
 | A | **Harvest** — read the real values off the live landing page | A ground-truth table: every colour, size, weight, tracking, radius, spacing, with provenance | Substantially done; needs **collation** into `SOURCE-TRUTH.md` |
 | B | **Token model** — how those values compile | The `@theme` block, its categories, its naming | Values ready; naming conventions settled in Tailwind v4 terms |
-| C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ⚠️ **6 components locked** in `COMPONENTS.md`, including nav and the mobile chrome the old build never had |
+| C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ⚠️ **7 components locked** in `COMPONENTS.md` — the whole chrome, the button hierarchy, and the mobile surfaces the old build never had |
 | D | **Drift mechanisms** — why it went wrong before | A catalogue of causes, each with the guard that prevents it | Done — §10 |
 | E | **Target `DESIGN.md`** | The document, in the pattern of §1 | ❌ Blocked on §7 |
 | F | **Enforcement** — how it stays true | A gate check in the `assert-*.sh` style, plus the audit rubric hook | Designed — §11 |
@@ -509,8 +554,9 @@ Do-not            — the explicit anti-patterns, each naming the drift it cause
 
    §5 makes `PLAN.md` the authority on *scope*, never on values. `918e197` treated it as both and
    wrote `draft` off as "not a status" — it is one. Read the schema, not the plan, for values.
-3. **Button hierarchy** — primary, secondary, and the disabled/loading forms of each. ❌ Open, and
-   **blocked on the elevation ruling** — decision 5.
+3. **Button hierarchy** — primary, secondary, and the disabled/loading forms of each.
+   ✅ *Locked* — `COMPONENTS.md` §9. Two variants, solid and ghost; **the primary CTA is white, not
+   gold**, because §6.3 rules gold never a surface.
 4. **Figure row** — the mono-figures pattern. `brand/DESIGN.md:79` puts Geist Mono on financials and
    tabular figures specifically, so this is a token decision, not a styling choice. Weight 500.
    ❌ Open, blocked on nothing.
@@ -703,7 +749,7 @@ document kept by discipline, and it should be read that way.
 | `STEP1-LANDING-PAGE.md` | Landing page harvest. **Closed, clean** — spacing rhythm and container width re-verified against the live source 2026-10-16 (§6.5, decision 6). Colours, 7 type roles, 2 label roles, radius scale, motion |
 | `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, display heading, card hover shadow, tag tracking, container width. Its **badge treatment is superseded** — `:50-55` is the old-build map, and its open questions at `:146`/`:148` were answered 2026-10-16 (§8) |
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
-| `COMPONENTS.md` | **Workstream C.** The decision-level locks. Six written — listing card, status badge, and the Batch 1 chrome: nav, footer, mobile conversion bar, mobile menu drawer. Also carries the shared rulings: the single container, the z-ladder, the touch law, hover guards. A working file — it does not leave this folder |
+| `COMPONENTS.md` | **Workstream C.** The decision-level locks. Seven written — listing card, status badge, button hierarchy, and the Batch 1 chrome: nav, footer, mobile conversion bar, mobile menu drawer. Also carries the shared rulings: the single container, the z-ladder, the touch law, hover guards. A working file — it does not leave this folder |
 | `DEFECT-HISTORY-2026-10-16.md` | The old build's 24 defects, each with the ruling that closed it. The source for §7 row 12 — `Do/Don't` is a collation of this file, not new work. Lives in the bridge folder |
 | `AUDIT-MISSING-PRIMITIVES-2026-10-16.md` | Texture utilities, keyframes, dead classes, raw hex, and **21 arbitrary shadows across 14 distinct values**. The material for §7 row 8 (Elevation) and §18 decision 5. Uncited until now. Lives in the bridge folder |
 
@@ -734,7 +780,7 @@ yet, and the moment there is, it will be in `engine_v2`.
 | 2 | `@theme` in `globals.css`, or a separate `theme.css` it imports | Open — `PLAN.md:235` says `globals.css`; the archive's draft uses a separate file. **Now carries the z-binding too**: `--z-*` is not a Tailwind v4 namespace, so the z-ladder in `COMPONENTS.md` §3.2 generates no utility until this is settled |
 | 3 | Enforcement strength | Open — proposed **fail**, not warn |
 | 4 | Keep the reference's *Agent Prompt Guide* section? | Open — refero has it, x.ai does not |
-| 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | Open — see §7 line 8 |
+| 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | **Resolved 2026-10-16 — adopted, with three adjudications.** Both the archive and `AUDIT-MISSING-PRIMITIVES` §5.2 derived the same seven tokens from the same 14 live literals, so the agreement is evidence rather than inheritance. See §6.5: one success glow not two, the blue glow dropped, Tailwind's named shadows banned. This unblocks the button hierarchy |
 | 6 | Layout rhythm and gutters: 224px and `px-12→20`, or the fluid clamp and `px-6→16`? | **Resolved 2026-10-16 — the harvest wins.** `theme.generated.css:87` declares `--spacing-section: 224px`, fixed; the page container is `px-12 md:px-16 lg:px-20` in every section. The clamp is declined and the `px-6 sm:px-10` family belongs to `NavBar.tsx:159`, not to a page container. No measurement was needed once the source was read — see §6.5 |
 | 7 | The dashboard container — `max-w-7xl` (4×) against the ruled `max-w-6xl` | Open. `COMPONENTS.md` §3.1 rules one container for the chrome and all page content; `/mystable` may legitimately need a wider grid than a marketing page. One ruling, either way |
 | 8 | `coming_soon_details` — its label and its treatment | Open. The sixth database status, absent from every map in the estate. `COMPONENTS.md` §2 has it sharing `coming_soon`'s; that may be right, but it is not yet a recorded decision |
@@ -745,8 +791,8 @@ yet, and the moment there is, it will be in `engine_v2`.
 
 **Workstream C — pattern locks.** It is the largest gap in §7, it is independent of everything
 else, and leaving it until drafting time guarantees the second pass that the one-pass goal exists
-to avoid. **Six components are locked** in `COMPONENTS.md`, including the whole chrome; three
-remain, and the first is blocked. Details there.
+to avoid. **Seven components are locked** in `COMPONENTS.md`, including the whole chrome and the
+button hierarchy; two remain, and neither is blocked.
 
 Alongside it, four smaller jobs:
 

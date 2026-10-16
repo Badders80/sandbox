@@ -17,8 +17,8 @@ rule. Live code is cited only as evidence — for what exists, and for what went
 - **`departs`** — the value differs from the live build on purpose. One line says why. §5 makes
   the live page the winner on values, so a departure is a ruling, and it has to be argued.
 
-**Status: 6 locked** — listing card, status badge, navigation, footer, mobile conversion bar,
-mobile menu drawer. Remaining: button hierarchy, figure row, form field (§9).
+**Status: 7 locked** — listing card, status badge, button hierarchy, navigation, footer, mobile
+conversion bar, mobile menu drawer. Remaining: figure row, form field (§10).
 
 ---
 
@@ -165,12 +165,26 @@ appear in this component at all.
 - The glow marks **motion, not importance.** There is no second glow colour.
 
 ### Do-not
-1. **Do not build a second status map.** Live has three, and they disagree: `listed` is `AVAILABLE`
-   in the grid and `Become an Owner` in the badge; `completed` is muted grey in one, amber in
-   another; `fully_subscribed` is amber in one, grey in another. `DEFECT-HISTORY` #13.
-2. **Do not declare the enum twice.** `CampaignStatus` exists in `database.types.ts` and again in
-   `lib/campaign-status.ts`. The badge imports the app's copy, so the database's copy is not the
-   one rendering. *Drift:* two sources of truth agreeing by coincidence.
+1. **Do not build a second status map.** Live has **four** sites and they disagree on both colour and
+   words:
+
+   | Site | `listed` | `fully_subscribed` | `completed` |
+   |---|---|---|---|
+   | `marketplace-listing-grid.tsx` `STATUS_META` | AVAILABLE | slate | slate |
+   | `campaign-status-badge.tsx` | **Become an Owner** | amber | amber |
+   | `packages/ui/src/status-pill.tsx` | **Become An Owner** | **GOLD** (`border-accent/40 … text-accent`) | **Campaign Concluded** |
+   | `lib/campaign-status.ts` | — | — | — (`StatusInfo` shape, 6 values) |
+
+   `status-pill.tsx` is the sharpest instance in the estate. Its own header says it **"Replaces both
+   the right-rail statusChip and CampaignStatusBadge. Exactly one token set per status."** — a
+   component written to unify two systems, which became a third. `DEFECT-HISTORY` #13's shape, and
+   `fully_subscribed` now has a fourth colour: gold. The ruling is amber (README §8). *Drift:* four
+   answers to one question, one of them written by the fix.
+2. **Do not declare the enum twice — it is declared four times.** `database.types.ts:71`,
+   `lib/campaign-status.ts`, `packages/ui/src/status-pill.tsx` (four values only), and
+   `asset-lock.ts:45`. The badge imports the app's copy, so the database's is not the one rendering.
+   *Drift:* four sources of truth agreeing by coincidence — and `status-pill.tsx` already omits
+   `draft` and `coming_soon_details`.
 3. **Do not fall back silently on an unknown value.** Live does `statusConfig[status] ??
    statusConfig.draft` — an unknown status renders as Draft, the one state that must never be
    public. *Drift:* a closed list with a hole that fails open.
@@ -185,9 +199,10 @@ appear in this component at all.
 
 ---
 
-## 3 · Batch 1 · shared rulings
+## 3 · Shared rulings
 
-Navigation, footer, the mobile bar and the drawer all consume these four. Stated once.
+Navigation, footer, the mobile bar, the drawer and the button hierarchy all consume these four.
+Stated once.
 
 ### 3.1 The container — `departs`
 
@@ -418,7 +433,7 @@ is a ruling.
 
 ### Tokens consumed
 `surface` with alpha, `border`, the label-spec role and the financial role (mono, weight 500) for
-the price, the primary button (§9, owed), `z-sticky` (§3.2), the container's gutter (§3.1).
+the price, the primary button (§9 — now locked), `z-sticky` (§3.2), the container's gutter (§3.1).
 
 **Departures, both argued:**
 - **Bottom inset compensation is required** — `env(safe-area-inset-bottom)`. Live has no `env()`
@@ -509,21 +524,115 @@ value is the entire point.
 
 ---
 
-## 9 · Still to lock
+## 9 · Button hierarchy
 
-| # | Component | Blocked on |
+### Name and job
+The actionable control. The only component that says *do this*.
+
+**The primary CTA is white, not gold.** `packages/ui/src/solid-pill-button.tsx` is `bg-heading
+text-on-light` — a near-white fill with dark text, and its own doc comment records it as the
+treatment the founder "called perfect and ruled for the flow". This is not taste: §6.3 rules gold
+*"never a surface"*, so a gold button fill would contradict the locked colour rule. **Gold is never
+a button fill, in any variant.**
+
+### Anatomy
+
+| Slot | Requirement |
+|---|---|
+| Label | **Required** |
+| Icon | Optional, leading or trailing |
+| Group wrapper | **Required** — carries the hover lift (see below) |
+
+### Variants — a CLOSED list of two
+
+| Variant | Treatment | Label role |
 |---|---|---|
-| 1 | **Button hierarchy** | The **elevation ruling** (README §7 row 8, Open decision 5). A primary button's pressed state and the gold hover both want a shadow decision that is not made. **This ruling comes first** — the bar's CTA (§6) and every modal consume it, and it is the last thing standing between Workstream C and done |
-| 2 | **Figure row** | Nothing. The mono-figures pattern at weight 500; Geist Mono is already ruled onto financials |
-| 3 | **Form field** | Nothing. Buyer and operator inputs share a look; the error state is the drift risk |
+| `solid` | Near-white fill, dark text | `.label-action` — 11px / **500** / 0.2em |
+| `ghost` | Outline only, no fill | `.label-eyebrow` — 11px / **300** / 0.2em |
 
-**Two jobs that are not components and are owed by these locks:**
+**The weight *is* the hierarchy** — 500 primary, 300 secondary, same size, same tracking. That is an
+existing decision in the live build and it is adopted as-is: two label roles, one component.
 
+**`glow` is not a variant.** `GlowPillButton` lives in the app, is marketing-only (hero, the rail's
+nav, design-lab), and never appears in the purchase flow. The button hierarchy is two variants; the
+glow pill is outside it.
+
+**And `ghost` is a variant, not a component.** The bridge names a third component
+(`GhostPillButton`); live has a `ghost` prop on one component. Variant, not component — that naming
+is retired.
+
+### States
+
+| State | Rule |
+|---|---|
+| `hover` | The lift rides the **label**, never the box — `scale-[1.02]` on a `group-hover` |
+| `focus-visible` | One ring, one offset, everywhere: 2px outline, 4px offset, in `--color-edge` |
+| `active` / pressed | `scale-[0.98]` — `departs`; live has 0.98 on the nav and 0.90 in the modal, and the bridge proposed 0.97. One value for a button. The modal's 0.90 belongs to the **stepper's** small ± controls, which are a different job |
+| `disabled` | **`opacity-45`, one treatment for both variants** (`departs` — live uses two mechanisms, see do-not 5) |
+| `loading` | Same footprint, label replaced or preceded by a spinner. The button never resizes |
+
+**Adopt the label-lift, and keep its reason.** Live documents it in the source: a `w-full` button
+that scales its own box pushes past its container on every hover, and whether that overflows depends
+on the *caller's* padding, which the primitive cannot see. Scaling the label cannot overflow
+anything. That reasoning is worth more than the value — it is the difference between a decision and a
+guess.
+
+### Tokens consumed
+`heading` for the solid fill, `on-light` for its text, `border` at one of the three opacity steps,
+`muted-foreground` for the ghost label, `edge` for the focus ring, `gold` **for hover text only,
+never a fill**, `radius-pill`, the 44px touch law, the state duration, and the two label roles.
+
+### Content rules
+- Labels are verb-first and short — two to four words. A button is not a sentence.
+- Sentence case in source; the label role uppercases it.
+- Never two `solid` buttons adjacent. One primary per view.
+- `min-h-11` (44px) always, in every variant and every state — `DEFECT-HISTORY` #5.
+- A button never disables to signal a *status*. A greyed button says the opposite of what is meant
+  (README §6.3).
+
+### Do-not
+1. **Do not fill a button with gold.** §6.3 — gold is never a surface, and the 3–5% budget is not
+   for controls. A gold primary is a colour-rule violation, not a preference.
+2. **Do not scale the button box on hover.** `hover:scale-*` on the container overflows depending on
+   the caller's padding. The lift goes on the label.
+3. **Do not write a raw hex as a text colour.** Live writes `text-[#111]` where `--color-on-light`
+   holds `#0a0a0a` — `DEFECT-HISTORY` #4. Note `#111` is the **raised surface** value, so the
+   literal is wrong twice: wrong token, and a surface colour used as type.
+4. **Do not ship a no-op hover.** Live's ghost hovers `border-border` → `border-border`, identical to
+   its own base — `DEFECT-HISTORY` #3. The fix is base `border-border/60` → `hover:border-heading/60`.
+5. **Do not give `disabled` two mechanisms.** Live runs transparent-fill-and-muted-border on solid and
+   bare `opacity-45` on ghost. One state, one treatment, or the variant list starts growing sideways.
+6. **Do not use a duration off the scale.** Live is `duration-300` on a colour transition; §6.5 locks
+   the hover/state duration at 200ms.
+7. **Do not add a third variant** for a button that merely wants to look different. A ruling, or it
+   is not a variant.
+8. **Do not let the button carry the shadow.** Elevation (§6.5) is four levels; a button that invents
+   its own shadow is how the 21 arbitrary values happened.
+
+---
+
+## 10 · Still to lock
+
+**Two left, and neither is blocked.** The elevation ruling closed on 2026-10-16, which unblocked the
+button hierarchy; nothing now stands between Workstream C and done.
+
+| # | Component | Live basis | The drift risk |
+|---|---|---|---|
+| 1 | **Figure row** | `packages/ui/src/stat-row.tsx` | Already has a canonical label (`label-spec` at 10px/400/0.2em mono) and a founder audit behind it — the unit was 16px beside a 30px value and was ruled unreadable, so the unit now sits below at body size. Rule from that |
+| 2 | **Form field** | `packages/ui/src/field.tsx` | The file's own header is the case study: the sign-in card hand-spelled the same input **four times inside itself**, and two popups hand-rolled the capsule a fifth and sixth time. The error state is the piece not yet ruled |
+
+**Three jobs that are not components and are owed:**
+
+- **Consolidate the status renderers.** Four sites, four answers (`§2`, do-not 1). One survives.
 - **Consolidate the accordion.** Live ships `ui/CollapsePanel.tsx` and `ui/AccordionList.tsx` against
   a rule that permits one implementation (README §6.5). One survives, and it is the STEP1
-  `CollapsePanel` — pure grid rows, no JS measurement. This is `DEFECT-HISTORY` #13's shape a second
-  time, and it is not on the six-item list because the six-item list did not know it existed.
+  `CollapsePanel` — pure grid rows, no JS measurement. `DEFECT-HISTORY` #13's shape a second time.
 - **Name the spacing tokens and the easing.** The footer's four vertical values (§5), the chrome's
   heights, and one easing consumed by the nav and the bar (§4, §6). The easing is Motion granularity
   (README §7 row 9); the spacing is README §18 item 1. Both are *named*, not invented — the values
   above are already decided; only the token names are owed.
+
+**One thing this pass turned up that is not Workstream C's:** `packages/ui/src/` already holds
+`stat-row`, `field`, `stepper`, `status-pill`, `modal-shell`, `eyebrow`, `back-link` and
+`countdown`. The V2 primitives are further along than any file in this folder recorded — the work
+left is ruling on spellings that already exist, not inventing components.
