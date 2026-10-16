@@ -47,6 +47,7 @@ typography:
     card-heading: 18px
     section-heading: 36px
     section-heading-wide: 48px
+    display: 64px
   weights: [300, 400, 500]       # 600 maps to 500
   tracking:
     label:   0.2em
@@ -286,10 +287,17 @@ pills), `-0.04em` (the display heading). A fifth is a ruling.
 | `--text-card-heading` | 18px | Card and panel headings |
 | `--text-section-heading` | 36px | Section `h2`, base breakpoint |
 | `--text-section-heading-wide` | 48px | The same role at `md:` |
+| `--text-display` | 64px | **The page heading.** Weight 300, tracking `-0.04em`, leading 1.05 |
 
 **36px and 48px are one role at two breakpoints**, not a display/heading pair.
 
-**The 64px page heading is a role.** It is weight 300, tracking `-0.04em`, leading 1.05.
+**The 64px page heading is a role, and it now has a token: `--text-display`.** Weight 300, tracking
+`-0.04em`, leading 1.05. It is the eighth role, and the base size for it is `--text-section-heading`
+(36px) with `md:` stepping up to 64px — the same two-breakpoint shape as the 36/48 pair.
+
+Naming it matters more than it looks: before this, the recipe was hand-typed into two page files as
+`text-[36px] … md:text-[64px] leading-[1.05]`. A recipe typed twice is a recipe that drifts, which is how
+several of §10's rules came to exist.
 
 ### Weights
 
