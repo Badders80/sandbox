@@ -61,14 +61,21 @@ typography:
     display: -0.04em
 
 rounded:
+  # The bare `rounded` utility maps to `--radius`, with no suffix. The generator
+  # reads this `bare` key onto it; `bare` is frontmatter-only and not a utility name.
+  bare: 8px     # -> --radius, alias onto sm
+  xs: 8px       # alias onto sm
   sm: 8px
   md: 16px
   lg: 24px
   xl: 24px      # alias onto lg
   "2xl": 24px   # alias onto lg
   "3xl": 24px   # alias onto lg
+  "4xl": 24px   # alias onto lg
   pill: 9999px
-  # radius-xs does not exist
+  # `rounded-none` (0) and `rounded-full` (9999px) are hardcoded in the utility
+  # rather than themeable, and both are legal. `rounded-[...]` bypasses the theme
+  # entirely and is banned in CI.
 
 spacing:
   section: 224px              # marketing sections, fixed
@@ -454,19 +461,32 @@ renders `rounded-xl` at 12px and `rounded-2xl` at 16px; pinning them to `lg` mea
 quietly reintroduce a fourth radius. The theme declares them explicitly, all four at `24px`:
 `--radius-lg`, `--radius-xl`, `--radius-2xl`, `--radius-3xl`.
 
-**Three doors are still open, and closing them is a decision, not an oversight.** Tailwind v4 also
-supplies radius values this set does not pin:
+**The namespace is closed, and it takes three more pins than the seven names suggest.** Tailwind v4
+supplies radius values the set above does not name, so they are pinned onto real steps as well:
 
-| Utility | Tailwind's value | Status |
+| Utility | Tailwind's default | Pinned to |
 |---|---|---|
-| `rounded` (bare) | `--radius: 0.25rem` — **4px** | **Unpinned.** This is the exact fall-through §10's rule 10 was written for: bare `rounded` shipped to 17 call sites at 4px |
-| `rounded-xs` | `--radius-xs: 0.125rem` — **2px** | **Unpinned.** The theme has no `xs` step, so the utility falls through |
-| `rounded-4xl` | `--radius-4xl: 2rem` — **32px** | **Unpinned.** A fifth radius, arriving by a name nobody watched |
+| bare `rounded` | `--radius: 0.25rem` — 4px | **8px** (onto `sm`) |
+| `rounded-xs` | `--radius-xs: 0.125rem` — 2px | **8px** (onto `sm`) |
+| `rounded-4xl` | `--radius-4xl: 2rem` — 32px | **24px** (onto `lg`) |
 
-Pinning all three onto real steps would make the vocabulary self-closing — the theme file's own
-comment already claims this ("*so no utility can fall through to Tailwind's scale and reintroduce a
-fifth*"), and it is not yet true. Until they are pinned, the ban is the only thing standing between a
-habit and a wrong radius.
+**Bare `rounded` at 4px is the exact fall-through §10's rule 10 was written for** — it shipped to 17
+call sites. With all ten pinned, **every named radius utility resolves to 8, 16, 24 or 9999px**, whatever
+anyone writes from habit. `rounded-none` (0) and `rounded-full` (9999px) are hardcoded in the utility
+rather than themeable, and both are legal.
+
+**Two honest caveats, because "closed" has a boundary.**
+
+- **Arbitrary values still bypass the theme.** `rounded-[26px]` compiles to 26px no matter what is
+  pinned, exactly as `scale-[…]`, `leading-[…]` and `z-[…]` bypass theirs. Nothing in the theme can
+  stop it; **the CI ban is what closes that door**, and it is why the ban is not redundant now that
+  the pins exist. There are zero arbitrary radii live, so the door is unwalked — but it is open.
+- **The aliases are load-bearing, not a fail-safe.** `rounded-xl` is the single most-used radius
+  spelling in the build at **58 sites**, with `rounded-2xl` ×19 and `rounded-3xl` ×5 — **82 sites that
+  render correctly only because these aliases exist.** Remove them as unused-looking and 82 sites
+  change radius, most of them to something smaller. The authoring standard is `sm` / `md` / `lg` /
+  `pill`; **live mostly writes `xl`.** Migrating those 82 sites to `lg` is V2 work, and until it
+  happens the aliases are a dependency rather than a safety net.
 
 ### Borders
 
