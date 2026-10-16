@@ -483,22 +483,51 @@ its *"things NOT to carry forward"* list. `REDIRECT_GRACE_MS = 8000` **survives*
 safety-timeout for the Stripe redirect fallback, not an animation timer, and it is Step 8 runtime
 logic rather than a design token.
 
-**Three items owed, named rather than buried.**
+**`--duration-micro: 140ms` — added 2026-10-16.** The stepper's ± increments were rolling at an
+untokenised "≤140ms" ceiling, which is a ceiling and not a value. It joins the set and clears
+`AUDIT-MOTION` 4a's **<180ms** cap for high-frequency touch controls. `@utility duration-micro` sets
+**both** `transition-duration` and `animation-duration` — deliberately, since a micro-interaction may
+be either, and unlike its six siblings it has to work for both spellings. **Its argued line does not
+hold as given:** it cited "the V2 prototype's `num-roll` keyframe" and **no such keyframe exists** —
+`numRoll` appears only as a *planned* animation name in a 2026-10-04 planning document
+(`operations/knowledge/docs/chat-corpus/claude/2026-10-04--purchase-flow-v2-main-build-migration--f17811c2.md:28`,
+alongside `ctaShimmer`, `haloPulse`, `sealSpring`, `ambientGlowIn`, `panelFadeUp`). It is a proposal
+with a good rationale — 140ms clears the audit's own ceiling — not a harvest from something measured.
+Recorded as the proposal it is.
 
-1. **The stepper's ± increments roll at "≤140ms" and have no token.** A ceiling is not a value, and a
-   control on every purchase step is not a one-off — so either `--duration-micro: 140ms` joins the
-   set or the micro-roll borrows one. `AUDIT-MOTION` 4a caps it at **<180ms**, which 140 satisfies
-   and `--duration-step: 220ms` would not.
-2. **`MIN_BEAT_MS`'s deletion is a behaviour ruling with no home in `DESIGN.md` yet.** It is not a
-   duration and not a token. The rule it produces — *no artificial minimum-hold timers on a
-   conversion flow* — is the kind of thing an agent will reintroduce, and it belongs in §9's Motion
-   as a stated principle. Not yet written.
-3. **None of the three new families closes its vocabulary.** Tailwind's bare-value `duration-<n>`,
-   `scale-<n>` and `z-<n>` utilities still compile, so `duration-450`, `scale-110` and `z-50` all
-   work and none is in the set — and `duration-400` is live proof, being outside Tailwind's own
-   scale. Radius is closed *because* `xl`/`2xl`/`3xl` are aliases and bare `rounded` is banned
-   (`DEFECT-HISTORY` #2). **Duration, scale and z are additive only** until §11's check bans the bare
-   forms — otherwise the token sets are advisory, which is how the last drift survived.
+**`MIN_BEAT_MS`'s deletion now has a home.** Ruled 2026-10-16 to land in **both** `DESIGN.md` §9
+(Motion) as a stated principle and §10.6 as an anti-pattern — it is a behaviour ruling, not a
+duration, and the rule it produces (*no artificial minimum-hold timers on a conversion flow*) is
+exactly what an agent reintroduces. See `SECTION10-DO-DONT.md` §10.6, rule 23.
+
+**Closing the three vocabularies — and the ban has to be aimed per family, because the drift is
+spelled differently in each.** Tailwind's bare-value and arbitrary-value forms both still compile, so
+the three new families are additive until §11's check bans the forms that actually occur:
+
+| Family | Where the live drift actually is | What the ban must cover |
+|---|---|---|
+| `duration-*` | **bare numbers** — `duration-400` ×35, `duration-500` ×5, `duration-300` ×49 | bare `duration-<n>` **and** `duration-[…]` |
+| `scale-*` | **arbitrary values** — *all five* live scales are `scale-[…]`; zero are bare | `scale-[…]` and bare `scale-<n>` |
+| `z-*` | **arbitrary values** — `z-[9999]`, `z-[10000]`, `z-[9990]`, `z-[9995]` ×12 sites | `z-[…]`, with a carve-out below |
+
+**Two consequences the ban forces, both unresolved.**
+
+- **`scale-[1.02]` is the locked label lift and it is an arbitrary value.** `solid-pill-button.tsx:36`,
+  `LABEL_LIFT`, and `COMPONENTS.md` §9's States table. So a `scale-<number>` ban catches **none** of
+  the real drift, and extending it to `scale-[…]` bans a locked value — unless **`--scale-lift: 1.02`
+  is tokenised first**, which nothing has ruled.
+- **`z-<number>` cannot be banned outright.** `z-10` appears at **19 sites in 10 files**, including the
+  badge-over-image on the listing card (`marketplace-listing-grid.tsx:68`), which `COMPONENTS.md` §3.2
+  *permits* — local stacking is "a local stacking context, not a ladder slot". A blanket ban would
+  break the locked pattern. Either bare `z-0`/`z-10`/`z-20` are carved out as the local-stacking
+  vocabulary, or §3.2 needs a stated alternative.
+
+**And one defect the ban surfaced that nothing has ever counted: scale is a drift surface.** Five
+distinct arbitrary scales are live, and the audit has never tabulated them the way it tabulated 21
+shadows and 19 border opacities. `scale-[0.76]` on `pedigree-table.tsx:200` is the sharpest — a
+scale-to-fit with `-mb-[24%] -mr-[24%]` compensation, which is a zoom wearing a transform's clothes.
+`1.02`, `1.03` and `1.05` are design-lab specimens. So of five values, two are locked (`0.98` press,
+`1.02` lift) and one is a defect; the rest are lab. Needs a ruling, like §6.5's two unaccounted glows.
 
 **CollapsePanel:** the STEP1 version is canonical — pure grid rows, no JS measurement. Exit
 differentiates at 300ms/200ms, with a reduced-motion guard.
@@ -576,7 +605,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 9 | Motion | ✅ | **Ruled 2026-10-16 — the shared core is tokenised, one-offs stay local.** Easings, durations and the press scale become tokens; bespoke scroll scrubs and one-off keyframes stay in their components. Durations already locked (§6.5); granularity was §18 item 1. **Two mechanisms still owed before this is buildable:** `--duration-*` and `--scale-*` are not Tailwind v4 namespaces, so they bind as `@utility` like the z-ladder (§18 item 2), and three of the proposed values are new rather than harvested (§18 item 1). The *decision* is made; those are implementation |
 | 10 | Layout — breakpoints | ✅ | **Ruled 2026-10-16 — not tokenised.** Breakpoints stay out of the `@theme` set: page layouts and responsive behaviour differ legitimately per view, and forcing breakpoints into tokens manufactures constraints the pages do not share. Standard Tailwind prefixes (`sm:` / `md:` / `lg:`) apply, mobile-first, under one rule. The single exception already ruled is the *chrome* collapse point (`COMPONENTS.md` §8, 768px) — one value, because the nav, the drawer and the bar must agree with each other. `SPEC` originally excluded breakpoints too; the reference pattern's inclusion is declined |
 | 11 | Components | ✅ | **9 components locked — Workstream C complete** (`COMPONENTS.md`). All six on the §8 list, plus the mobile conversion bar, the mobile menu drawer and the button hierarchy — three the six-item list never knew existed. Four consolidation jobs remain and none of them is a component |
-| 12 | Do / Don't | ✅ | **Written 2026-10-16** — `SECTION10-DO-DONT.md`. `DEFECT-HISTORY`'s 24 defects, **plus one found later by the rhythm ruling**, collated into **22 rules**: 8 restated from the component locks, 11 from §6 (9 rules, after collating #21+#22 and folding #23 into #15), **5 written new** — #7, #11, #12, #17 and #25 — and 1 excluded as build hygiene (#24). 8 + 11 + 5 + 1 = 25. Every rule is stated forward, carrying the drift that is its reason. Four corrections to `DEFECT-HISTORY` came out of the collation; see that file's §Corrections |
+| 12 | Do / Don't | ✅ | **Written 2026-10-16** — `SECTION10-DO-DONT.md`. `DEFECT-HISTORY`'s 24 defects, **plus two the audit produced later** (#25 the `PressShowcase` rhythm break, #26 the 1400ms beat floor), collated into **23 rules**: 8 restated from the component locks, 11 from §6 (9 rules, after collating #21+#22 and folding #23 into #15), **6 written new** — #7, #11, #12, #17, #25 and #26 — and 1 excluded as build hygiene (#24). 8 + 11 + 6 + 1 = 26. Every rule is stated forward, carrying the drift that is its reason. Four corrections to `DEFECT-HISTORY` came out of the collation; see that file's §Corrections |
 | 13 | Agent Prompt Guide | ✅ | **Written 2026-10-16** — `SECTION11-AGENT-PROMPT-GUIDE.md`, and it is **section 11** of `DESIGN.md` since Provenance was cut. Decision 4 closed: the section ships, because a one-pass build is the point and a machine reader needs the rules stated rather than inferred. Ten rules: the six as ruled, plus the touch law, the elevation vocabulary and the vertical rhythm. **Three corrections and three additions, all marked in that file's §What was changed** — the significant one being rule 2, which as drafted called Geist Mono financial-only against §6.1's explicit second job for the face |
 
 **A row was removed from this table on 2026-10-16, and the tally below is recomputed from what

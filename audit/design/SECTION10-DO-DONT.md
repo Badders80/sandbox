@@ -1,8 +1,9 @@
 # §10 Do / Don't — the target `DESIGN.md`, section 10
 
 > **What this is:** the content of section 10 of the target `DESIGN.md` (README §7 row 12, README §9).
-> A collation of `DEFECT-HISTORY-2026-10-16.md`'s 24 defects — **plus one found later, by the rhythm
-> ruling** — into **22 rules**, each stated forward and carrying the drift that is its reason.
+> A collation of `DEFECT-HISTORY-2026-10-16.md`'s 24 defects — **plus two the audit produced later**
+> (#25 the `PressShowcase` rhythm break, #26 the 1400ms beat floor) — into **23 rules**, each stated
+> forward and carrying the drift that is its reason.
 >
 > **Status:** ✅ ready. Written 2026-10-16. Verdicts marked `adopted` / `departs` per README §5.
 >
@@ -147,6 +148,13 @@ Entrance timing is not styling; it is a cost the page pays before anyone reads i
 *Drift:* the panel read `scrollHeight` in JS while also animating grid rows — two mechanisms for one
 movement, and the measurement had to be retaken on every open.
 
+**Don't hold conversion steps behind artificial elapsed-time timers. Do bound wait times strictly by
+real network and API responses.**
+*Drift:* the legacy purchase flow enforced a mandatory `MIN_BEAT_MS = 1400` timer on every step,
+degrading conversion under the guise of readability. Readability is solved by the 220ms enter
+transition, not by holding the user hostage. Elapsed time is bounded by the API, never by a clock we
+invented.
+
 ### 10.7 Out of scope for this section — stated, not silently dropped
 
 **Asset naming is not a design rule.** Three assets shipped named `untitled-35`, `-36` and `-37`.
@@ -169,7 +177,7 @@ The first is recorded as README §18 item 10 and `SOURCE-TRUTH.md` C3.
 
 ---
 
-## The collation — 25 defects into 22 rules
+## The collation — 26 defects into 23 rules
 
 | Defect | Rule (§10.1–10.6) | Home before this file | Disposition |
 |---|---|---|---|
@@ -197,15 +205,18 @@ The first is recorded as README §18 item 10 and `SOURCE-TRUTH.md` C3.
 | 23 | (folds into 15) | README §6.5 | restated — collated |
 | 24 | — | — | **excluded** (§10.7) |
 | **25** | Don't invent a fifth page-level padding scheme | **none** — found after the harvest, by the 2026-10-16 rhythm ruling | **new** |
+| **26** | Don't hold conversion steps behind artificial timers | **none** — `AUDIT-MOTION` C1, not `DEFECT-HISTORY`. Ruled to land in §9 and here on 2026-10-16 | **new** |
 
 **Counted:** 8 restated from component locks · 11 restated from section rules (9 rules, after
-collating #21+#22 and folding #23 into #15) · **5 written new** · 1 excluded. 8 + 11 + 5 + 1 = 25,
-into **22 rules**.
+collating #21+#22 and folding #23 into #15) · **6 written new** · 1 excluded. 8 + 11 + 6 + 1 = 26,
+into **23 rules**.
 
-**Defect #25 is not in `DEFECT-HISTORY` and cannot be.** That file lives in the bridge, outside
-version control, and is the extraction's read-only record of 24 rows. #25 was found by the rhythm
-ruling — `PressShowcaseSection`'s `py-24` breaking the 224px section rhythm — and is logged here and
-in README §6.5.
+**Neither #25 nor #26 is in `DEFECT-HISTORY`, and neither can be.** That file lives in the bridge,
+outside version control, and is the extraction's read-only record of 24 rows. #25 came from the
+rhythm ruling (`PressShowcaseSection`'s `py-24`); #26 from `AUDIT-MOTION`'s C1 (the 1400ms beat
+floor). Both are logged here and in README §6.5. **So this file is no longer purely a collation of
+`DEFECT-HISTORY` — it is that collation plus two rules the audit produced later**, and the opening
+line says so.
 
 ---
 
