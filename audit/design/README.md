@@ -4,19 +4,20 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** gathering — **all thirteen of §7's sections are ready**, and **Workstream C is
-> complete**: nine components locked in `COMPONENTS.md`. STEP1 (landing), STEP2
-> (marketplace) and STEP3 (MyStable) are closed. Colour, layout and the container are shut, and
-> **Do/Don't (#12) closed 2026-10-16** — `SECTION10-DO-DONT.md`. **Provenance was cut from the
-> skeleton** the same day (§9, §18 item 12): the evidence lives in `SOURCE-TRUTH.md`, not in the
-> spec. **§7's table is closed — all thirteen rows ✅, which §7 itself defines as the point at which
-> `DESIGN.md` is written in one pass.** That write is the remaining work, and it is now unblocked.
+> **Status:** written — **`DESIGN.md` exists**, all eleven sections in one pass on 2026-10-16, with
+> every §7 row ✅ and every §18 decision resolved. Awaiting review, then deployment to `engine_v2`.
 >
-> **Shape:** this README, plus `STEP1-LANDING-PAGE.md`, `STEP2-MARKETPLACE.md`,
-> `STEP3-MYSTABLE.md` as the evidence files, `COMPONENTS.md` as the Workstream C working file,
-> `SECTION10-DO-DONT.md` and `SECTION11-AGENT-PROMPT-GUIDE.md` as the target `DESIGN.md` sections 10 and
-> 11, and `SOURCE-TRUTH.md` as the forensic record behind §2. Markdown only. No venv, no imports, no
-> scripts.
+> **Workstream C is complete**: nine components locked in `COMPONENTS.md`. STEP1 (landing), STEP2
+> (marketplace) and STEP3 (MyStable) are closed. Colour, layout and the container are shut; the
+> collations closed on 2026-10-16 — **Do/Don't (#12)** and **Provenance**, which was then **cut from
+> the skeleton** (§9, §18 item 12), its evidence kept in `SOURCE-TRUTH.md`. §7's table is closed, which
+> is §7's own definition of the point at which the document is written in one pass. It has been.
+>
+> **Shape:** this README, `DESIGN.md` as the deliverable, plus `STEP1-LANDING-PAGE.md`,
+> `STEP2-MARKETPLACE.md` and `STEP3-MYSTABLE.md` as the evidence files, `COMPONENTS.md` as the
+> Workstream C working file, `SECTION10-DO-DONT.md` and `SECTION11-AGENT-PROMPT-GUIDE.md` as the
+> sections they became, and `SOURCE-TRUTH.md` as the forensic record behind §2. Markdown only. No
+> venv, no imports, no scripts.
 
 ---
 
@@ -664,7 +665,7 @@ forensic record of every locked value against its source (§17), and Workstream 
 | B | **Token model** — how those values compile | The `@theme` block, its categories, its naming | Values ready; naming conventions settled in Tailwind v4 terms |
 | C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ✅ **Complete — 9 components locked** in `COMPONENTS.md`: the whole chrome, the button hierarchy, the data and form primitives, and the mobile surfaces the old build never had. Four consolidation jobs remain, none a component |
 | D | **Drift mechanisms** — why it went wrong before | A catalogue of causes, each with the guard that prevents it | Done — §10 |
-| E | **Target `DESIGN.md`** | The document, in the pattern of §1 | ❌ Blocked on §7 |
+| E | **Target `DESIGN.md`** | The document, in the pattern of §1 | ✅ **Written 2026-10-16** — `DESIGN.md`, all 11 sections in one pass, 872 lines. Frontmatter, then Overview, Colours, Non-negotiables, Typography, Layout, Elevation & Depth, Shapes, Components, Motion, Do/Don't, Agent Prompt Guide. Awaiting review, then deployment to `engine_v2` |
 | F | **Enforcement** — how it stays true | A gate check in the `assert-*.sh` style, plus the audit rubric hook | Designed — §11 |
 
 ### Workstream A · Harvest
@@ -898,7 +899,7 @@ audit rather than passing it.
 
 | Artifact | Home | Note |
 |---|---|---|
-| The V2 `DESIGN.md` | `evolution/engine_v2/website/website/DESIGN.md` | Authored here, lands in the build repo next to the app it describes. `PLAN.md:203` bans `CLAUDE.md` and `AGENTS.md` there — `DESIGN.md` is not on that list |
+| The V2 `DESIGN.md` | authored at `audit/design/DESIGN.md`; deploys to `evolution/engine_v2/website/website/DESIGN.md` | **Authored here, ruled 2026-10-16** — this folder is version-controlled and pushed, and the deliverable has a commit behind it. **`engine_v2` is not a git repository** (`git rev-parse` fails), which is why the audit does not write into it: a document with no commit behind it is the trap §17 names for the bridge. The copy is a deployment step, and versioning `engine_v2` is that island's problem. `PLAN.md:203` bans `CLAUDE.md` and `AGENTS.md` there — `DESIGN.md` is not on that list |
 | The `@theme` block | `evolution/engine_v2/website/website/src/app/globals.css` | `PLAN.md:235`. Compiled from `DESIGN.md` |
 | The enforcement check | `evolution/engine_v2/website/scripts/` | Chained in the root `pnpm test` |
 
@@ -993,6 +994,7 @@ document kept by discipline, and it should be read that way.
 | `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, display heading, card hover shadow, tag tracking, container width. Its **badge treatment is superseded** — `:50-55` is the old-build map, and its open questions at `:146`/`:148` were answered 2026-10-16 (§8) |
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
 | `COMPONENTS.md` | **Workstream C.** The decision-level locks — **complete at 9 components**, plus the shared rulings: the single container, the z-ladder, the touch law, hover guards, one focus ring. A working file; it does not leave this folder |
+| `DESIGN.md` | **The deliverable.** All 11 sections, written in one pass on 2026-10-16 (§7 row 14 / §8 workstream E). Self-contained: it cites no file in this folder, because it is the only artifact that ships (§13). Awaiting review |
 | `SECTION10-DO-DONT.md` | **The target `DESIGN.md` section 10** (§7 row 12), closed 2026-10-16. 24 defects collated into 21 rules, plus the collation table and four corrections to `DEFECT-HISTORY`. A working file; it does not leave this folder |
 | `SECTION11-AGENT-PROMPT-GUIDE.md` | **The target `DESIGN.md` section 11** (§7 row 13), written 2026-10-16. Ten rules for a machine reader, plus the three corrections and three additions it made to the ruling text. A working file; it does not leave this folder |
 | `SOURCE-TRUTH.md` | **The forensic record behind `DESIGN.md` §2 and §7** — not a `DESIGN.md` section itself, ruled 2026-10-16 (§9). Every value §6 locks against the element, property and `file:line` it came from, in §8's seven categories, plus eight corrections to §6 and the parked light scope. Kept so the harvest is re-runnable after the domain cutover. A working file; it does not leave this folder |
@@ -1069,9 +1071,11 @@ the value actually live — fails AA where the proposed one clears it. Four more
 §6.1, a derivation in §6.5, and three undercounts in `DEFECT-HISTORY`. All eight are filed in
 `SOURCE-TRUTH.md` and argued in §6.
 
-**Nothing stands between this table and `DESIGN.md` — both remaining rows closed on 2026-10-16.**
-Row 9 (Motion) by §18 item 1, row 13 (Agent Prompt Guide) by `SECTION11-AGENT-PROMPT-GUIDE.md`. **The
-one-pass write in Workstream E is the next action.**
+**`DESIGN.md` is written — 2026-10-16, one pass, `audit/design/DESIGN.md`.** Row 9 (Motion) closed by
+§18 item 1 and row 13 (Agent Prompt Guide) by `SECTION11-AGENT-PROMPT-GUIDE.md`, and then the whole
+document was assembled: frontmatter plus all 11 sections, 872 lines, citing nothing in this folder
+because it is the only artifact that ships. **Next action is your review** — the audit has no further
+work it can do without it.
 
 **What the write carries with it — all ruled on 2026-10-16, none built:**
 
