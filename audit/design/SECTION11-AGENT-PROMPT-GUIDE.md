@@ -12,6 +12,9 @@
 > only section of `DESIGN.md` written *for* a machine rather than about the system, and it is the one
 > that has to survive being read by an agent that has nothing else.
 >
+> **Superseded for rule text, 2026-10-16.** The rules below now live in `DESIGN.md` §11, which is
+> authoritative. What is unique to this file is the audit-side apparatus — not the rules.
+>
 > **This file does not leave this folder.** What follows is lifted into `DESIGN.md` verbatim at
 > Workstream E (README §13).
 

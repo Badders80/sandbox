@@ -4,8 +4,12 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** written — **`DESIGN.md` exists**, all eleven sections in one pass on 2026-10-16, with
-> every §7 row ✅ and every §18 decision resolved. Awaiting review, then deployment to `engine_v2`.
+> **Status:** writing is done; delivery is not. **`DESIGN.md` exists** — eleven sections, one pass,
+> 2026-10-16 — with every §7 row ✅. **Of §13's three deliverables, one exists:** the document. The
+> `@theme` block it compiles to and the enforcement check that keeps the two true are both still
+> unwritten, and they are the pre-6a gate. One value-level question remains open (§18 item 15).
+> §13's own terms: *"the only artifacts that leave this folder are the finished `DESIGN.md`, the
+> `@theme` block it compiles to, and the check."* **One of three.**
 >
 > **Workstream C is complete**: nine components locked in `COMPONENTS.md`. STEP1 (landing), STEP2
 > (marketplace) and STEP3 (MyStable) are closed. Colour, layout and the container are shut; the
@@ -13,11 +17,21 @@
 > the skeleton** (§9, §18 item 12), its evidence kept in `SOURCE-TRUTH.md`. §7's table is closed, which
 > is §7's own definition of the point at which the document is written in one pass. It has been.
 >
-> **Shape:** this README, `DESIGN.md` as the deliverable, plus `STEP1-LANDING-PAGE.md`,
-> `STEP2-MARKETPLACE.md` and `STEP3-MYSTABLE.md` as the evidence files, `COMPONENTS.md` as the
-> Workstream C working file, `SECTION10-DO-DONT.md` and `SECTION11-AGENT-PROMPT-GUIDE.md` as the
-> sections they became, and `SOURCE-TRUTH.md` as the forensic record behind §2. Markdown only. No
-> venv, no imports, no scripts.
+> **Shape:** nine markdown files. Markdown only — no venv, no imports, no scripts.
+>
+> | File | What it is | Status |
+> |---|---|---|
+> | **`DESIGN.md`** | **The deliverable.** Eleven sections, self-contained, cites nothing in this folder | **Authoritative** |
+> | **`README.md`** | This runsheet — the decisions, their reasons, and the enforcement spec (§11) | **Live** |
+> | `COMPONENTS.md` | The Workstream C ledger — nine component locks and the shared rulings | Working |
+> | `SOURCE-TRUTH.md` | Every locked value against the element and `file:line` it came from | Evidence |
+> | `STEP1-LANDING-PAGE.md` · `STEP2-MARKETPLACE.md` · `STEP3-MYSTABLE.md` | The three page harvests | Evidence |
+> | `SECTION10-DO-DONT.md` · `SECTION11-AGENT-PROMPT-GUIDE.md` | The collation and corrections behind `DESIGN.md` §§10–11. **Their rule text is superseded by `DESIGN.md`;** what is unique to them is the audit-side apparatus — the defect-to-rule collation, the corrections to `DEFECT-HISTORY`, the record of what changed from the ruling text | Evidence |
+>
+> **`DESIGN.md` is the single source for section content.** Where the SECTION files and `DESIGN.md`
+> differ, `DESIGN.md` wins and the SECTION file is stale — the rule text is duplicated only because the
+> sections were authored before the document existed. Resolving that duplication is a post-6a job, not
+> a pre-6a one.
 
 ---
 
@@ -941,8 +955,16 @@ F  → gate check written and chained
   **two rows that fail this criterion rather than passing it**: `--color-disabled` has no source
   anywhere, and `--color-status-closed`'s locked value is a proposal (`SOURCE-TRUTH.md` C1, C2). The
   criterion is met when those two either get a declaration or lose their place in the locked set.
-  A further two rows, C3 and C5, are filed as §18 items 10 and 11 for the same reason.
-- Every token sits in a Tailwind v4 namespace, so each generates a utility.
+  C3 and C5 were ruled on 2026-10-16 (§18 items 10 and 11). **`--color-disabled` never was** — it is the
+  one value in `DESIGN.md` that exists nowhere in the build, the bridge, or any decision. Filed as §18
+  item 15, and it is the last value-level gap on the board.
+- **Every token generates a utility — by namespace, or by an explicit `@utility` where v4 has none.
+  Corrected 2026-10-16.** This read *"every token sits in a Tailwind v4 namespace"*, which is **false
+  and was false when written**: `--duration-*`, `--scale-*` and `--z-*` are **not** v4 theme namespaces,
+  and a custom property in a non-namespace generates nothing at all — the "hard-coded value wearing a
+  costume" that `COMPONENTS.md` §3.2 warns about. The z-ladder, the seven durations, `scale-press` and
+  `scale-lift` therefore bind as `@utility` declarations. `--ease-*`, `--leading-*`, `--radius-*`,
+  `--text-*`, `--color-*` and `--shadow-*` are real namespaces and need no help.
 - No hex literal exists outside `globals.css` anywhere in `website/`.
 - `DESIGN.md` describes no V1 artifact, and reintroduces none of the ten banned tokens.
 - Every component in Workstream C has a closed variant list and a named do-not.
@@ -1055,9 +1077,10 @@ bridge stays read-only; what changes is that `#19` is no longer quotable as clos
 | 9 | Breakpoints: tokenise them, as the reference pattern does? | **Resolved 2026-10-16 — no.** Breakpoints stay out of `@theme`. Page layouts differ legitimately per view, and tokenising the set constrains pages that share nothing. Standard Tailwind prefixes apply, mobile-first, under one rule. The one exception is the *chrome* collapse point, `COMPONENTS.md` §8 — 768px, one value for three surfaces that must agree with each other. Closes §7 row 10 |
 | 10 | `--color-on-light` — create it, or name `--color-on-gold`? | **Resolved 2026-10-16 — declare both, at `#0a0a0a`.** `--color-on-gold` for badges and gold accents, `--color-on-light` for dark text on white and near-white fills. Both already exist in name in §6.3's table; only `--color-on-light` was missing from the theme. **The four rules that name it stay as they are** — §6.3, `COMPONENTS.md` §9 do-not 3, `SECTION10-DO-DONT.md` §10.1 and `DEFECT-HISTORY` #4's resolution. Closes `SOURCE-TRUTH.md` C3. **One caution carried forward:** two names for one value is the shape that produced the `success-glow` / `glow-success` name flip (`SOURCE-TRUTH.md` §5), so the split must stay semantic — *on gold* vs *on light* — and not become a coin toss |
 | 11 | `.label-badge` — create the class, or drop the fourth label role? | **Resolved 2026-10-16 — keep the fourth role and create it.** `.label-badge` at 10px / 500 / 0.05em, sans; token `--tracking-tag: 0.05em`, used for highlight tags and status pills. **This is a decision, not a harvest** — the class exists nowhere in the build today, and the live fourth class is `.label-mono-intro` with zero consumers. §6.2 must therefore present it as created rather than observed. Closes `SOURCE-TRUTH.md` C5 |
+| 15 | **`--color-disabled: #62666d` — no source has ever been found, 2026-10-16** | **Open.** `SOURCE-TRUTH.md` C2: the value is declared in `DESIGN.md`'s frontmatter and §2, and **appears nowhere else in the estate** — not the theme, not the app, not the bridge, not a ruling. Its only other occurrence in three repositories is the sentence recording that it has no source. It was raised with C1 (the status slate, since ruled) and then overtaken by items 10 and 11, so it has been sitting in the document untouched. **Two ways to close it:** declare it — it is a plausible non-text floor for disabled borders and inactive structure, and the ratios in §2 were computed for it — or drop the row and let disabled structure take `--color-edge` at a lower opacity. Either is one line. Until then `DESIGN.md` specifies a token the build cannot resolve, which is the one thing this audit exists to prevent |
+| 12 | Should `DESIGN.md` carry a Provenance section? | **Resolved 2026-10-16 — no, cut.** The skeleton's 11th section is removed and the sections below it renumber (`Agent Prompt Guide` becomes 11). `DESIGN.md` is a forward-looking spec consumed by builders and agents; a value→source table is forensic reference and neither reader can act on it. `SOURCE-TRUTH.md` keeps the evidence in this folder. `§11`'s third check compares values against `globals.css`, not citations, so the doc-first flip is unaffected — and §10's drift narratives stay, since they are the reason a rule exists. §9 carries the full argument |
 | 13 | **Leading — an entire un-tokenised axis, found 2026-10-16** | **Resolved 2026-10-16 — four tiers, no fifth, and every live site now has a home.** `--leading-none: 1` · `--leading-display: 1.05` · `--leading-heading: 1.25` · `--leading-body: 1.625`. `--leading` **is** a Tailwind v4 theme namespace, so these generate with no `@utility` workaround. **The tier is chosen by size and job, not by spelling** — which is what closes the "map to either body or heading" clause, since a choice is not a mapping. Applied against all 133 sites: **section `h2`s and the `PressShowcase` `h3` (36/48px) → `display`** (tightening 1.1 and 1.15 to 1.05 — the largest marketing type, intended); **`leading-snug` ×7 and the 18px card headings → `heading`**; **all prose → `body`**, which folds `leading-relaxed` ×53 with `leading-[1.7]` ×21 and purges `leading-[1.8]` ×7, `leading-[1.6]` ×3, `leading-[1.5]` ×2 and `leading-[1.85]` ×1; **`leading-none` ×11 → `none`**. Full tally: **thirteen spellings, 133 sites**, every one mapped. No fifth tier, because over-tokenisation is its own drift source. **Two things to know:** `--leading-none` re-declares Tailwind's own `leading-none` at the same value, so that one spelling stays legal while `-tight`/`-snug`/`-relaxed`/`-loose` are banned — benign, and it needs to be a stated carve-out rather than an accident. And **`--leading-display` now covers three sizes (36, 48, 64) rather than the `--text-display` role alone**, so the name reads narrower than the job; `--leading-heading-tight` would say what it does. Neither blocks the write |
 | 14 | **Radius — three utilities still fell through the alias set, found 2026-10-16** | **Resolved 2026-10-16 — the namespace is pinned.** Bare `rounded` → **8px**, `rounded-xs` → **8px** (both onto `sm`), `rounded-4xl` → **24px** (onto `lg`). With the existing `lg`/`xl`/`2xl`/`3xl` pins that is **ten names onto four values: 8 · 16 · 24 · 9999px**, so every named radius utility resolves inside the vocabulary whatever anyone writes from habit. Bare `rounded` at 4px was the exact fall-through `DEFECT-HISTORY` #2 was written for, at 17 call sites. The theme's own comment (`theme.generated.css:74-75`) now tells the truth. **Two caveats recorded with it.** (a) **Arbitrary values still bypass the theme** — `rounded-[26px]` compiles regardless of the pins, exactly as `scale-[…]`, `leading-[…]` and `z-[…]` bypass theirs. Nothing in the theme can stop that; **CI's ban is what closes it**, which is why the ban is not redundant now the pins exist. Zero arbitrary radii are live, so the door is unwalked but open. (b) **The aliases turned out to be load-bearing rather than a fail-safe** — `rounded-xl` is the most-used radius spelling in the build at **58 sites**, plus `rounded-2xl` ×19 and `rounded-3xl` ×5: **82 sites that render correctly only because these aliases exist.** Remove them as unused-looking and 82 sites change radius. The authoring standard is `sm`/`md`/`lg`/`pill`; live mostly writes `xl`, and migrating those 82 sites is V2 work |
-| 12 | Should `DESIGN.md` carry a Provenance section? | **Resolved 2026-10-16 — no, cut.** The skeleton's 11th section is removed and the sections below it renumber (`Agent Prompt Guide` becomes 11). `DESIGN.md` is a forward-looking spec consumed by builders and agents; a value→source table is forensic reference and neither reader can act on it. `SOURCE-TRUTH.md` keeps the evidence in this folder. `§11`'s third check compares values against `globals.css`, not citations, so the doc-first flip is unaffected — and §10's drift narratives stay, since they are the reason a rule exists. §9 carries the full argument |
 
 ---
 

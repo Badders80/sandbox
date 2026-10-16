@@ -7,6 +7,9 @@
 >
 > **Status:** ✅ ready. Written 2026-10-16. Verdicts marked `adopted` / `departs` per README §5.
 >
+> **Superseded for rule text, 2026-10-16.** The rules below now live in `DESIGN.md` §10, which is
+> authoritative. What is unique to this file is the audit-side apparatus — not the rules.
+>
 > **This file does not leave this folder.** Only `DESIGN.md`, the `@theme` block and the check do
 > (README §13). What follows is lifted into `DESIGN.md` verbatim at Workstream E.
 
