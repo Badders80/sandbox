@@ -49,6 +49,11 @@ typography:
     section-heading-wide: 48px
     display: 64px
   weights: [300, 400, 500]       # 600 maps to 500
+  leading:
+    none: 1              # single-line controls, badges, pills
+    display: 1.05        # every major heading — 64px page heading and 36/48px section headings
+    heading: 1.25        # card and panel headings
+    body: 1.625          # all prose
   tracking:
     label:   0.2em
     nav:     0.15em
@@ -298,6 +303,31 @@ pills), `-0.04em` (the display heading). A fifth is a ruling.
 Naming it matters more than it looks: before this, the recipe was hand-typed into two page files as
 `text-[36px] … md:text-[64px] leading-[1.05]`. A recipe typed twice is a recipe that drifts, which is how
 several of §10's rules came to exist.
+
+### Leading
+
+**Four tiers, and they are the whole vocabulary.**
+
+| Token | Value | Use |
+|---|---|---|
+| `--leading-none` | `1` | Single-line controls, badges, pills |
+| `--leading-display` | `1.05` | **Every major heading** — the 64px page heading and the 36 / 48px section headings |
+| `--leading-heading` | `1.25` | Card and panel headings |
+| `--leading-body` | `1.625` | All prose |
+
+**The tier is chosen by size and job, never by spelling.** Anything at heading scale takes
+`--leading-display` and tightens hard — that is what gives the type its editorial punch. Card-scale
+headings take `--leading-heading`. Prose takes `--leading-body`, at every body size. Single-line
+controls take `--leading-none`.
+
+**These four values are the vocabulary.** No bare Tailwind leading name (`leading-tight`,
+`leading-snug`, `leading-relaxed`, `leading-loose`) and no arbitrary value (`leading-[1.8]`) appears in
+a component. Where a piece of text does not fit a tier, fix the text, not the scale.
+
+**One deliberate loosening and one deliberate tightening, both worth knowing.** `--leading-body` at
+1.625 unifies two spellings that were doing the same job across 74 sites — `leading-relaxed` and
+`leading-[1.7]`. And the section headings tighten from 1.1, which is a visible change to the largest
+marketing type; it is intended.
 
 ### Weights
 
