@@ -134,6 +134,19 @@ When two sources disagree, the winner is fixed:
 **The bridge, `/home/evo/audit/website/`**, is reference only. It records what the old build had.
 It is mined surgically and never quoted from directly — see §3.
 
+**A trap that has already been sprung once.** Two files in that folder are *forward-looking drafts*,
+not records: `V2-DESIGN-SPEC-2026-10-16.md` and `V2-THEME-2026-10-16.css`. The second is 440 lines
+and contains `.press`, `.collapse-panel`, `.sticky-buy-bar` and `.legal-doc`. **None of those four
+exist in the live build**, whose theme is 169 lines. So a review that checks a draft against "the
+theme" and cites `:371-373` is checking it against a *proposal* and reporting the proposal back as
+verified. That is not verification; it is a mirror.
+
+The test is mechanical. A value is **verified** only if it is found in
+`evolution/engine/website` — the app, or `packages/brand_dna/src/theme.generated.css`. A value found
+only under `/home/evo/audit/website/` is a **proposal**, however confident the prose around it
+reads, and it needs either a ruling to adopt it or a line explaining why it diverges. §5 makes the
+live page the winner on values; a draft does not become the live page by being well written.
+
 ---
 
 ## 6 · What is already locked
