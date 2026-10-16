@@ -348,7 +348,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 8 | Elevation & Depth | ⚠️ partial | `--shadow-card-hover` locked. The archive proposes **4 elevation + 1 bevel + 2 glow** (`panel`, `modal`, `float`, `card-hover`; `bevel`; `glow-success`, `glow-gold`) — **unreviewed, needs a ruling** |
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
 | 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
-| 11 | Components | ⚠️ partial | **2 of 6 locked** — listing card and status badge, in `COMPONENTS.md`. Remaining: button hierarchy (blocked on the elevation ruling), figure row, nav/footer, form field |
+| 11 | Components | ⚠️ partial | **6 components locked** in `COMPONENTS.md` — listing card, status badge, nav, footer, mobile conversion bar, mobile menu drawer. Of the six-item list in §8, three remain: button hierarchy (blocked on the elevation ruling), figure row, form field |
 | 12 | Do / Don't | ❌ | **Not written.** Derivable — `DEFECT-HISTORY` carries 24 defects, each already paired with the rule that prevents it |
 | 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
 | 14 | Agent Prompt Guide | ⚠️ open | The richer refero pattern has it; the leaner x.ai pattern does not. Open decision 4 |
@@ -366,7 +366,7 @@ left until drafting time, guarantees a second pass.
 |---|---|---|---|
 | A | **Harvest** — read the real values off the live landing page | A ground-truth table: every colour, size, weight, tracking, radius, spacing, with provenance | Substantially done; needs **collation** into `SOURCE-TRUTH.md` |
 | B | **Token model** — how those values compile | The `@theme` block, its categories, its naming | Values ready; naming conventions settled in Tailwind v4 terms |
-| C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ⚠️ **2 of 6** — listing card and status badge locked in `COMPONENTS.md` |
+| C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ⚠️ **6 components locked** in `COMPONENTS.md`, including nav and the mobile chrome the old build never had |
 | D | **Drift mechanisms** — why it went wrong before | A catalogue of causes, each with the guard that prevents it | Done — §10 |
 | E | **Target `DESIGN.md`** | The document, in the pattern of §1 | ❌ Blocked on §7 |
 | F | **Enforcement** — how it stays true | A gate check in the `assert-*.sh` style, plus the audit rubric hook | Designed — §11 |
@@ -622,7 +622,7 @@ F  → gate check written and chained
 | `STEP1-LANDING-PAGE.md` | Landing page harvest. **Closed, clean** — spacing rhythm and container width re-verified against the live source 2026-10-16 (§6.5, decision 6). Colours, 7 type roles, 2 label roles, radius scale, motion |
 | `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, display heading, card hover shadow, tag tracking, container width. Its **badge treatment is superseded** — `:50-55` is the old-build map, and its open questions at `:146`/`:148` were answered 2026-10-16 (§8) |
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
-| `COMPONENTS.md` | **Workstream C.** The decision-level locks. Listing card and status badge written; four to go. A working file — it does not leave this folder |
+| `COMPONENTS.md` | **Workstream C.** The decision-level locks. Six written — listing card, status badge, and the Batch 1 chrome: nav, footer, mobile conversion bar, mobile menu drawer. Also carries the shared rulings: the single container, the z-ladder, the touch law, hover guards. A working file — it does not leave this folder |
 | `DEFECT-HISTORY-2026-10-16.md` | The old build's 24 defects, each with the ruling that closed it. The source for §7 row 12 — `Do/Don't` is a collation of this file, not new work. Lives in the bridge folder |
 | `AUDIT-MISSING-PRIMITIVES-2026-10-16.md` | Texture utilities, keyframes, dead classes, raw hex, and **21 arbitrary shadows across 14 distinct values**. The material for §7 row 8 (Elevation) and §18 decision 5. Uncited until now. Lives in the bridge folder |
 
@@ -642,7 +642,7 @@ is exactly why it needs watching: a value copied from there is a value with no c
 | # | Decision | Status |
 |---|---|---|
 | 1 | Token granularity past colour and type | Open — spacing and radii yes; shadows and motion only if used in more than one place |
-| 2 | `@theme` in `globals.css`, or a separate `theme.css` it imports | Open — `PLAN.md:235` says `globals.css`; the archive's draft uses a separate file |
+| 2 | `@theme` in `globals.css`, or a separate `theme.css` it imports | Open — `PLAN.md:235` says `globals.css`; the archive's draft uses a separate file. **Now carries the z-binding too**: `--z-*` is not a Tailwind v4 namespace, so the z-ladder in `COMPONENTS.md` §3.2 generates no utility until this is settled |
 | 3 | Enforcement strength | Open — proposed **fail**, not warn |
 | 4 | Keep the reference's *Agent Prompt Guide* section? | Open — refero has it, x.ai does not |
 | 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | Open — see §7 line 8 |
@@ -654,16 +654,19 @@ is exactly why it needs watching: a value copied from there is a value with no c
 
 **Workstream C — pattern locks.** It is the largest gap in §7, it is independent of everything
 else, and leaving it until drafting time guarantees the second pass that the one-pass goal exists
-to avoid. **Two of six are done** (`COMPONENTS.md`); the four remaining are listed there.
+to avoid. **Six components are locked** in `COMPONENTS.md`, including the whole chrome; three
+remain, and the first is blocked. Details there.
 
-Alongside it, three smaller jobs:
+Alongside it, four smaller jobs:
 
 - **Rule on §18 item 5 — elevation — first.** It is now on the critical path, not beside it: the
-  button hierarchy cannot be locked without it.
+  button hierarchy cannot be locked without it, and the button hierarchy is consumed by the mobile
+  conversion bar and every modal.
 - **Rule on `coming_soon_details`.** The sixth status has no label or treatment anywhere in the
   estate (§8). It currently shares `coming_soon`'s, which may be right — but it is unrecorded.
 - **Rule on §18 item 2** — whether the `@theme` block lives in `globals.css` or a `theme.css` it
-  imports. Not on the critical path; it only has to be settled before the block is written.
+  imports, and with it how the z-ladder binds. Not on the critical path; it has to be settled
+  before the block is written.
 - **Collate provenance** into `SOURCE-TRUTH.md` from STEP1–3, `DEFECT-HISTORY`, and the live source
   read on 2026-10-16. The values are known; the job is to gather each next to the element it came
   from.
