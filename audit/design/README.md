@@ -4,15 +4,17 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** gathering — **nine of §7's fourteen sections are ready**, and **Workstream C is
+> **Status:** gathering — **ten of §7's fourteen sections are ready**, and **Workstream C is
 > complete**: nine components locked in `COMPONENTS.md`. STEP1 (landing), STEP2
-> (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut; Workstream C has
-> six components locked in `COMPONENTS.md`. The document itself is **not yet written** — see **§7,
-> the bill of materials**, for exactly what is still missing before we can write it in one pass.
+> (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut, and **Do/Don't
+> (#12) closed 2026-10-16** — `SECTION10-DO-DONT.md`. The document itself is **not yet written** —
+> see **§7, the bill of materials**, for exactly what is still missing before we can write it in one
+> pass.
 >
 > **Shape:** this README, plus `STEP1-LANDING-PAGE.md`, `STEP2-MARKETPLACE.md`,
-> `STEP3-MYSTABLE.md` as the evidence files, and `COMPONENTS.md` as the Workstream C working file.
-> Markdown only. No venv, no imports, no scripts.
+> `STEP3-MYSTABLE.md` as the evidence files, `COMPONENTS.md` as the Workstream C working file, and
+> `SECTION10-DO-DONT.md` as the target `DESIGN.md` section 10. Markdown only. No venv, no imports,
+> no scripts.
 
 ---
 
@@ -189,7 +191,7 @@ looking for a `.woff2` will not find one, and must not conclude the face is miss
 
 **The nav is not an eyebrow role.** This table used to say the eyebrow's job was "section labels,
 eyebrows, **nav**". That came from the bridge spec's prose, not from the build. Live nav links are
-`text-[12px] font-[300] tracking-[0.15em]` (`NavBar.tsx:192`) — a 12px size that is not a type role,
+`text-[12px] font-[300] tracking-[0.15em]` (`NavBar.tsx:193`) — a 12px size that is not a type role,
 an inline arbitrary weight, and a **fourth tracking step**. The nav's link treatment is its own
 decision and is recorded in `COMPONENTS.md` §4.
 
@@ -441,14 +443,14 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
 | 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
 | 11 | Components | ✅ | **9 components locked — Workstream C complete** (`COMPONENTS.md`). All six on the §8 list, plus the mobile conversion bar, the mobile menu drawer and the button hierarchy — three the six-item list never knew existed. Four consolidation jobs remain and none of them is a component |
-| 12 | Do / Don't | ❌ | **Not written.** Derivable — `DEFECT-HISTORY` carries 24 defects, each already paired with the rule that prevents it |
+| 12 | Do / Don't | ✅ | **Written 2026-10-16** — `SECTION10-DO-DONT.md`. `DEFECT-HISTORY`'s 24 defects collated into **21 rules**: 8 restated from the component locks, 11 from §6 (9 rules, after collating #21+#22 and folding #23 into #15), **4 written new** — #7, #11, #12, #17 — and 1 excluded as build hygiene (#24). Every rule is stated forward, carrying the drift that is its reason. Four corrections to `DEFECT-HISTORY` came out of the collation; see that file's §Corrections |
 | 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
 | 14 | Agent Prompt Guide | ⚠️ open | The richer refero pattern has it; the leaner x.ai pattern does not. Open decision 4 |
 
-**Reading it plainly:** nine sections are ready, three are partial or open, two are not started.
-**We are not at play.** The remaining gaps are **Do/Don't (#12)** and **Provenance (#13)** — both
-collation jobs with their source material already in hand, plus three partial rows (motion
-granularity, breakpoints, the agent prompt guide).
+**Reading it plainly:** ten sections are ready, three are partial or open, one is not started.
+**We are not at play.** The remaining gap is **Provenance (#13)** — a collation job with its source
+material already in hand — plus three partial rows (motion granularity, breakpoints, the agent prompt
+guide).
 
 ---
 
@@ -757,6 +759,7 @@ document kept by discipline, and it should be read that way.
 | `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, display heading, card hover shadow, tag tracking, container width. Its **badge treatment is superseded** — `:50-55` is the old-build map, and its open questions at `:146`/`:148` were answered 2026-10-16 (§8) |
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
 | `COMPONENTS.md` | **Workstream C.** The decision-level locks — **complete at 9 components**, plus the shared rulings: the single container, the z-ladder, the touch law, hover guards, one focus ring. A working file; it does not leave this folder |
+| `SECTION10-DO-DONT.md` | **The target `DESIGN.md` section 10** (§7 row 12), closed 2026-10-16. 24 defects collated into 21 rules, plus the collation table and four corrections to `DEFECT-HISTORY`. A working file; it does not leave this folder |
 | `DEFECT-HISTORY-2026-10-16.md` | The old build's 24 defects, each with the ruling that closed it. The source for §7 row 12 — `Do/Don't` is a collation of this file, not new work. Lives in the bridge folder |
 | `AUDIT-MISSING-PRIMITIVES-2026-10-16.md` | Texture utilities, keyframes, dead classes, raw hex, and **21 arbitrary shadows across 14 distinct values**. The material for §7 row 8 (Elevation) and §18 decision 5. Uncited until now. Lives in the bridge folder |
 
@@ -776,6 +779,16 @@ the skeleton in §9 has Components at 8, Motion at 9 and Do/Don't at 10. The fil
 rulings live with us and the defects live there; only the path is stale. Nothing to fix over there
 — the bridge is read-only — but do not go looking for a `DESIGN.md` in this folder. There isn't one
 yet, and the moment there is, it will be in `engine_v2`.
+
+**And one row of it is wrong, found while collating §10 on 2026-10-16.** `DEFECT-HISTORY` #19 says
+`benedict.css` was *"Nuked"*. It was not: `apps/web/src/app/benedict.css` is live, imported at
+`globals.css:9`, still declaring the unlicensed face — and it has a live consumer,
+`story-block.tsx:71`. The row's resolution is also wrong on its own terms: it says *"`--font-serif`
+owns the role"* where §6.1 says the stack reads `var(--font-instrument-serif)` and **never**
+`var(--font-serif)`. The full finding, with the three further corrections that came out of the same
+pass (#11's one site is six; `layout.tsx:68-70`'s stated reason does not hold; an unrecorded
+`font-serif` call site at `about/page.tsx:109`), is in `SECTION10-DO-DONT.md` §Corrections. The
+bridge stays read-only; what changes is that `#19` is no longer quotable as closed.
 
 ---
 
@@ -798,20 +811,24 @@ yet, and the moment there is, it will be in `engine_v2`.
 
 **Workstream C — pattern locks. ✅ Complete.** Nine components locked in `COMPONENTS.md`: the whole
 chrome, the button hierarchy, the figure row and form field, and the mobile surfaces the old build
-never had. Four consolidation jobs remain there and none is a component. **Do/Don't (#12) is now the
-largest gap that is still open**, and it is a collation of `DEFECT-HISTORY`'s 24 rows rather than new
-work.
+never had. Four consolidation jobs remain there and none is a component.
 
-Alongside it, four smaller jobs:
+**Do/Don't (#12) — ✅ closed 2026-10-16.** `SECTION10-DO-DONT.md` collates `DEFECT-HISTORY`'s 24
+defects into 21 rules. Four needed writing from scratch (#7, #11, #12, #17) because no rule existed
+for them anywhere in the estate; one (#24, asset naming) is not a design rule and is excluded with
+that reason stated. The collation also corrected four rows of `DEFECT-HISTORY` — see §17.
 
-- **Rule on §18 item 5 — elevation — first.** It is now on the critical path, not beside it: the
-  button hierarchy cannot be locked without it, and the button hierarchy is consumed by the mobile
-  conversion bar and every modal.
+**Provenance (#13) is now the largest gap that is still open**, and it is the same kind of job:
+collation, with the source material already in hand.
+
+Alongside it, three smaller jobs:
+
 - **Rule on `coming_soon_details`.** The sixth status has no label or treatment anywhere in the
   estate (§8). It currently shares `coming_soon`'s, which may be right — but it is unrecorded.
 - **Rule on §18 item 2** — whether the `@theme` block lives in `globals.css` or a `theme.css` it
   imports, and with it how the z-ladder binds. Not on the critical path; it has to be settled
   before the block is written.
-- **Collate provenance** into `SOURCE-TRUTH.md` from STEP1–3, `DEFECT-HISTORY`, and the live source
-  read on 2026-10-16. The values are known; the job is to gather each next to the element it came
-  from.
+- **Rule on §18 item 7**, the dashboard's `max-w-7xl` against the ruled `max-w-6xl`. §10's new
+  column rule (#7 — a width is a cap, never a fixed value) is adjacent but does not settle it; the
+  dashboard question is whether a data grid may legitimately be wider than a marketing page, which
+  is a scope ruling, not a value one.
