@@ -210,7 +210,7 @@ canvas and the card surface; every structural token clears 3:1. Ratios below are
 | Token | Value | Ratios | Role |
 |---|---|---|---|
 | `--color-status-active` | `#10b981` | 8.13 / 7.80 | Active, verified, live availability, positive returns |
-| `--color-status-pending` | `#f59e0b` | 9.60 / 9.22 | **Fully allocated** — sold out, waitlist. Read as *demand still standing*, not as closure. `pending` is not a status name; `coming_soon` is green |
+| `--color-status-pending` | `#f59e0b` | 9.60 / 9.22 | **`fully_subscribed`**, labelled FULLY ALLOCATED — sold out, waitlist. Read as *demand still standing*, not as closure. `pending` is not a status name; `coming_soon` is green |
 | `--color-status-closed` | `#738396` | 5.32 / 5.11 | Terminal — **completed**. Neutral slate |
 | `--color-destructive` | `#ef4444` | 5.48 / 5.26 | Error, cancelled, declined |
 
@@ -230,6 +230,29 @@ translucent whites (`border`, `ink`). That is the greyscale, counted by job rath
 **Retired — do not use:** `ash #575757`, `smoke #454545` (fail contrast — 2.85:1 and 2.15:1),
 `hairline #050505`, `stage-black #000000` (zero call sites). The bridge theme still declares all
 four; they do not survive into V2.
+
+**The 24 are not the whole of what is live.** `theme.generated.css` also declares the following, and
+none of it is in the locked set above. Recorded 2026-10-16 because the next reader will meet it:
+
+- **Two purple tokens with live call sites.** `--color-stripe-purple: #635BFF` and
+  `--color-stripe-purple-light: #8884FF` (`theme.generated.css:42-43`), used four times in
+  `purchase-flow-modal.tsx` for the *Powered by Stripe Identity* badge. The bridge spec claims
+  "there are no purple tokens in this system" and that the Stripe mark is self-contained. That is a
+  proposal, not a description — the live build does the opposite. **The Stripe attribution still
+  needs a V2 ruling**; it cannot be waved off as absent.
+- **A 16-token shadcn compatibility block** (`:99-114`): `background`, `card`, `card-foreground`,
+  `popover`, `popover-foreground`, `primary`, `primary-foreground`, `secondary`,
+  `secondary-foreground`, `accent`, `accent-foreground`, `muted`, `destructive-foreground`,
+  `input`, `ring`. Every one is an alias onto a real token, so none is a new colour — but
+  `--color-accent` → gold is **used 127 times in the app**, while §6.3's own rule says the accent
+  is "never called `accent`". The prohibition is not enforceable against the live build as
+  written; it needs restating as a rule about *new* names, or dropping.
+- **Four more type roles** than §6.4 lists: `--text-label` 11px, `--text-body-small` 15px,
+  `--text-body` 16px, `--text-card-heading` 18px. §6.4's "seven roles" is right — it just is not the
+  seven in its own table, which lists a `display 64px` role that **is not a token at all**:
+  `--text-display` appears nowhere, and 64px lives as a hand-typed `md:text-[64px]` copied into
+  `marketplace/page.tsx:67` and `marketplace/[slug]/page.tsx:116`. Two pages, one recipe, typed
+  twice. That is drift mechanism #6 happening in the file §6.4 was harvested from.
 
 **Three notes for whoever reads this next.**
 
@@ -403,15 +426,31 @@ Do-not            — the explicit anti-patterns, each naming the drift it cause
    (`available`, `coming_soon`); **amber, no glow** (`fully_allocated`); slate, no glow
    (`completed`).
 
-   This reverses the muted-grey treatment the old build gave `fully_allocated`, and it supersedes
-   the mapping recorded at `STEP2-MARKETPLACE.md:50-55`. That answers the two questions STEP2 left
-   open at `:146` and `:148`. It also moves §6.3 and this list onto the same answer — they
-   disagreed for one commit, and amber is the side that won.
+   This reverses the muted-grey treatment the old build gave the sold-out state, and it supersedes
+   `STEP2-MARKETPLACE.md:50-55` — **on the colour only.** STEP2's *names* were right all along; the
+   audit's own were the wrong ones. That answers the two questions STEP2 left open at `:146` and
+   `:148`, and it moves §6.3 and this list onto the same answer — they disagreed for one commit,
+   and amber is the side that won.
 
-   Two names to stop carrying: **`draft` is not a status** — it is the `published` boolean
-   (`PLAN.md:206`, `FORENSIC-AUDIT.md:97`), and the bridge spec folds it into the status map. And
-   **`listed` / `fully_subscribed` are bridge aliases**, not database values; they are retired
-   rather than translated.
+   **The status vocabulary, read off the code 2026-10-16.** `database.types.ts:71` declares the
+   Postgres type `CampaignStatus` with **six** values: `draft`, `coming_soon`,
+   `coming_soon_details`, `listed`, `fully_subscribed`, `completed`. `ListingStatus`
+   (`asset-lock.ts:45`) is the public subset of four — `listed`, `coming_soon`,
+   `fully_subscribed`, `completed`.
+
+   That kills a name this audit has been using. **`available` and `fully_allocated` do not exist**
+   — not in the enum, not in the app, anywhere. `PLAN.md:206` and `FORENSIC-AUDIT.md:97` both record
+   the enum as `(coming_soon, available, fully_allocated, completed)`: wrong on two of four names,
+   and missing two states. The amber ruling above stands, but it applies to **`fully_subscribed`**
+   — the *value* is `fully_subscribed` and the *label* is **FULLY ALLOCATED**; they are not
+   interchangeable.
+
+   `coming_soon_details` is the sixth state and it is **absent from every map we hold** — PLAN.md,
+   this section, and the bridge's §2.6 alike, which only alludes to "its internal term-sheet
+   variant". Its label and treatment need a ruling.
+
+   §5 makes `PLAN.md` the authority on *scope*, never on values. `918e197` treated it as both and
+   wrote `draft` off as "not a status" — it is one. Read the schema, not the plan, for values.
 3. **Button hierarchy** — primary, secondary, and the disabled/loading forms of each.
 4. **Figure row** — the mono-figures pattern. `brand/DESIGN.md:79` puts Geist Mono on financials and
    tabular figures specifically, so this is a token decision, not a styling choice. Weight 500.
