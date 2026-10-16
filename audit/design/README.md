@@ -452,6 +452,12 @@ differentiates at 300ms/200ms, with a reduced-motion guard.
 owed work, not yet locked. This is `DEFECT-HISTORY` #13's shape a second time — two implementations
 of one job, which is how the badge problem started.
 
+**The container is now universal, and horizontal only — ruled 2026-10-16 (decision 7).** Every page
+surface sits inside `max-w-6xl`: `/`, `/marketplace`, `/marketplace/[slug]`, `/mystable` and any
+nested route, with `px-12 md:px-16 lg:px-20` on every one. Dialogs are not pages and keep their own
+caps. `COMPONENTS.md` §3.1 carries the six live schemes this replaces, and the corrected count — the
+dashboard carries **one** `max-w-7xl`, not the four this document and §18 item 7 both claimed.
+
 **Section rhythm, confirmed and ruled on 2026-10-16.** `--spacing-section: 224px` is declared in
 `brand_dna/src/theme.generated.css:87` and is **fixed** — the live build has no fluid section rule
 at any viewport, including mobile. The bridge's `clamp(5rem, 12vw, 14rem)` is therefore a proposal,
@@ -460,11 +466,25 @@ adopting a fix for an unmeasured problem is how the second palette got in. If V2
 fluid rhythm it is a deliberate improvement with a reason recorded, argued as such — not a
 correction of a value we never measured wrong.
 
-**Two honest exceptions to the rhythm.** `PressShowcaseSection.tsx:171` uses `py-24` (96px), not
-`py-section`, so the "six wrappers" count is a count of six, not of all sections.
-`NavBar.tsx:159` runs its own scheme — `max-w-[1440px] px-6 sm:px-10 lg:px-12` — which is where the
-bridge's `px-6 sm:px-10 lg:px-16` gutter numbers came from. They belong to the nav bar, a different
-component at a different width. They are not a page container.
+**And the rhythm is per surface type, not one rule — ruled 2026-10-16.** Marketing sections run
+`py-section` (224px). Functional dashboard and application headers run `pt-32 pb-24` (128px / 96px),
+which is what `/mystable` does today, and that asymmetry is intended rather than a drift. Do not
+force the two into one value; they are different kinds of surface.
+
+**Two things this leaves unsettled, named rather than buried.** `PressShowcaseSection.tsx:171` runs
+`py-24` (96px) and **is** a marketing section, so under the rule above it needs changing rather than
+exempting — this document called it an "honest exception" until 2026-10-16, and the ruling makes it
+a defect. And `NavBar.tsx:159` still runs its own `max-w-[1440px] px-6 sm:px-10 lg:px-12`, which was
+where the bridge's `px-6 sm:px-10 lg:px-16` gutter numbers came from; §3.1 retires it.
+
+**One correction to what this paragraph used to say.** Until 2026-10-16 it read that the
+`px-6 sm:px-10 lg:px-12` family "belongs to the nav bar… They are not a page container." **That is
+false.** `marketplace/[slug]/page.tsx:134` is a page container using it — and it is one of the two
+lines `DEFECT-HISTORY` #8 names as "two left edges on one page". The family has a page call site, the
+defect it causes is live, and `COMPONENTS.md` §3.1 now retires it.
+
+**The `py-56` count stands on its own.** Six section wrappers use `py-56` = 224px, which is where the
+spacing token came from; that is a count of six, not of every section on the page.
 
 ---
 
@@ -855,7 +875,7 @@ bridge stays read-only; what changes is that `#19` is no longer quotable as clos
 | 4 | Keep the reference's *Agent Prompt Guide* section? | **Resolved 2026-10-16 — include it.** A one-pass build is the point, and a machine reader of `DESIGN.md` needs the no-debt rule and the token prohibitions stated for it rather than inferred. Section 12 of the skeleton (§9) ships. **The section is owed** — §7 row 14 is partial until it is written |
 | 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | **Resolved 2026-10-16 — adopted, with three adjudications.** Both the archive and `AUDIT-MISSING-PRIMITIVES` §5.2 derived the same seven tokens from the same 14 live literals, so the agreement is evidence rather than inheritance. See §6.5: one success glow not two, the blue glow dropped, Tailwind's named shadows banned. This unblocks the button hierarchy |
 | 6 | Layout rhythm and gutters: 224px and `px-12→20`, or the fluid clamp and `px-6→16`? | **Resolved 2026-10-16 — the harvest wins.** `theme.generated.css:87` declares `--spacing-section: 224px`, fixed; the page container is `px-12 md:px-16 lg:px-20` in every section. The clamp is declined and the `px-6 sm:px-10` family belongs to `NavBar.tsx:159`, not to a page container. No measurement was needed once the source was read — see §6.5 |
-| 7 | The dashboard container — `max-w-7xl` (4×) against the ruled `max-w-6xl` | Open. `COMPONENTS.md` §3.1 rules one container for the chrome and all page content; `/mystable` may legitimately need a wider grid than a marketing page. One ruling, either way |
+| 7 | The dashboard container — `max-w-7xl` against the ruled `max-w-6xl` | **Resolved 2026-10-16 — one universal horizontal container.** Every page surface sits inside `max-w-6xl` with `px-12 md:px-16 lg:px-20`: zero conditional page widths, zero dashboard exceptions. `COMPONENTS.md` §3.1 carries the full table. **Two scope boundaries, both ruled:** dialogs and modals are *not* pages and keep their own caps under §10's rule 7 (`CtaLeadModal` 760px, the billing dialog 520px, `pedigree-tab.tsx:590`); and the lock is **horizontal only** — vertical rhythm varies by surface type (marketing `py-section` 224px, functional headers `pt-32 pb-24`), which must not be forced into one rule. **This ruling also corrected a miscount:** the "(4×)" this item and `COMPONENTS.md` §3.1 both carried attributed all four `max-w-7xl` sites to the dashboard; only **one** is — one is MyStable, two are the horse-about route, one is the pedigree modal |
 | 8 | `coming_soon_details` — its label and its treatment | Open. The sixth database status, absent from every map in the estate. `COMPONENTS.md` §2 has it sharing `coming_soon`'s; that may be right, but it is not yet a recorded decision |
 | 9 | Breakpoints: tokenise them, as the reference pattern does? | **Resolved 2026-10-16 — no.** Breakpoints stay out of `@theme`. Page layouts differ legitimately per view, and tokenising the set constrains pages that share nothing. Standard Tailwind prefixes apply, mobile-first, under one rule. The one exception is the *chrome* collapse point, `COMPONENTS.md` §8 — 768px, one value for three surfaces that must agree with each other. Closes §7 row 10 |
 | 10 | `--color-on-light` — create it, or name `--color-on-gold`? | **Open, raised 2026-10-16 by the provenance pass.** Live declares only `--color-on-gold: #0a0a0a` (`theme.generated.css:40`); `--color-on-light` is a bridge proposal, and four rules already tell the builder to use `text-on-light` — §6.3, `COMPONENTS.md` §9 do-not 3, `SECTION10-DO-DONT.md` §10.1, and `DEFECT-HISTORY` #4's resolution. Either the alias is created or those four name `--color-on-gold`. `SOURCE-TRUTH.md` C3 |

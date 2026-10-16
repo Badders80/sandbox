@@ -111,6 +111,11 @@ up with the headline beneath it. (`COMPONENTS.md` §3.1)
 *Drift:* a `w-[300px]` rail overflowed its column by 28px at 320px. A fixed width inside a fluid
 parent is an overflow waiting for a narrow viewport.
 
+**This rule governs dialogs and modals, and the page container does not.** A dialog is an overlay
+shell, not a viewport: it takes its own intentional cap — `760px` for the CTA lead modal, `520px` for
+the billing dialog, and the pedigree modal's own — rather than the page's `max-w-6xl`. Containment
+rules bind pages and chrome; a cap binds an overlay.
+
 **Don't size a tappable control below 44px.**
 *Drift:* stepper buttons at 24×28px and a 16×16px acceptance checkbox — both purchase-critical.
 (`COMPONENTS.md` §3.3)

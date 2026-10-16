@@ -210,20 +210,43 @@ Stated once.
 **One container for all chrome and all page content:** `max-w-6xl` (1152px), gutters `px-12
 md:px-16 lg:px-20` (48 / 64 / 80).
 
-Live runs **four** schemes:
+Live runs **six** schemes, not four — and the four this table knew about were not the whole story.
 
 | Surface | Live | Verdict |
 |---|---|---|
 | pages | `max-w-6xl px-12 md:px-16 lg:px-20` (15×) | **adopted** — the container |
 | nav | `max-w-[1440px] px-6 sm:px-10 lg:px-12` (1×) | retired |
 | footer | `max-w-6xl px-8 md:px-16` — no `lg` step, base of 8 | retired |
-| dashboard | `max-w-7xl` (4×) | **open** — decision 7 |
+| horse-about route | `max-w-7xl px-4 sm:px-6 lg:px-8` (2×) — `horses/[slug]/about/page.tsx:71`, `:95` | retired — **never recorded before 2026-10-16** |
+| horse-detail body grid | `max-w-6xl px-6 sm:px-10 lg:px-12` (1×) — `marketplace/[slug]/page.tsx:134` | retired — **this is `DEFECT-HISTORY` #8, still live** |
+| dashboard | `max-w-7xl` (**1×**, not 4×) — `mystable-dashboard.tsx:454` | retired — **decision 7 closed 2026-10-16** |
+| pedigree modal | `max-w-7xl` (1×) — `pedigree-tab.tsx:590` | **out of scope** — a dialog, not a page. Governed by §10's rule 7 |
 
-**Why the departure.** `DEFECT-HISTORY` #8 is *"Hero and body grid on different gutters (`px-12`
-vs `px-6`) — two left edges on one page"*, and its resolution is *"One container pattern."* The
-nav's `px-6 sm:px-10 lg:px-12` against the page's `px-12` is that same defect, unfixed — the
+**The universal horizontal lock — ruled 2026-10-16, decision 7 closed.** Every page surface —
+`/`, `/marketplace`, `/marketplace/[slug]`, `/mystable`, and any nested route — sits inside
+`max-w-6xl` with `px-12 md:px-16 lg:px-20`. **Zero conditional page widths, zero dashboard
+exceptions.** The rogue `px-4 sm:px-6 lg:px-8` and `max-w-7xl` page wrappers are dead.
+
+**Scope boundary, both sides:**
+
+- **Dialogs and modals are not pages.** An overlay shell is governed by §10's rule 7 — fluid width
+  with an intentional maximum cap — the way `CtaLeadModal` takes `760px` and the billing dialog
+  `520px`. The `max-w-6xl` invariant is strictly top-level page content and global chrome. So
+  `pedigree-tab.tsx:590` keeps its cap and is not a violation.
+- **Horizontal only.** This lock is containment and gutters. **Vertical rhythm varies by surface
+  type and must not be forced into one rule** — marketing sections use `py-section` (224px);
+  functional dashboard and application headers use `pt-32 pb-24` (128/96px), as `/mystable` does
+  today.
+
+**Why the departure is worth it.** `DEFECT-HISTORY` #8 is *"Hero and body grid on different gutters
+(`px-12` vs `px-6`) — two left edges on one page"*, and its resolution is *"One container pattern."*
+The nav's `px-6 sm:px-10 lg:px-12` against the page's `px-12` is that same defect, unfixed — the
 chrome and the content disagree about where the left edge is, so the wordmark never lines up with
-the headline beneath it. A 1440px nav over a 1152px page is a scheme of one.
+the headline beneath it. **And it is still unfixed on the horse detail page:**
+`marketplace/[slug]/page.tsx:112` opens at `px-12 md:px-16 lg:px-20` and `:134`, twenty-two lines
+later, runs `px-6 sm:px-10 lg:px-12` — the two left edges #8 names, shipping today. Recorded as
+**live, not resolved**; V2 wipes it. This is why the lock is an invariant rather than a preference:
+two left edges on one page is a visual bug, not a styling option.
 
 ### 3.2 The z-ladder — `new`
 
