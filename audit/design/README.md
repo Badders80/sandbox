@@ -279,9 +279,19 @@ Weights: **300 and 500 only.** No 600 — `font-semibold` maps to 500.
 **CollapsePanel:** the STEP1 version is canonical — pure grid rows, no JS measurement. Exit
 differentiates at 300ms/200ms, with a reduced-motion guard.
 
-**One row above is not locked.** The `--spacing-section` and container values are the *harvest*
-values, and they are contested (§7 row 7). The rest of this table is settled. Do not read
-`224px` as a locked token until Open decision 6 resolves.
+**Section rhythm, confirmed and ruled on 2026-10-16.** `--spacing-section: 224px` is declared in
+`brand_dna/src/theme.generated.css:87` and is **fixed** — the live build has no fluid section rule
+at any viewport, including mobile. The bridge's `clamp(5rem, 12vw, 14rem)` is therefore a proposal,
+not a harvest, and it is **declined**: nothing in the audit has ever recorded a mobile defect, and
+adopting a fix for an unmeasured problem is how the second palette got in. If V2 later wants a
+fluid rhythm it is a deliberate improvement with a reason recorded, argued as such — not a
+correction of a value we never measured wrong.
+
+**Two honest exceptions to the rhythm.** `PressShowcaseSection.tsx:171` uses `py-24` (96px), not
+`py-section`, so the "six wrappers" count is a count of six, not of all sections.
+`NavBar.tsx:159` runs its own scheme — `max-w-[1440px] px-6 sm:px-10 lg:px-12` — which is where the
+bridge's `px-6 sm:px-10 lg:px-16` gutter numbers came from. They belong to the nav bar, a different
+component at a different width. They are not a page container.
 
 ---
 
@@ -298,7 +308,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 4 | Colours | ✅ | §6.3 — 24 tokens, contrast-verified on canvas and surface, including the legal set |
 | 5 | Typography | ✅ | §6.4 — seven roles, two weights |
 | 6 | Shapes — radius & borders | ✅ | §6.5 — 5-tier radius, 3 border opacities |
-| 7 | Layout — spacing & container | ⚠️ open | Harvest is fixed: `224px` (`py-56`) and `px-12 md:px-16 lg:px-20`. The bridge proposes fluid: `clamp(5rem, 12vw, 14rem)` and `px-6 sm:px-10 lg:px-16`. **These are not the same rule.** The clamp equals 224px only at ≥1867px; at 1440px it is 172.8px, at 375px it is 80px. Adopting it overrides §5 rather than reconciling with it. Blocked on measurement — Open decision 6 |
+| 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl`. **Confirmed against the live source 2026-10-16**: `brand_dna/src/theme.generated.css:87` declares `--spacing-section: 224px` — fixed, not a clamp — and every page section uses `px-12 md:px-16 lg:px-20`. The bridge's fluid values are declined, not missing |
 | 8 | Elevation & Depth | ⚠️ partial | `--shadow-card-hover` locked. The archive proposes **4 elevation + 1 bevel + 2 glow** (`panel`, `modal`, `float`, `card-hover`; `bevel`; `glow-success`, `glow-gold`) — **unreviewed, needs a ruling** |
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
 | 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
@@ -307,7 +317,7 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
 | 14 | Agent Prompt Guide | ⚠️ open | The richer refero pattern has it; the leaner x.ai pattern does not. Open decision 4 |
 
-**Reading it plainly:** four sections are ready, five are partial or open, three are not started.
+**Reading it plainly:** five sections are ready, four are partial or open, three are not started.
 **We are not at play.** The two heaviest gaps are **Components (#11)** and **Do/Don't (#12)** — and
 both are the kind of thing that, left until drafting time, guarantees a second pass.
 
@@ -556,8 +566,8 @@ F  → gate check written and chained
 
 | File | What it holds |
 |---|---|
-| `STEP1-LANDING-PAGE.md` | Landing page harvest. **Closed, clean** — except its spacing rhythm, which is contested (Open decision 6). Colours, 7 type roles, 2 label roles, radius scale, motion |
-| `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, display heading, card hover shadow, tag tracking. Its **badge treatment is superseded** — `:50-55` is the old-build map, and its open questions at `:146`/`:148` were answered 2026-10-16 (§8). Container width is contested like STEP1's |
+| `STEP1-LANDING-PAGE.md` | Landing page harvest. **Closed, clean** — spacing rhythm and container width re-verified against the live source 2026-10-16 (§6.5, decision 6). Colours, 7 type roles, 2 label roles, radius scale, motion |
+| `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, display heading, card hover shadow, tag tracking, container width. Its **badge treatment is superseded** — `:50-55` is the old-build map, and its open questions at `:146`/`:148` were answered 2026-10-16 (§8) |
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
 | `DEFECT-HISTORY-2026-10-16.md` | The old build's 24 defects, each with the ruling that closed it. The source for §7 row 12 — `Do/Don't` is a collation of this file, not new work. Lives in the bridge folder |
 | `AUDIT-MISSING-PRIMITIVES-2026-10-16.md` | Texture utilities, keyframes, dead classes, raw hex, and **21 arbitrary shadows across 14 distinct values**. The material for §7 row 8 (Elevation) and §18 decision 5. Uncited until now. Lives in the bridge folder |
@@ -582,7 +592,7 @@ is exactly why it needs watching: a value copied from there is a value with no c
 | 3 | Enforcement strength | Open — proposed **fail**, not warn |
 | 4 | Keep the reference's *Agent Prompt Guide* section? | Open — refero has it, x.ai does not |
 | 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | Open — see §7 line 8 |
-| 6 | Layout rhythm and gutters: 224px and `px-12→20`, or the fluid clamp and `px-6→16`? | **Open, blocked on measurement.** The live page wins on values (§5), and nobody has recorded its section padding or gutter at 375 / 768 / 1440. Measure first. If the harvest holds up at mobile, keep it and the clamp is a proposal we decline. If it does not, the clamp is an override of §5 and needs to be argued as one |
+| 6 | Layout rhythm and gutters: 224px and `px-12→20`, or the fluid clamp and `px-6→16`? | **Resolved 2026-10-16 — the harvest wins.** `theme.generated.css:87` declares `--spacing-section: 224px`, fixed; the page container is `px-12 md:px-16 lg:px-20` in every section. The clamp is declined and the `px-6 sm:px-10` family belongs to `NavBar.tsx:159`, not to a page container. No measurement was needed once the source was read — see §6.5 |
 
 ---
 
@@ -592,11 +602,8 @@ is exactly why it needs watching: a value copied from there is a value with no c
 else, and leaving it until drafting time guarantees the second pass that the one-pass goal exists
 to avoid.
 
-Alongside it, three smaller jobs:
+Alongside it, two smaller jobs:
 
-- **Measure the layout values** — the live page's section padding and container gutter at 375,
-  768 and 1440. One read of the running site, and Open decision 6 stops being open. Until it is
-  done, §6.5's `224px` and §7 row 7 stay contested.
 - **Collate provenance** into `SOURCE-TRUTH.md` from STEP1–3 and `DEFECT-HISTORY`. The values are
   known and closed; the job is to gather each next to the element it came from.
 - **Rule on §18 items 5 and 2** — elevation, and where the `@theme` block lives.
