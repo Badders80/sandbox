@@ -4,17 +4,17 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** gathering — **eleven of §7's fourteen sections are ready**, and **Workstream C is
+> **Status:** gathering — **twelve of §7's fourteen sections are ready**, and **Workstream C is
 > complete**: nine components locked in `COMPONENTS.md`. STEP1 (landing), STEP2
-> (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut, and **Do/Don't
-> (#12) closed 2026-10-16** — `SECTION10-DO-DONT.md`. The document itself is **not yet written** —
-> see **§7, the bill of materials**, for exactly what is still missing before we can write it in one
-> pass.
+> (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut, and both collation
+> jobs closed on 2026-10-16 — **Do/Don't (#12)**, `SECTION10-DO-DONT.md`, and **Provenance (#13)**,
+> `SOURCE-TRUTH.md`. The document itself is **not yet written** — see **§7, the bill of materials**,
+> for the two rows still standing between this table and a one-pass write.
 >
 > **Shape:** this README, plus `STEP1-LANDING-PAGE.md`, `STEP2-MARKETPLACE.md`,
-> `STEP3-MYSTABLE.md` as the evidence files, `COMPONENTS.md` as the Workstream C working file, and
-> `SECTION10-DO-DONT.md` as the target `DESIGN.md` section 10. Markdown only. No venv, no imports,
-> no scripts.
+> `STEP3-MYSTABLE.md` as the evidence files, `COMPONENTS.md` as the Workstream C working file,
+> `SECTION10-DO-DONT.md` as the target `DESIGN.md` section 10, and `SOURCE-TRUTH.md` as the provenance
+> ledger behind section 11. Markdown only. No venv, no imports, no scripts.
 
 ---
 
@@ -165,6 +165,15 @@ Settled rulings and values. The audit records these; it does not relitigate them
 | **System sans stack** | Primary UI + body | No file. `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, …` | `brand/DESIGN.md:78` |
 | **Geist Mono** | Financials, hashes, countdowns, tabular figures — **and the editorial voice**: standfirsts, secondary-page eyebrows | `next/font`, as `var(--font-geist-mono)` | `brand/DESIGN.md:79` |
 | **Instrument Serif** | **"Reserved drama" — one italic gold word inside a page headline, and nothing else** | `next/font` as `var(--font-instrument-serif)`. The stack reads **that** variable, never `var(--font-serif)` | `brand/DESIGN.md:80` |
+
+**Why the stack must not read `var(--font-serif)` — corrected 2026-10-16.** The rule above is right;
+the reason usually given for it is not. `tokens.ts:63` sets `BRAND_FONTS.serif` to
+`var(--font-instrument-serif), ui-serif, Georgia, "Times New Roman", Times, serif`, and the generator
+writes that into `--font-serif` (`theme.generated.css:16`). So `--font-serif` is not a
+self-reference — it *leads with* the right variable and drags an OS-dependent generic chain behind
+it. That tail **is** drift mechanism 2, which is why the ruling exists. `layout.tsx:68-70` reaches
+the same conclusion from the wrong reason; the conclusion is what this table keeps.
+`SOURCE-TRUTH.md` C4.
 | **Bw Gradual** | **Logo mark only — not a web font.** The wordmark is SVG vector paths | Ships in `brand/fonts/` | `brand/DESIGN.md:81` |
 | **Geist Sans** | **RETIRED 2026-09-22.** Lives in `brand/fonts/retired/` | — | `brand/DESIGN.md:83-84` |
 
@@ -188,6 +197,16 @@ looking for a `.woff2` will not find one, and must not conclude the face is miss
 **Four roles, not two — and the second one was missing from this table until 2026-10-16.**
 `.label-spec` is live and in active use (`cap-table-card.tsx:27`, `data-room-card.tsx:15`,
 `horses/[slug]/about/page.tsx:99`). STEP1 and STEP3 both recorded it; this table did not.
+
+**And `.label-badge` is not a class in the build — corrected 2026-10-16.** A repo-wide grep returns
+zero occurrences. The live fourth label class is `.label-mono-intro`
+(`theme.generated.css:164-167`), declared with zero consumers — which is `DEFECT-HISTORY` #22, and
+which this table already records two paragraphs below. The **tracking value** `0.05em` *is* live, as
+Tailwind's `tracking-wider` on the highlight tags (`STEP2:46`), and `STEP2:155` proposes naming it
+`--tracking-tag`. So the fourth *role* may well be the right decision — a badge/status pill needs one
+— but it is a **decision to make**, not a class to read off the build, and it must not be described
+as live. The theme's own comment is stale in the same direction: `theme.generated.css:120` says
+"three roles" above four declarations. `SOURCE-TRUTH.md` C5.
 
 **The nav is not an eyebrow role.** This table used to say the eyebrow's job was "section labels,
 eyebrows, **nav**". That came from the bridge spec's prose, not from the build. Live nav links are
@@ -221,7 +240,7 @@ canvas and the card surface; every structural token clears 3:1. Ratios below are
 |---|---|---|---|
 | `--color-border` | `rgba(255,255,255,0.1)` | — | Translucent. Works over any surface — never replace with an opaque grey |
 | `--color-edge` | `#9a9aa0` | 7.37 / 7.07 | Control floor, secondary metadata, **and the one focus ring** (`COMPONENTS.md` §3.5) |
-| `--color-disabled` | `#62666d` | 3.58 / 3.43 | **Non-text only** — disabled borders and inactive structure. Never text |
+| `--color-disabled` | `#62666d` — **`departs`**; no live declaration | 3.58 / 3.43 | **Non-text only** — disabled borders and inactive structure. Never text. Corrected 2026-10-16: this value has **no source** in the theme, the app or the bridge. It is a proposal, and it needs either a declaration or the argued line §5 requires. `SOURCE-TRUTH.md` C2 |
 
 **Text**
 
@@ -248,7 +267,7 @@ canvas and the card surface; every structural token clears 3:1. Ratios below are
 |---|---|---|---|
 | `--color-status-active` | `#10b981` | 8.13 / 7.80 | Active, verified, live availability, positive returns |
 | `--color-status-pending` | `#f59e0b` | 9.60 / 9.22 | **`fully_subscribed`**, labelled FULLY ALLOCATED — sold out, waitlist. Read as *demand still standing*, not as closure. `pending` is not a status name; `coming_soon` is green |
-| `--color-status-closed` | `#738396` | 5.32 / 5.11 | Terminal — **completed**. Neutral slate |
+| `--color-status-closed` | `#738396` — **`departs`**; live is `#64748b` | 5.32 / 5.11 | Terminal — **completed**. Neutral slate. **The departure is the fix:** live `#64748b` measures ≈4.33:1 on canvas and fails AA, while `#738396` clears at 5.32. Corrected 2026-10-16 — this row was presented as a measurement and it is a proposal. `SOURCE-TRUTH.md` C1 |
 | `--color-destructive` | `#ef4444` | 5.48 / 5.26 | Error, cancelled, declined |
 
 **Legal document surface** — the white PDS/SA read inside the dark flow, scoped to `.legal-doc`
@@ -261,8 +280,10 @@ canvas and the card surface; every structural token clears 3:1. Ratios below are
 | `--color-legal-border` | `#dddddd` | 1.36 | **Deliberate** — a document hairline, not a control boundary. Do not "fix" it |
 | `--color-legal-checkbox` | `#b98a2f` | 3.12 | Clears the 3:1 control floor |
 
-**Eight opaque neutrals** (canvas, surface, raised, heading, edge, muted, disabled, hover) plus two
+**Seven opaque neutrals are live** (canvas, surface, raised, heading, edge, muted, hover) plus two
 translucent whites (`border`, `ink`). That is the greyscale, counted by job rather than by ramp.
+**This said eight until 2026-10-16**, counting `disabled` — which is not declared anywhere live
+(`SOURCE-TRUTH.md` C2).
 
 **Retired — do not use:** `ash #575757`, `smoke #454545` (fail contrast — 2.85:1 and 2.15:1),
 `hairline #050505`, `stage-black #000000` (zero call sites). The bridge theme still declares all
@@ -297,6 +318,18 @@ none of it is in the locked set above. Recorded 2026-10-16 because the next read
   `--text-display` appears nowhere, and 64px lives as a hand-typed `md:text-[64px]` copied into
   `marketplace/page.tsx:67` and `marketplace/[slug]/page.tsx:116`. Two pages, one recipe, typed
   twice. That is drift mechanism #6 happening in the file §6.4 was harvested from.
+- **`--color-on-light` is not declared anywhere.** Live has `--color-on-gold` (`#0a0a0a`,
+  `theme.generated.css:40`); `--color-on-light` is a **bridge proposal**
+  (`V2-THEME-2026-10-16.css:50`). This one has teeth: `DEFECT-HISTORY` #4's resolution, §6.3's own
+  row below, `COMPONENTS.md` §9 do-not 3 and `SECTION10-DO-DONT.md` §10.1 all tell the builder to use
+  `text-on-light`. Either it is created as an alias of `on-gold`, or those four rules name
+  `--color-on-gold`. `SOURCE-TRUTH.md` C3.
+- **A second live palette, parked.** `globals.css:58` opens `[data-theme="light"]` — a light console
+  overriding the house tokens (canvas `#f7f7f5`, gold `#a87c2a`, and a dormant `--color-light-*`
+  family beside it). No live route sets it (`globals.css:49`; the design lab demos it), so excluding
+  it from the locked set is right — but its neighbours are recorded here and it was not. It also
+  carries its own **documented contrast gap** at `globals.css:53-57`: `--color-edge` is not
+  overridden and measures 2.80:1 on the light canvas. `SOURCE-TRUTH.md` §The light scope.
 
 **Three notes for whoever reads this next.**
 
@@ -377,6 +410,13 @@ proposes the same set; the two agree because both read the same 14 distinct valu
 highlight into one string, which is why they could not be tokenised as-is. They are written
 `shadow-[var(--shadow-panel),var(--shadow-bevel)]` and never as one hand-written value.
 
+**Two live glows these seven do not account for — found 2026-10-16, recorded not ruled.**
+`pedigree-tab.tsx:275` runs `0 0 20px rgba(212,169,100,0.3)` on a selected node, a second gold value
+beside the locked 12px/0.25 on the same component; `pedigree-table.tsx` runs
+`0 0 18px rgba(16,185,129,0.12)`, a third emerald. If the seven tokens are the whole vocabulary —
+which adjudication 3 below says they are — both are dropped like the blue glow. Neither is currently
+named, and `DEFECT-HISTORY` #15's "14 distinct values" does not include them. `SOURCE-TRUTH.md` §5.
+
 **Three adjudications, so they are not re-opened:**
 
 1. **One success glow, not two.** Live carries `--shadow-success-glow` at `20px/0.35` *and*
@@ -385,7 +425,10 @@ highlight into one string, which is why they could not be tokenised as-is. They 
    the `20px` token's only consumer — **drops its glow entirely** and takes `--shadow-panel`. Its
    green is already carried by `border-status-active/40` and `bg-status-active/10`; the bloom was
    saying it twice. This is also what makes the glow single-purpose: it marks *motion*, per §2.6 of
-   the badge rule.
+   the badge rule. **Corrected 2026-10-16:** the "three inline literals use `8px/0.6`" does not
+   reproduce — the build holds **one** 8px site (`marketplace-listing-grid.tsx:65`, an 8px blur
+   carrying the *20px/0.35* token's colour) and two declared tokens, none at alpha `0.6`. The
+   adjudication may still be right; it is an adjudication, not a derivation. `SOURCE-TRUTH.md` C7.
 2. **The blue glow is dropped.** `0 0 8px rgba(96,165,250,0.6)` has one call site and introduces an
    info-blue that appears in none of the locked 24. §6.3 already rules there is no fourth status
    colour. The call site moves to `--shadow-glow-gold` or loses the glow.
@@ -444,14 +487,13 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 10 | Layout — breakpoints | ✅ | **Ruled 2026-10-16 — not tokenised.** Breakpoints stay out of the `@theme` set: page layouts and responsive behaviour differ legitimately per view, and forcing breakpoints into tokens manufactures constraints the pages do not share. Standard Tailwind prefixes (`sm:` / `md:` / `lg:`) apply, mobile-first, under one rule. The single exception already ruled is the *chrome* collapse point (`COMPONENTS.md` §8, 768px) — one value, because the nav, the drawer and the bar must agree with each other. `SPEC` originally excluded breakpoints too; the reference pattern's inclusion is declined |
 | 11 | Components | ✅ | **9 components locked — Workstream C complete** (`COMPONENTS.md`). All six on the §8 list, plus the mobile conversion bar, the mobile menu drawer and the button hierarchy — three the six-item list never knew existed. Four consolidation jobs remain and none of them is a component |
 | 12 | Do / Don't | ✅ | **Written 2026-10-16** — `SECTION10-DO-DONT.md`. `DEFECT-HISTORY`'s 24 defects collated into **21 rules**: 8 restated from the component locks, 11 from §6 (9 rules, after collating #21+#22 and folding #23 into #15), **4 written new** — #7, #11, #12, #17 — and 1 excluded as build hygiene (#24). Every rule is stated forward, carrying the drift that is its reason. Four corrections to `DEFECT-HISTORY` came out of the collation; see that file's §Corrections |
-| 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
+| 13 | Provenance | ✅ | **Collated 2026-10-16** — `SOURCE-TRUTH.md`. Every value §6 locks, recorded against the element, property and `file:line` it was read from, in the seven categories §8 names, so the harvest can be re-run after the domain cutover. **It came back with eight corrections** — four values §6.3 presents as measured are proposals, one token and one label class are not in the build at all — all filed in `SOURCE-TRUTH.md` §Corrections and argued in §6 |
 | 14 | Agent Prompt Guide | ⚠️ decided | **Decided 2026-10-16 — include it.** Decision 4 closed: the section ships, because a one-pass build is the whole point and a machine reader of `DESIGN.md` needs the no-debt and token rules stated for it rather than inferred. **Not written yet** — the section itself is owed, and it is the only reason this row is not ✅ |
 
-**Reading it plainly:** eleven sections are ready, two are partial, one is not started.
-**We are not at play.** The remaining gap is **Provenance (#13)**, not started — a collation job with
-its source material already in hand — plus two partial rows: **motion granularity (#9)**, which is
-ruled nowhere and needs a decision, and the **Agent Prompt Guide (#14)**, decided on 2026-10-16 but
-not yet written.
+**Reading it plainly:** twelve sections are ready, two are partial, none is not started.
+**We are close, and not at play.** Two rows stand between this table and fourteen ✅, and neither is
+a collation: **motion granularity (#9)**, ruled nowhere, where §18 item 1 proposes the shape without
+deciding it — and the **Agent Prompt Guide (#14)**, decided on 2026-10-16 but not yet written.
 
 ---
 
@@ -459,7 +501,7 @@ not yet written.
 
 | # | Workstream | Produces | State |
 |---|---|---|---|
-| A | **Harvest** — read the real values off the live landing page | A ground-truth table: every colour, size, weight, tracking, radius, spacing, with provenance | Substantially done; needs **collation** into `SOURCE-TRUTH.md` |
+| A | **Harvest** — read the real values off the live landing page | A ground-truth table: every colour, size, weight, tracking, radius, spacing, with provenance | ✅ **Complete — collated 2026-10-16** into `SOURCE-TRUTH.md`: seven categories, every value against its `file:line`, `adopted`/`departs` marked, and eight corrections filed |
 | B | **Token model** — how those values compile | The `@theme` block, its categories, its naming | Values ready; naming conventions settled in Tailwind v4 terms |
 | C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ✅ **Complete — 9 components locked** in `COMPONENTS.md`: the whole chrome, the button hierarchy, the data and form primitives, and the mobile surfaces the old build never had. Four consolidation jobs remain, none a component |
 | D | **Drift mechanisms** — why it went wrong before | A catalogue of causes, each with the guard that prevents it | Done — §10 |
@@ -765,6 +807,7 @@ document kept by discipline, and it should be read that way.
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
 | `COMPONENTS.md` | **Workstream C.** The decision-level locks — **complete at 9 components**, plus the shared rulings: the single container, the z-ladder, the touch law, hover guards, one focus ring. A working file; it does not leave this folder |
 | `SECTION10-DO-DONT.md` | **The target `DESIGN.md` section 10** (§7 row 12), closed 2026-10-16. 24 defects collated into 21 rules, plus the collation table and four corrections to `DEFECT-HISTORY`. A working file; it does not leave this folder |
+| `SOURCE-TRUTH.md` | **The target `DESIGN.md` section 11** (§7 row 13), collated 2026-10-16. Every value §6 locks against the element, property and `file:line` it came from, in §8's seven categories, plus eight corrections to §6 and the parked light scope. The file that makes the harvest re-runnable after the cutover. A working file; it does not leave this folder |
 | `DEFECT-HISTORY-2026-10-16.md` | The old build's 24 defects, each with the ruling that closed it. The source for §7 row 12 — `Do/Don't` is a collation of this file, not new work. Lives in the bridge folder |
 | `AUDIT-MISSING-PRIMITIVES-2026-10-16.md` | Texture utilities, keyframes, dead classes, raw hex, and **21 arbitrary shadows across 14 distinct values**. The material for §7 row 8 (Elevation) and §18 decision 5. Uncited until now. Lives in the bridge folder |
 
@@ -810,6 +853,8 @@ bridge stays read-only; what changes is that `#19` is no longer quotable as clos
 | 7 | The dashboard container — `max-w-7xl` (4×) against the ruled `max-w-6xl` | Open. `COMPONENTS.md` §3.1 rules one container for the chrome and all page content; `/mystable` may legitimately need a wider grid than a marketing page. One ruling, either way |
 | 8 | `coming_soon_details` — its label and its treatment | Open. The sixth database status, absent from every map in the estate. `COMPONENTS.md` §2 has it sharing `coming_soon`'s; that may be right, but it is not yet a recorded decision |
 | 9 | Breakpoints: tokenise them, as the reference pattern does? | **Resolved 2026-10-16 — no.** Breakpoints stay out of `@theme`. Page layouts differ legitimately per view, and tokenising the set constrains pages that share nothing. Standard Tailwind prefixes apply, mobile-first, under one rule. The one exception is the *chrome* collapse point, `COMPONENTS.md` §8 — 768px, one value for three surfaces that must agree with each other. Closes §7 row 10 |
+| 10 | `--color-on-light` — create it, or name `--color-on-gold`? | **Open, raised 2026-10-16 by the provenance pass.** Live declares only `--color-on-gold: #0a0a0a` (`theme.generated.css:40`); `--color-on-light` is a bridge proposal, and four rules already tell the builder to use `text-on-light` — §6.3, `COMPONENTS.md` §9 do-not 3, `SECTION10-DO-DONT.md` §10.1, and `DEFECT-HISTORY` #4's resolution. Either the alias is created or those four name `--color-on-gold`. `SOURCE-TRUTH.md` C3 |
+| 11 | `.label-badge` — create the class, or drop the fourth label role? | **Open, raised 2026-10-16 by the provenance pass.** §6.2 locks four roles; three exist as classes, and the fourth (`.label-badge`, 10 / 500 / 0.05em) exists nowhere in the build. The live fourth class is `.label-mono-intro`, declared with zero consumers. The **tracking** value `0.05em` is live as `tracking-wider`. A status pill plausibly needs the role, and `STEP2:155` already proposes the name `--tracking-tag` — but it is a decision, not a harvest. `SOURCE-TRUTH.md` C5 |
 
 ---
 
@@ -824,10 +869,15 @@ defects into 21 rules. Four needed writing from scratch (#7, #11, #12, #17) beca
 for them anywhere in the estate; one (#24, asset naming) is not a design rule and is excluded with
 that reason stated. The collation also corrected four rows of `DEFECT-HISTORY` — see §17.
 
-**Provenance (#13) is now the largest gap that is still open**, and it is the same kind of job:
-collation, with the source material already in hand.
+**Provenance (#13) — ✅ closed 2026-10-16.** `SOURCE-TRUTH.md` records every value §6 locks against
+the element, property and `file:line` it came from, in §8's seven categories. It was a collation, and
+it still found eight corrections: **four values §6.3 presents as measured are proposals** (the status
+slate, the disabled grey, the on-light alias, the badge class), and `#64748b` — the value actually
+live — fails AA where the proposed one clears it. Four more correct a rationale in §6.1, a derivation
+in §6.5, and three undercounts in `DEFECT-HISTORY`. All eight are filed in `SOURCE-TRUTH.md` and
+argued in §6.
 
-Alongside it, five smaller jobs — two of them the partial rows §7 still shows:
+**Two rows stand between this table and fourteen ✅, and neither is a collation:**
 
 - **Rule on §7 row 9 — motion granularity.** The one row ruled nowhere. §18 item 1 already proposes
   the shape ("spacing and radii yes; shadows and motion only if used in more than one place"), and
@@ -835,6 +885,9 @@ Alongside it, five smaller jobs — two of them the partial rows §7 still shows
 - **Write §7 row 14 — the Agent Prompt Guide.** Decided 2026-10-16 (include it); the section is owed.
   It should say what a machine reader of `DESIGN.md` needs stated rather than inferred: zero debt,
   name a role never a value, and the four prohibitions this audit keeps re-learning.
+
+Three smaller jobs beside them:
+
 - **Rule on `coming_soon_details`.** The sixth status has no label or treatment anywhere in the
   estate (§8). It currently shares `coming_soon`'s, which may be right — but it is unrecorded.
 - **Rule on §18 item 2** — whether the `@theme` block lives in `globals.css` or a `theme.css` it
@@ -844,3 +897,9 @@ Alongside it, five smaller jobs — two of them the partial rows §7 still shows
   column rule (#7 — a width is a cap, never a fixed value) is adjacent but does not settle it; the
   dashboard question is whether a data grid may legitimately be wider than a marketing page, which
   is a scope ruling, not a value one.
+
+**And the harvest's own follow-through**, if it is wanted: `SOURCE-TRUTH.md`'s eight corrections change
+four rows of §6.3, one reason in §6.1, one derivation in §6.5, the provenance claim in §6.2 and the
+completeness claim in §6.5. They are recorded and argued but **not all applied** — C3 (`--color-on-light`) and C5
+(`.label-badge`) need a ruling, not an edit, because each is a decision to create a token or to
+rename one.
