@@ -4,7 +4,7 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** gathering — **ten of §7's fourteen sections are ready**, and **Workstream C is
+> **Status:** gathering — **eleven of §7's fourteen sections are ready**, and **Workstream C is
 > complete**: nine components locked in `COMPONENTS.md`. STEP1 (landing), STEP2
 > (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut, and **Do/Don't
 > (#12) closed 2026-10-16** — `SECTION10-DO-DONT.md`. The document itself is **not yet written** —
@@ -441,16 +441,17 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl`. **Confirmed against the live source 2026-10-16**: `brand_dna/src/theme.generated.css:87` declares `--spacing-section: 224px` — fixed, not a clamp — and every page section uses `px-12 md:px-16 lg:px-20`. The bridge's fluid values are declined, not missing. The container is ruled for the chrome and all page content (`COMPONENTS.md` §3.1); the dashboard's `max-w-7xl` is a separate open item — decision 7 |
 | 8 | Elevation & Depth | ✅ | §6.5 — **ruled 2026-10-16**: 4 elevation + 1 bevel + 2 glow, derived from the live literals, with the two near-duplicate success glows folded and the one-off blue dropped. Bevel composes, never concatenates |
 | 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
-| 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
+| 10 | Layout — breakpoints | ✅ | **Ruled 2026-10-16 — not tokenised.** Breakpoints stay out of the `@theme` set: page layouts and responsive behaviour differ legitimately per view, and forcing breakpoints into tokens manufactures constraints the pages do not share. Standard Tailwind prefixes (`sm:` / `md:` / `lg:`) apply, mobile-first, under one rule. The single exception already ruled is the *chrome* collapse point (`COMPONENTS.md` §8, 768px) — one value, because the nav, the drawer and the bar must agree with each other. `SPEC` originally excluded breakpoints too; the reference pattern's inclusion is declined |
 | 11 | Components | ✅ | **9 components locked — Workstream C complete** (`COMPONENTS.md`). All six on the §8 list, plus the mobile conversion bar, the mobile menu drawer and the button hierarchy — three the six-item list never knew existed. Four consolidation jobs remain and none of them is a component |
 | 12 | Do / Don't | ✅ | **Written 2026-10-16** — `SECTION10-DO-DONT.md`. `DEFECT-HISTORY`'s 24 defects collated into **21 rules**: 8 restated from the component locks, 11 from §6 (9 rules, after collating #21+#22 and folding #23 into #15), **4 written new** — #7, #11, #12, #17 — and 1 excluded as build hygiene (#24). Every rule is stated forward, carrying the drift that is its reason. Four corrections to `DEFECT-HISTORY` came out of the collation; see that file's §Corrections |
 | 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
-| 14 | Agent Prompt Guide | ⚠️ open | The richer refero pattern has it; the leaner x.ai pattern does not. Open decision 4 |
+| 14 | Agent Prompt Guide | ⚠️ decided | **Decided 2026-10-16 — include it.** Decision 4 closed: the section ships, because a one-pass build is the whole point and a machine reader of `DESIGN.md` needs the no-debt and token rules stated for it rather than inferred. **Not written yet** — the section itself is owed, and it is the only reason this row is not ✅ |
 
-**Reading it plainly:** ten sections are ready, three are partial or open, one is not started.
-**We are not at play.** The remaining gap is **Provenance (#13)** — a collation job with its source
-material already in hand — plus three partial rows (motion granularity, breakpoints, the agent prompt
-guide).
+**Reading it plainly:** eleven sections are ready, two are partial, one is not started.
+**We are not at play.** The remaining gap is **Provenance (#13)**, not started — a collation job with
+its source material already in hand — plus two partial rows: **motion granularity (#9)**, which is
+ruled nowhere and needs a decision, and the **Agent Prompt Guide (#14)**, decided on 2026-10-16 but
+not yet written.
 
 ---
 
@@ -637,7 +638,11 @@ typecheck → lint → test → build.
 
 **Proposed checks, in the same style:**
 
-1. **No colour literal outside `globals.css`** in `website/`. Catches mechanism 3.
+1. **No raw colour outside `globals.css`** in `website/` — **both spellings**: a hex or `rgb()`/`oklch()`
+   literal, *and* a raw Tailwind palette utility (`text-purple-400`, `bg-zinc-900/60`, `border-blue-400/40`).
+   Catches mechanism 3. **Widened 2026-10-16** — the literal-only wording was proposed first and it
+   misses the defect it was written for: `DEFECT-HISTORY` #17 is `text-purple-400`, a palette class
+   with no literal in it, and the widened check is what catches it. Live is full of both spellings.
 2. **No raw generic font utility** (`font-sans`, `font-serif`) and no `font-family` declaration
    outside `globals.css`. Catches mechanisms 1 and 2.
 3. **`DESIGN.md` values match `globals.css`.** Catches the two-sources-of-truth failure — the
@@ -799,11 +804,12 @@ bridge stays read-only; what changes is that `#19` is no longer quotable as clos
 | 1 | Token granularity past colour and type | Open — spacing and radii yes; shadows and motion only if used in more than one place |
 | 2 | `@theme` in `globals.css`, or a separate `theme.css` it imports | Open — `PLAN.md:235` says `globals.css`; the archive's draft uses a separate file. **Now carries the z-binding too**: `--z-*` is not a Tailwind v4 namespace, so the z-ladder in `COMPONENTS.md` §3.2 generates no utility until this is settled |
 | 3 | Enforcement strength | Open — proposed **fail**, not warn |
-| 4 | Keep the reference's *Agent Prompt Guide* section? | Open — refero has it, x.ai does not |
+| 4 | Keep the reference's *Agent Prompt Guide* section? | **Resolved 2026-10-16 — include it.** A one-pass build is the point, and a machine reader of `DESIGN.md` needs the no-debt rule and the token prohibitions stated for it rather than inferred. Section 12 of the skeleton (§9) ships. **The section is owed** — §7 row 14 is partial until it is written |
 | 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | **Resolved 2026-10-16 — adopted, with three adjudications.** Both the archive and `AUDIT-MISSING-PRIMITIVES` §5.2 derived the same seven tokens from the same 14 live literals, so the agreement is evidence rather than inheritance. See §6.5: one success glow not two, the blue glow dropped, Tailwind's named shadows banned. This unblocks the button hierarchy |
 | 6 | Layout rhythm and gutters: 224px and `px-12→20`, or the fluid clamp and `px-6→16`? | **Resolved 2026-10-16 — the harvest wins.** `theme.generated.css:87` declares `--spacing-section: 224px`, fixed; the page container is `px-12 md:px-16 lg:px-20` in every section. The clamp is declined and the `px-6 sm:px-10` family belongs to `NavBar.tsx:159`, not to a page container. No measurement was needed once the source was read — see §6.5 |
 | 7 | The dashboard container — `max-w-7xl` (4×) against the ruled `max-w-6xl` | Open. `COMPONENTS.md` §3.1 rules one container for the chrome and all page content; `/mystable` may legitimately need a wider grid than a marketing page. One ruling, either way |
 | 8 | `coming_soon_details` — its label and its treatment | Open. The sixth database status, absent from every map in the estate. `COMPONENTS.md` §2 has it sharing `coming_soon`'s; that may be right, but it is not yet a recorded decision |
+| 9 | Breakpoints: tokenise them, as the reference pattern does? | **Resolved 2026-10-16 — no.** Breakpoints stay out of `@theme`. Page layouts differ legitimately per view, and tokenising the set constrains pages that share nothing. Standard Tailwind prefixes apply, mobile-first, under one rule. The one exception is the *chrome* collapse point, `COMPONENTS.md` §8 — 768px, one value for three surfaces that must agree with each other. Closes §7 row 10 |
 
 ---
 
@@ -821,8 +827,14 @@ that reason stated. The collation also corrected four rows of `DEFECT-HISTORY` �
 **Provenance (#13) is now the largest gap that is still open**, and it is the same kind of job:
 collation, with the source material already in hand.
 
-Alongside it, three smaller jobs:
+Alongside it, five smaller jobs — two of them the partial rows §7 still shows:
 
+- **Rule on §7 row 9 — motion granularity.** The one row ruled nowhere. §18 item 1 already proposes
+  the shape ("spacing and radii yes; shadows and motion only if used in more than one place"), and
+  the durations are locked in §6.5. What is missing is the decision itself.
+- **Write §7 row 14 — the Agent Prompt Guide.** Decided 2026-10-16 (include it); the section is owed.
+  It should say what a machine reader of `DESIGN.md` needs stated rather than inferred: zero debt,
+  name a role never a value, and the four prohibitions this audit keeps re-learning.
 - **Rule on `coming_soon_details`.** The sixth status has no label or treatment anywhere in the
   estate (§8). It currently shares `coming_soon`'s, which may be right — but it is unrecorded.
 - **Rule on §18 item 2** — whether the `@theme` block lives in `globals.css` or a `theme.css` it

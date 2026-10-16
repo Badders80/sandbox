@@ -539,9 +539,12 @@ it. Live is evidence, so the panel is kept, and the work here is the accessibili
 The nav's toggle, the drawer and the conversion bar all appear and disappear at the same width.
 **That width is 768px**, and it is one token consumed by all three — never three literals.
 
-`departs`: live's drawer has no stated breakpoint, and README §7 row 10 leaves breakpoints open. The
-broader breakpoint tokenisation stays open; the *chrome* collapses at one value, and having one
-value is the entire point.
+`departs`: live's drawer has no stated breakpoint. **README §7 row 10 closed 2026-10-16 — breakpoints
+are not tokenised** (README §18 item 9): page layouts differ legitimately per view, so the set stays
+out of `@theme` and standard Tailwind prefixes apply. This 768px is the **one exception**, and it is
+the exception precisely because it is not a layout breakpoint — it is an agreement *between three
+chrome surfaces*, which is a different kind of thing. One value, and having one value is the entire
+point.
 
 ---
 
