@@ -745,7 +745,12 @@ F  → gate check written and chained
 
 ## 15 · Acceptance criteria
 
-- `SOURCE-TRUTH.md` records every value with provenance, and nothing is inferred.
+- `SOURCE-TRUTH.md` records every value with provenance, and nothing is inferred. **Not yet met —
+  corrected 2026-10-16.** The ledger is complete and every row carries a `file:line`, but it records
+  **two rows that fail this criterion rather than passing it**: `--color-disabled` has no source
+  anywhere, and `--color-status-closed`'s locked value is a proposal (`SOURCE-TRUTH.md` C1, C2). The
+  criterion is met when those two either get a declaration or lose their place in the locked set.
+  A further two rows, C3 and C5, are filed as §18 items 10 and 11 for the same reason.
 - Every token sits in a Tailwind v4 namespace, so each generates a utility.
 - No hex literal exists outside `globals.css` anywhere in `website/`.
 - `DESIGN.md` describes no V1 artifact, and reintroduces none of the ten banned tokens.
