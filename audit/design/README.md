@@ -1,21 +1,56 @@
 # audit/design — the V2 design system extraction
 
-> **What this is:** the audit that produces a clean, V2-only `DESIGN.md` and the token set
-> that `website/src/app/globals.css` will carry, so that every page built from here —
-> marketplace, horse page, MyStable — is *assembled from decisions already made* rather
-> than re-invented.
+> **What this is:** the audit that produces one clean, V2-only `DESIGN.md` — the document every
+> page of the V2 build is assembled from — plus the token set it compiles to, and the check that
+> keeps the two true.
 >
-> **Status:** **proposal, partially audited.** The per-page pass has run: STEP1 (landing
-> page) is closed and clean; STEP2 (marketplace) and STEP3 (MyStable) carry open items, one
-> of them critical — two competing status-badge systems over the same `public.status` enum.
-> Nothing lands until one ruling is written (see **Ruling required**); `PLAN.md` is still
-> unamended. Live state: `sandbox-design-audit-state.md`.
+> **Status:** gathering. STEP1 (landing), STEP2 (marketplace) and STEP3 (MyStable) are closed. The
+> document itself is **not yet written** — see **§7, the bill of materials**, for exactly what is
+> still missing before we can write it.
 >
-> **Shape:** README · SPEC · STEP1–3 · ref-* · `sandbox-design-audit-state.md`. Markdown
-> only, per `v2/README.md:29` ("This folder is markdown"). No venv, no imports, no scripts —
-> the harvest so far is cited prose, not code, so there is no `out/` yet.
+> **Shape:** this README, plus `STEP1-LANDING-PAGE.md`, `STEP2-MARKETPLACE.md`,
+> `STEP3-MYSTABLE.md` as the evidence files. Markdown only. No venv, no imports, no scripts.
 
-## Why this exists
+---
+
+## 1 · What we are building
+
+**One `DESIGN.md`, and it is the authority.**
+
+The pattern is fixed and not up for reinvention — the
+[getdesign.md](https://getdesign.md/x.ai/) /
+[refero](https://styles.refero.design/style/90ce5883-bb24-4466-93f7-801cd617b0d1) form:
+
+- **YAML frontmatter** carrying the tokens as machine-readable data (`colors`, `typography`,
+  `rounded`, `spacing`, `components`), so the document is readable by a human *and* by an agent
+  building from it.
+- **Short, tabular sections** — Overview, Colours, Typography, Layout, Elevation, Shapes, Motion,
+  Components, Do/Don't.
+- **Values inline, not referenced.** The document is self-contained. Hand it to someone with no
+  access to the repo and they have the whole system.
+
+**The `@theme` block is its compiled output.** `DESIGN.md` states the values; the Tailwind v4
+`@theme` block in `globals.css` is derived from it and is what the build consumes. Where they
+disagree, the document is the source and the CSS is wrong — and **§11, Workstream F**, makes that
+mechanical rather than a matter of discipline. Two artifacts, one authored, one compiled, one
+check asserting they are identical.
+
+**Why a document alone is not enough.** The estate already ran this experiment. A `DESIGN.md`
+existed throughout the period when the drift happened. `brand/DESIGN.md:83-84` records the
+instance: Geist Sans *"reached the page through a `font-sans` utility on four route files while
+`body` inherited the system stack."* The document did not prevent it. So the deliverable is a
+document **plus** the mechanism that checks it, and nothing here ships without both.
+
+### The mode we are in
+
+**We are gathering, not writing.** The purpose of this phase is to assemble every correct input —
+each value, each ruling, each piece of provenance — so that when we hit *play* on `DESIGN.md`, it
+is written **in one pass**. No drafting, no discovering a missing decision halfway through, no
+second pass. **§7 is the test of readiness:** when every line of it is closed, we are at play.
+
+---
+
+## 2 · Why this exists
 
 The V2 build shipped steps 1–5 with **no design authority in the repo at all**. Impeccable's
 context loader, run 2026-10-15 against `engine_v2/website`, returned:
@@ -25,135 +60,455 @@ designPath: null    productPath: null    hasVisualImplementation: false
 ```
 
 The only design system document in the estate is `evolution/engine/brand/DESIGN.md`, and
-`PLAN.md:235` rules that it **stays behind** — correctly, because it is V1-contaminated: it
-cites `@evo/ui`, `app/horses/[slug]/about/page.tsx`, the token generator, and
+`PLAN.md:235` rules that it **stays behind** — correctly, because it is V1-contaminated: it cites
+`@evo/ui`, `app/horses/[slug]/about/page.tsx`, the token generator, and
 `comms/automated-comms/build-surface.mjs`.
 
-So `PLAN.md:235` tells 6a to "transcribe the tokens once into `website/src/app/globals.css`"
-while nothing anywhere records **what those token values are**. They are named — canvas,
-gold `#c39853`, the system sans, Geist Mono, Instrument Serif — but never transcribed.
+So `PLAN.md:235` tells 6a to *"transcribe the tokens once into `website/src/app/globals.css`"*
+while nothing anywhere records **what those tokens are**. They are named — canvas, gold, the
+system sans, Geist Mono, Instrument Serif — but never valued. This audit is what turns the names
+into values, once, deliberately, outside the build critical path.
 
-Meanwhile the stated problem is real and historical: **drift with ad-hoc elements across the
-marketplace, the horse page, and MyStable.** The estate has already suffered at least one
-documented instance of exactly that (`DESIGN.md:83-84`: Geist Sans reached four route files
-through a `font-sans` utility while `body` inherited the system stack). A `DESIGN.md` existed
-throughout. That is the whole argument for this audit's second half: **a document alone did
-not prevent drift, so the deliverable is a document plus a mechanism.**
+---
 
-## Ruling required before this lands
+## 3 · The governing rule: zero debt
 
-`PLAN.md:152` — *"The landing page is the visual north star. There is NO separate design pass,
-design token gate, or lookbook."*
-`PLAN.md:277` — parks *"per-page styling, a lookbook, and any token beyond the 6a theme file."*
+**Zero debt enters this folder.** Every file here is either written from our own decisions, or
+explicitly adopted from `audit/website/` after review. No bulk imports.
 
-This audit **is** the lookbook, pulled forward from the post-build visual pass into the build
-critical path. That is an amendment to `PLAN.md`, not an extension of 6a. Per the house rule in
-`~/.claude/CLAUDE.md`, a changed ruling updates the SSOT file **and** the source doc it cites.
-Until that amendment is written, this folder is a proposal.
+- **Artifacts never cross.** No file from `audit/website/` is copied in. This is mechanical, not
+  stylistic: the build-repo gate fails the commit on ten banned legacy tokens, and `brand_dna`
+  alone appears in four bridge files. A straight copy cannot survive contact with the gate.
+- **Rulings cross deliberately** — one at a time, restated in our own words, with provenance. A
+  decision carries no legacy vocabulary; a copied document does.
 
-## Scope
+The archive states the principle better than we did, in its own words
+(`/home/evo/audit/website/DEFECT-HISTORY-2026-10-16.md:11,46-48`):
 
-**In:**
-- The token set: colour, type roles, spacing rhythm, radii, borders, elevation, motion, breakpoints.
-- The component *decisions* that must be locked so a card, a button, a status badge, and a
-  listing row are reused rather than re-invented.
-- The drift mechanisms catalogued from the estate's own history, so the spec prevents causes
-  rather than symptoms.
-- The target `DESIGN.md`: its sections, its home, and how it stays true.
-- The enforcement half: a mechanical check, in the existing gate style.
+> *"The rulings live in the V2 specification. The defects live here — because a defect in the old
+> build is a fact about the old build, and the old build is not the spec."*
 
-**Out:**
-- Page layout and grids. They differ legitimately per page; tokenising them manufactures
-  drift of its own.
-- Copy and content. The landing page's copy is a separate question (see Open decisions).
-- Business logic, pricing, data. This audit never touches `dsls`, `horses`, or the rules engine.
-- Anything in `engine/`. Scope is the design system the website consumes.
+> *"A specification that carries a list of the old build's mistakes is a specification arguing with
+> a codebase that will not exist."*
 
-## Precedence of truth
+The ten tokens the gate arms:
+
+```
+INVENTORY_UUID_BY_SLUG   LEGACY_SLUG_ALIASES   slugCandidates   HORSE_STILLS
+DEFAULT_CDN_HOST         CONTENT_DIR           resolveHorseSlug  REFUND_WINDOW_DAYS
+brand_dna                orca  (case-insensitive)
+```
+
+---
+
+## 4 · Standalone by design
+
+`sandbox/v2` is a markdown-only planning island — `v2/README.md:29`: *"This folder is markdown.
+Reading the brief is the work."* A ~40-token extraction plus a gate script has no home there, and
+`PLAN.md:152` explicitly rules out a design pass on the build critical path.
+
+So this runs as a **separate function**, 100% standalone:
+
+1. Finish the document here, on its own terms.
+2. **Then** go into `PLAN.md` and point it at the result.
+
+**Not before.** You cannot write an informed amendment until you know what you are amending for —
+and the token scope has already moved from the six values `PLAN.md:235` names to the full set.
+`PLAN.md` is not touched while this work is in progress. The amendment is a **downstream step, not
+a precondition.**
+
+---
+
+## 5 · Precedence of truth
 
 When two sources disagree, the winner is fixed:
 
-1. **The live landing page** — wins on *values*. `PLAN.md:152` makes it the visual north star,
-   and the brand audit rules that where `brand/DESIGN.md` and the live landing page disagree,
-   **the live landing page wins**.
+1. **The live landing page** — wins on *values*. `PLAN.md:152` makes it the visual north star, and
+   the brand audit rules that where `brand/DESIGN.md` and the live landing page disagree, the live
+   landing page wins.
 2. **`evolution/engine/brand/DESIGN.md`** — wins on *rulings*. It carries decisions that are not
-   observations: which faces are retired, the single serif-drama exception, the label roles.
-   These survive the rewrite as constraints even though the document itself stays behind.
-3. **`PLAN.md`** — wins on *scope*. What 6a may and may not do.
+   observations: which faces are retired, the single serif-drama exception, the label roles. These
+   survive as constraints even though the document itself stays behind.
+3. **`PLAN.md`** — wins on *scope*.
 
-## Coverage map
+**The bridge, `/home/evo/audit/website/`**, is reference only. It records what the old build had.
+It is mined surgically and never quoted from directly — see §3.
 
-Six workstreams. `SPEC.md` holds the detail for each.
+---
 
-| # | Workstream | Produces |
+## 6 · What is already locked
+
+Settled rulings and values. The audit records these; it does not relitigate them.
+
+### 6.1 Faces
+
+| Face | Role | Delivery | Ruling |
+|---|---|---|---|
+| **System sans stack** | Primary UI + body | No file. `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, …` | `brand/DESIGN.md:78` |
+| **Geist Mono** | Financials, hashes, countdowns, tabular figures — **and the editorial voice**: standfirsts, secondary-page eyebrows | `next/font`, as `var(--font-geist-mono)` | `brand/DESIGN.md:79` |
+| **Instrument Serif** | **"Reserved drama" — one italic gold word inside a page headline, and nothing else** | `next/font` as `var(--font-instrument-serif)`. The stack reads **that** variable, never `var(--font-serif)` | `brand/DESIGN.md:80` |
+| **Bw Gradual** | **Logo mark only — not a web font.** The wordmark is SVG vector paths | Ships in `brand/fonts/` | `brand/DESIGN.md:81` |
+| **Geist Sans** | **RETIRED 2026-09-22.** Lives in `brand/fonts/retired/` | — | `brand/DESIGN.md:83-84` |
+
+**Two traps this table exists to prevent.** `brand/fonts/` sits next to `brand/logos/` and invites
+a wholesale copy — but it holds Bw Gradual (must never load) and `retired/GeistSans-VF.woff2`
+(reintroducing it reverses a locked ruling). `PLAN.md:233` says *"copy the logos"*; read literally
+that is correct, and this table makes the reason explicit so nobody "helpfully" adds fonts.
+
+**Instrument Serif is not a file in the cupboard.** It arrives via `next/font`. Any harvest step
+looking for a `.woff2` will not find one, and must not conclude the face is missing.
+
+### 6.2 Label roles — preserve, do not reinvent (`brand/DESIGN.md:150-151`)
+
+| Class | Size | Weight | Tracking | Face | Used for |
+|---|---|---|---|---|---|
+| `.label-eyebrow` | 11px | 300 | 0.2em | sans | section labels, eyebrows, nav — the workhorse |
+| `.label-action` | 11px | 500 | 0.2em | sans | caps that are clicked, and gold status |
+
+### 6.3 Colour
+
+| Role | Value | Rule |
 |---|---|---|
-| A | **Harvest** — read the real values off the live landing page | A ground-truth table: every colour, size, weight, tracking, radius, and spacing value, with the element it came from |
-| B | **Token model** — how those values become tokens | The `@theme` block in `globals.css`, its categories, and its naming |
-| C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field |
-| D | **Drift mechanisms** — why it went wrong before | A catalogue of the causes, each with the guard that prevents it |
-| E | **Target `DESIGN.md`** — the end result | The document, its sections, and where it lives |
-| F | **Enforcement** — how it stays true | A gate check in the `assert-*.sh` style, plus the audit rubric hook |
+| canvas | `#030303` | page |
+| surface | `#0a0a0a` | card |
+| raised | `#111111` | hover, inset |
+| border | `rgba(255,255,255,0.1)` | decorative containment, ~1.2:1 |
+| edge | `#9a9aa0` | WCAG 3:1 floor — interactive controls only |
+| heading | `#f8fafc` | headings, crisp |
+| muted | `#7c7c7c` | secondary text, labels |
+| **gold** | **`#d4a964`** | **3–5% of the viewport. Never a surface. Never called `accent`.** |
+| gold hover | `#c39853` | hover only |
+| on-gold / on-light | `#0a0a0a` | dark-on-gold; white-on-gold fails AA |
+| mint | `#00e599` | one display word per page |
+| status active | `#10b981` | semantic only, never adjacent to mint |
+| status pending | `#f59e0b` | " |
+| status closed | `#64748b` | " |
+| destructive | `#ef4444` | " |
 
-## What this audit produces
+**Retired greyscale — do not use:** `ash #575757` and `smoke #454545` (fail contrast),
+`hairline #050505` and `stage-black #000000` (zero call sites).
+
+### 6.4 Type
+
+Seven fixed roles, `micro 10px → section-heading-wide 48px`. `--text-micro` (10px) is **not
+reserved** — it is in active use (pedigree, cap table, right rail, MyStable). 36px and 48px are
+**one role at two breakpoints**, not a display/heading pair.
+
+| Token | Size | Use |
+|---|---|---|
+| `--text-micro` | 10px | tags, meta, pedigree, cap table |
+| — | 36px `--text-section-heading` | section h2, base breakpoint |
+| — | 48px `--text-section-heading-wide` | same role, `md:` |
+| `--text-display` | 64px | marketplace + MyStable page heading. Weight 300, tracking `-0.04em`, leading 1.05 |
+
+Weights: **300 and 500 only.** No 600 — `font-semibold` maps to 500.
+
+### 6.5 Shape, depth, motion
+
+| Token | Value | Source |
+|---|---|---|
+| `--radius-xs` | `4px` | micro — checkbox, chip |
+| `--radius-sm` | `8px` | inputs, steppers, image frames |
+| `--radius-md` | `16px` | inner cards, accordion panels |
+| `--radius-lg` | `24px` | outer cards, rail, modals |
+| `--radius-pill` | `9999px` | pills, badges, status dots |
+| border opacities | three steps: `/20`, `/40`, `/60` | `DEFECT-HISTORY` #16 |
+| `--shadow-card-hover` | `0 20px 40px rgba(0,0,0,0.45)` | listing card, on hover |
+| `--spacing-section` | `224px` | `py-section`; six wrappers use `py-56` |
+| container | `max-w-6xl` (1152px) | padding `px-12 md:px-16 lg:px-20` |
+| touch target law | **44px** | `DEFECT-HISTORY` #5 |
+| durations | hover `200ms` · collapse `300ms` · shimmer `2000ms` | STEP1 |
+
+**CollapsePanel:** the STEP1 version is canonical — pure grid rows, no JS measurement. Exit
+differentiates at 300ms/200ms, with a reduced-motion guard.
+
+---
+
+## 7 · The bill of materials — readiness for play
+
+**This is the readiness test.** Every section `DESIGN.md` must contain, whether we have it, and
+where it comes from. When every line reads ✅, we write the document in one pass.
+
+| # | `DESIGN.md` section | Ready | Where it comes from |
+|---|---|---|---|
+| 1 | Frontmatter tokens | ✅ | §6.3–6.5 — values locked |
+| 2 | Overview / posture | ✅ | *"Dark, quiet, editorial."* Gold carries 3–5%, never a surface |
+| 3 | Non-negotiables | ✅ | §6.1–6.2 — retired faces, the one serif word, the label roles |
+| 4 | Colours | ✅ | §6.3, incl. the four status colours and the accent budget |
+| 5 | Typography | ✅ | §6.4 — seven roles, two weights |
+| 6 | Shapes — radius & borders | ✅ | §6.5 — 5-tier radius, 3 border opacities |
+| 7 | Layout — spacing & container | ✅ | §6.5 — `224px` rhythm, `max-w-6xl` |
+| 8 | Elevation & Depth | ⚠️ partial | `--shadow-card-hover` locked. The archive proposes **4 elevation + 1 bevel + 2 glow** (`panel`, `modal`, `float`, `card-hover`; `bevel`; `glow-success`, `glow-gold`) — **unreviewed, needs a ruling** |
+| 9 | Motion | ⚠️ partial | Durations locked (§6.5). Granularity open — Open decision 1 |
+| 10 | Layout — breakpoints | ⚠️ open | `SPEC` originally excluded breakpoints from tokenisation. The reference pattern includes them. Needs a ruling |
+| 11 | Components | ❌ | **Workstream C not done.** Only the status badge is decided (§8). Card, button hierarchy, figure row, nav/footer, form field all remain |
+| 12 | Do / Don't | ❌ | **Not written.** Derivable — `DEFECT-HISTORY` carries 24 defects, each already paired with the rule that prevents it |
+| 13 | Provenance | ❌ | **Not collated.** Exists, scattered: `STEP1-3` cite file:line per finding; `DEFECT-HISTORY` #1–24 each carry their location. Collation job, not a re-audit |
+| 14 | Agent Prompt Guide | ⚠️ open | The richer refero pattern has it; the leaner x.ai pattern does not. Open decision 4 |
+
+**Reading it plainly:** five sections are ready, four are partial or open, three are not started.
+**We are not at play.** The two heaviest gaps are **Components (#11)** and **Do/Don't (#12)** — and
+both are the kind of thing that, left until drafting time, guarantees a second pass.
+
+---
+
+## 8 · Coverage — the six workstreams
+
+| # | Workstream | Produces | State |
+|---|---|---|---|
+| A | **Harvest** — read the real values off the live landing page | A ground-truth table: every colour, size, weight, tracking, radius, spacing, with provenance | Substantially done; needs **collation** into `SOURCE-TRUTH.md` |
+| B | **Token model** — how those values compile | The `@theme` block, its categories, its naming | Values ready; naming conventions settled in Tailwind v4 terms |
+| C | **Pattern locks** — the components | Decision-level specs for card, button, badge, nav, listing row, form field | ❌ **Only the badge is decided** |
+| D | **Drift mechanisms** — why it went wrong before | A catalogue of causes, each with the guard that prevents it | Done — §10 |
+| E | **Target `DESIGN.md`** | The document, in the pattern of §1 | ❌ Blocked on §7 |
+| F | **Enforcement** — how it stays true | A gate check in the `assert-*.sh` style, plus the audit rubric hook | Designed — §11 |
+
+### Workstream A · Harvest
+
+**Seven categories:** colour · type roles · space · shape · depth · motion · interactive states.
+
+**Provenance is mandatory.** Every value is recorded with the element and property it came from,
+so it can be re-verified later. The live page is the source of truth and it will change — the
+domain cutover is coming (`PLAN.md:107`), so the harvest is a **method**, recorded so values can be
+re-checked, not a one-off copy-paste.
+
+**The landing page's nine sections are kept** (decision 2, 2026-10-15). This is what retires the
+*"6a's page structure is not specified"* note at `engine_v2/CONTINUE.md:26-29`:
 
 ```
-audit/design/
-├── README.md      ← this file: the map
-├── SPEC.md        ← the full spec: workstreams A–F
-├── SOURCE-TRUTH.md  (on run) the harvest output — values with provenance
-└── out/
-    ├── report.md    (on run) findings, in the house audit shape
-    └── gate.json    (on run) machine-readable pass/fail
+1  Hero            horizontal brand lockup over a horse image + tagline
+2  About           "Own the Experience"
+3  Our Mission     "How It Works" — three audience panels
+4  Our Model       "Digital Syndication" — three icon features
+5  Marketplace     "Transformation Powered by Regulation" — three steps + CTA
+6  News & Updates  card grid, date/author/publisher metadata
+7  As Featured In  looping partner-logo marquee
+8  FAQ             six accordion entries
+9  Closing CTA     "The Future of Ownership Has Arrived" + footer
 ```
 
-The **only** artifact that leaves this folder is the finished `DESIGN.md` and the `@theme`
-block, both landing in the build repo.
+### Workstream B · Token model
 
-## Where the outputs go
+**The file:** `website/src/app/globals.css`. Currently 23 bytes — `@import 'tailwindcss';`.
+Tailwind **4.3.3**, Next **15.5.27**.
+
+**The mechanism, and the trap.** Tailwind v4 maps *namespaced* custom properties to utilities:
+`--color-*` → colour, `--font-*` → font-family, `--text-*` → font-size, `--spacing-*`, `--radius-*`,
+`--shadow-*`, `--ease-*`, `--breakpoint-*`. **A custom property outside a known namespace
+generates no utility at all** — it exists as a variable and nothing can use it. The naming
+convention is therefore not cosmetic. Decide it once and freeze it.
+
+**Tokenise:** colour · type roles (family + size + weight + tracking + leading as one name) · space
+rhythm · radii and border widths · interactive states.
+
+**Deliberately NOT tokenised:** **layout and grids** — page arrangements differ legitimately, and
+a token only one page can use is not a token, it is a hard-coded value wearing a costume. Also not
+tokenised: content and copy.
+
+**The guardrails, stated plainly.** Lock **decisions, not markup** — a spec that pins exact JSX
+rots the first time React or Tailwind shifts, people route around it, and routing around it is how
+the drift started. And **over-tokenising is its own drift source**: a 200-token system nobody can
+hold in their head gets ignored, and an ignored system is a dead one.
+
+### Workstream C · Pattern locks
+
+A component is locked at **decision level**, in a fixed schema:
+
+```
+Name and job      — one sentence, what it is for
+Anatomy           — its slots, and which are required
+Variants          — a CLOSED list. Adding one is a ruling.
+States            — default · hover · focus-visible · active · disabled · loading · empty · error
+Tokens consumed   — which tokens, and ONLY which tokens
+Content rules     — max lines, truncation, what may never appear inside it
+Do-not            — the explicit anti-patterns, each naming the drift it caused
+```
+
+**Components to lock, in priority order:**
+
+1. **Listing card** — the marketplace unit. Highest drift exposure.
+2. **Status badge** — the four statuses are already a database enum; the badge must not invent a
+   fifth look. ✅ *Decided:* green + glow = active (`available`, `coming_soon`); muted grey =
+   terminal (`fully_allocated`, `completed`). One component, one map.
+3. **Button hierarchy** — primary, secondary, and the disabled/loading forms of each.
+4. **Figure row** — the mono-figures pattern. `brand/DESIGN.md:79` puts Geist Mono on financials and
+   tabular figures specifically, so this is a token decision, not a styling choice. Weight 500.
+5. **Nav and footer** — shared across every page, so the first place a per-page variant appears.
+6. **Form field** — buyer and operator inputs share a look; the error state is the drift risk.
+
+**The "closed list" rule is the whole mechanism.** The drift was not one wrong colour; it was a
+second and third variant of the same thing. A variant list closed by default means adding one
+requires a ruling — a conversation instead of an accident.
+
+---
+
+## 9 · The target `DESIGN.md`
+
+The skeleton, in the fixed pattern of §1. Sections 3, 9 and 13 are ours — neither reference has
+them, and they are the three that do the most work here.
+
+```
+---  YAML frontmatter: colors · typography · rounded · spacing · components
+1    Overview            posture, and "Key Characteristics"
+2    Colours             Brand & Accent · Surface · Text · Semantic
+3    Non-negotiables     retired faces, the one serif word, the label roles
+4    Typography          families · hierarchy table · principles · substitutes
+5    Layout              spacing scale · container · breakpoints · touch targets
+6    Elevation & Depth   table: Level | Treatment | Use
+7    Shapes              radius scale · border opacity steps
+8    Components          buttons · cards · inputs · nav · signature · listing card
+9    Motion              durations, easings, and what is allowed to move
+10   Do / Don't          the anti-patterns, each naming the drift it caused
+11   Provenance          value → source element, so it can be re-verified
+12   Agent Prompt Guide  explicit instructions for machine readers   (open decision 4)
+```
+
+---
+
+## 10 · Drift mechanisms
+
+The estate's own history, catalogued so the spec prevents **causes**, not symptoms.
+
+| # | Mechanism | Documented evidence | Guard that prevents it |
+|---|---|---|---|
+| 1 | **Utility class over inheritance** — a face applied per-file while the parent sets another | `brand/DESIGN.md:83-84`: Geist Sans reached four route files via `font-sans` while `body` inherited the system stack | `body` owns the face. A component may only name a **role**, never a family |
+| 2 | **Unpinned generic fallback** — a raw generic resolving differently per OS | `brand/DESIGN.md:80`: `font-serif` rendered Georgia on macOS, Times New Roman on Windows, Noto Serif on Android — one page, three faces | Never use a raw generic. Only named role tokens |
+| 3 | **Ad-hoc colour** — a hex literal written at the point of use | The reported drift across marketplace, horse page, MyStable | No hex literal outside `globals.css`. Mechanical, via Workstream F |
+| 4 | **Per-page palette invention** | `PLAN.md:153` forbids it; `PLAN.md:245` repeats it for 6b | Make the prohibition mechanical rather than remembered |
+| 5 | **Component re-invention** — the same component built twice | `DEFECT-HISTORY` #13: two badge implementations of one enum | Workstream C, closed variant list |
+| 6 | **Hand-typed label styling** — repeating an 11px/0.2em recipe per page | `brand/DESIGN.md:150-151` had them as *classes*, meaning they were applied by hand | Label roles become tokens, so the recipe exists once |
+
+**Two lessons this table encodes.** Every one of these is a *value written at the point of use*
+instead of *a name referring to a decision*. And every one survived because the system was
+documented but not **checked**.
+
+---
+
+## 11 · Workstream F — enforcement
+
+**The mechanism already exists in the build repo.** `scripts/assert-no-anti-patterns.sh` scans for
+the ten banned tokens and fails the gate; `scripts/assert-operations-doc.sh` asserts another
+invariant. The root `pnpm test` chains both, and `pnpm verify` runs
+typecheck → lint → test → build.
+
+**Proposed checks, in the same style:**
+
+1. **No colour literal outside `globals.css`** in `website/`. Catches mechanism 3.
+2. **No raw generic font utility** (`font-sans`, `font-serif`) and no `font-family` declaration
+   outside `globals.css`. Catches mechanisms 1 and 2.
+3. **`DESIGN.md` values match `globals.css`.** Catches the two-sources-of-truth failure — the
+   check that makes the doc-first flip in §1 safe.
+
+**Scope: code and configuration only.** Prose in `engine/OPERATIONS.md` is exempt, per the existing
+ruling.
+
+**Plus the audit hook.** Each remaining build step goes through the gemma4:31b rubric. A
+design-token item belongs in that rubric from 6a onward, so a step that invents a colour fails its
+audit rather than passing it.
+
+**Strength: fail, not warn.** Warn is how the last drift survived. *(Open decision 3.)*
+
+---
+
+## 12 · Non-goals
+
+- Not a redesign. `PLAN.md:150` makes the landing page the north star; its look is kept.
+- Not a component library with its own conventions and ceremony.
+- Not a change to any page. This audit writes documents; the build consumes them.
+- Not a V1 migration. Nothing from `@evo/ui`, the old token package, or the generator is carried
+  over.
+- Not in `engine/`. Scope is the system the website consumes.
+
+---
+
+## 13 · Where the outputs go
 
 | Artifact | Home | Note |
 |---|---|---|
-| The V2 `DESIGN.md` | `evolution/engine_v2/website/website/DESIGN.md` | New file, in the build repo next to the app it describes. `PLAN.md:203` bans `CLAUDE.md` and `AGENTS.md` there — `DESIGN.md` is **not** on that list, and the brand audit treats it as the intended companion. |
-| The tokens | `evolution/engine_v2/website/website/src/app/globals.css` | `PLAN.md:153`. Currently 23 bytes: `@import 'tailwindcss';` |
-| The enforcement check | `evolution/engine_v2/website/scripts/` | Alongside `assert-no-anti-patterns.sh` and `assert-operations-doc.sh`, chained in the root `pnpm test` |
+| The V2 `DESIGN.md` | `evolution/engine_v2/website/website/DESIGN.md` | Authored here, lands in the build repo next to the app it describes. `PLAN.md:203` bans `CLAUDE.md` and `AGENTS.md` there — `DESIGN.md` is not on that list |
+| The `@theme` block | `evolution/engine_v2/website/website/src/app/globals.css` | `PLAN.md:235`. Compiled from `DESIGN.md` |
+| The enforcement check | `evolution/engine_v2/website/scripts/` | Chained in the root `pnpm test` |
 
-## How this plugs into the build
+The **only** artifacts that leave this folder are the finished `DESIGN.md`, the `@theme` block it
+compiles to, and the check.
 
-`PLAN.md` currently runs 6a → 6b → 7 → 8 → 9. This audit sits **before 6a** and changes what
-6a is: 6a becomes "consume the locked system" rather than "invent the token values".
+---
 
-Downstream is already bound: `PLAN.md:155` — marketplace, horse listing, and MyStable
-*"reuse the established theme file. They do not introduce new tokens or palettes."*
-`PLAN.md:245` — *"6b introduces no new tokens: it reuses the 6a theme file."*
+## 14 · Sequencing
 
-So this is the one pass that sets the values, and every later step is forbidden from adding
-more. That is the point of doing it deliberately rather than during 6a.
+```
+A  → harvest collated into SOURCE-TRUTH.md        [read-only, blocks nothing]
+C  → pattern locks written                        [the largest remaining gap]
+D  → drift mechanisms catalogued                 [done — §10]
+B  → token model decided, naming frozen
+E  → DESIGN.md written, one pass, citing the values
+F  → gate check written and chained
+   → then the PLAN.md amendment, pointing v2 at the result
+   → 6a becomes: consume the locked system, build the landing page
+   → 6b, then 7, 8, 9 — already bound by PLAN.md:155 and :245
+```
 
-## Constraints on this folder
+**The amendment comes last, not first** — §4.
 
-- **Sandbox island law holds** (`sandbox/AGENTS.md`): `just check` must stay 10/10. Writing
-  markdown here does not affect it — `audit/` already carries `.py` and `.json`.
-- **Markdown only**, matching `v2/`. No venv, no dependencies, no scripts until the harvest
-  is designed and agreed.
-- **Never reintroduce a banned legacy token.** The gate scans for ten, including `brand_dna`
-  and `orca`. `DESIGN.md` is prose and must not carry any of them back in.
+---
 
-## Open decisions
+## 15 · Acceptance criteria
 
-Four open, one answered. `SPEC.md` §12 carries the detail.
+- `SOURCE-TRUTH.md` records every value with provenance, and nothing is inferred.
+- Every token sits in a Tailwind v4 namespace, so each generates a utility.
+- No hex literal exists outside `globals.css` anywhere in `website/`.
+- `DESIGN.md` describes no V1 artifact, and reintroduces none of the ten banned tokens.
+- Every component in Workstream C has a closed variant list and a named do-not.
+- The gate fails when a new colour or a raw generic font utility is introduced — demonstrated by
+  actually introducing one and watching it fail, not by asserting that it would.
+- `pnpm verify` passes with the new check chained in.
 
-1. **The ruling** — amend `PLAN.md` §7 and §Ruling 4 to pull the design pass forward, and settle
-   the amendment's own lookbook exclusion wording.
-2. ~~**"Replicate" means what?**~~ — **answered 2026-10-15.** Keep the landing page as it is: its
-   sections, its copy, its look. Its nine-section structure is now recorded in `SPEC.md` §3, which
-   replaces the *"6a's structure is unspecified"* note at `engine_v2/CONTINUE.md:26-29`.
-3. **Token granularity** — how far past colour and type to go: spacing and radii are proposed;
-   shadows and motion are open.
-4. **Where `DESIGN.md` lives** — proposed in the build repo; confirm.
-5. **Enforcement strength** — fail the gate on an unknown colour, or warn. Fail is proposed,
-   because warn is how the last drift survived.
+---
 
-## Next action
+## 16 · Constraints on this folder
 
-Confirm the map. Then `SPEC.md` gets exercised in order: **A** (harvest the live page into
-`SOURCE-TRUTH.md`), which is read-only and produces the values everything else depends on.
+- **Sandbox island law holds** (`sandbox/AGENTS.md`): no external imports from `evolution/`, own
+  venv, and `just check` stays 10/10. Markdown does not affect it.
+- **Markdown only.** No venv, no dependencies, no scripts.
+- **Never reintroduce a banned legacy token** — §3.
+- **Do not call the output a lookbook.** `PLAN.md:150,275` ban the word. This produces an audit and
+  a `DESIGN.md`.
+
+---
+
+## 17 · The evidence files
+
+| File | What it holds |
+|---|---|
+| `STEP1-LANDING-PAGE.md` | Landing page harvest. **Closed, clean.** Colours, 7 type roles, 2 label roles, radius scale, spacing rhythm, motion |
+| `STEP2-MARKETPLACE.md` | Marketplace audit. **Closed.** Listing card anatomy, badge treatment, display heading, card hover shadow, tag tracking, container width |
+| `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
+
+Read-only source material. The findings are cited above; these files hold the full detail and the
+file:line provenance behind each value.
+
+---
+
+## 18 · Open decisions
+
+| # | Decision | Status |
+|---|---|---|
+| 1 | Token granularity past colour and type | Open — spacing and radii yes; shadows and motion only if used in more than one place |
+| 2 | `@theme` in `globals.css`, or a separate `theme.css` it imports | Open — `PLAN.md:235` says `globals.css`; the archive's draft uses a separate file |
+| 3 | Enforcement strength | Open — proposed **fail**, not warn |
+| 4 | Keep the reference's *Agent Prompt Guide* section? | Open — refero has it, x.ai does not |
+| 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | Open — see §7 line 8 |
+
+---
+
+## 19 · Next action
+
+**Workstream C — pattern locks.** It is the largest gap in §7, it is independent of everything
+else, and leaving it until drafting time guarantees the second pass that the one-pass goal exists
+to avoid.
+
+Alongside it, two smaller jobs:
+
+- **Collate provenance** into `SOURCE-TRUTH.md` from STEP1–3 and `DEFECT-HISTORY`. The values are
+  known and closed; the job is to gather each next to the element it came from.
+- **Rule on §18 items 5 and 2** — elevation, and where the `@theme` block lives.
