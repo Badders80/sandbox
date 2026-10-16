@@ -338,8 +338,10 @@ about page. "300 and 500 only" was wrong for as long as `.label-spec` has existe
 #18 maps `font-semibold` (600) to 500 and says nothing about 400, because it was looking at MyStable
 financials rather than at the label roles.
 
-So the rule is **300 / 400 / 500**, and `600` maps to 500. Either `.label-spec` moves to 300 or 500,
-or the scale admits 400 — that is a ruling, and it is owed.
+So the rule is **300 / 400 / 500** — **ruled 2026-10-16**: the scale admits 400 rather than moving
+`.label-spec`, because `label-spec` is mono, 10px and in active use, and pulling it to 300 or 500
+would break the one role that carries spec labels on cap tables and data rooms. `600` maps to 500
+(`DEFECT-HISTORY` #18).
 
 ### 6.5 Shape, depth, motion
 
