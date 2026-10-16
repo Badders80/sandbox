@@ -41,12 +41,12 @@ a footnote, in the past tense, as *reason*, never as *rule*. Forward rule; the d
 
 **Don't take a colour from anywhere but the locked set. Do read it off the token table.**
 *Drift:* `text-purple-400` went on the MyStable `5×M` figure — a raw Tailwind palette class, in a
-system that has no purple. The ban in README §11 covers *literals*; a palette utility is the same
-defect wearing a name.
+system that has no purple. A ban on *literals* alone does not catch it: a palette utility is the
+same defect wearing a name.
 
 **Don't write a hex as a text colour. Do use `--color-on-light` for dark text on any light fill.**
 *Drift:* `text-[#111]` sat beside a token holding `#0a0a0a` — wrong value, and the raised-surface
-colour used as type. Wrong twice. (`COMPONENTS.md` §9)
+colour used as type. Wrong twice.
 
 **Don't declare a token nothing consumes. Do delete it.**
 *Drift:* `--shadow-success-glow-strong` was declared and never wired; `--label-mono-intro` was a
@@ -60,7 +60,7 @@ across four files, all copied from one another.
 
 **Don't pick a status colour by eye. Do take the colour and the words from the locked status table.**
 *Drift:* `completed` shipped blue and `fully_subscribed` shipped white against a locked amber.
-Amber on `fully_subscribed` means *demand still standing*, never a warning. (`COMPONENTS.md` §2)
+Amber on `fully_subscribed` means *demand still standing*, never a warning.
 
 ### 10.2 Type
 
@@ -84,7 +84,7 @@ already answered.
 
 **Don't use a numeric Tailwind radius name. Do take the scale — 8 / 16 / 24 plus pill.**
 *Drift:* bare `rounded` fell through to Tailwind's built-in 4px at 17 call sites. The named tiers are
-the same defect completed. (`COMPONENTS.md` §1)
+the same defect completed.
 
 **Don't invent a border opacity. Do use `/20`, `/40`, `/60`.**
 *Drift:* 19 distinct border-opacity values were live.
@@ -96,7 +96,6 @@ behind them, plus a call-site literal with no token at all.
 **Don't build a job twice. Do keep one component per job.**
 *Drift:* two status-badge implementations of one enum — and the component written to unify them
 became a third. A second implementation is a defect even when it is written better than the first.
-(`COMPONENTS.md` §2)
 
 ### 10.4 Layout
 
@@ -104,7 +103,7 @@ became a third. A second implementation is a defect even when it is written bett
 lg:px-20`.**
 *Drift:* hero and body grid ran `px-12` and `px-6` — two left edges on one page. The chrome and the
 content disagreeing about the left edge is the same defect, and it is why the wordmark never lines
-up with the headline beneath it. (`COMPONENTS.md` §3.1)
+up with the headline beneath it.
 
 **Don't fix a column's width in pixels. Do make it fluid and cap it at a breakpoint —
 `w-full md:max-w-[300px]`.**
@@ -118,21 +117,19 @@ rules bind pages and chrome; a cap binds an overlay.
 
 **Don't size a tappable control below 44px.**
 *Drift:* stepper buttons at 24×28px and a 16×16px acceptance checkbox — both purchase-critical.
-(`COMPONENTS.md` §3.3)
 
 **Don't put the only route to purchase at the end of a scroll. Do keep the mobile conversion bar.**
 *Drift:* the horse page's primary CTA sat at the bottom of a single-column mobile scroll.
-(`COMPONENTS.md` §6)
 
 ### 10.5 Components and states
 
 **Don't write a hover state that matches its own base. Do make the hover change something.**
 *Drift:* the ghost variant hovered `border-border` → `border-border` — identical to its base, a no-op
-that read as a working interaction. (`COMPONENTS.md` §9)
+that read as a working interaction.
 
 **Don't ship an unguarded hover. Do wrap every hover rule in `@media (hover: hover)`.**
 *Drift:* zero guards anywhere — every hover rule shipped to every touch device, and an infinite
-shimmer ran on phones. (`COMPONENTS.md` §3.4)
+shimmer ran on phones.
 
 ### 10.6 Motion
 
@@ -146,11 +143,23 @@ movement, and the measurement had to be retaken on every open.
 
 ### 10.7 Out of scope for this section — stated, not silently dropped
 
-**Asset naming is not a design rule.** `DEFECT-HISTORY` #24 records an asset shipped as
-`untitled-36.svg` (three of them, in fact: `-35`, `-36`, `-37`). That is build hygiene, and
-`DESIGN.md` is not a build checklist — README §12 rules out a component library "with its own
-conventions and ceremony". The other 23 defects all produced a rule; this one did not, and the
-exclusion is recorded here rather than leaving the reader to wonder why the count is 23.
+**Asset naming is not a design rule.** Three assets shipped named `untitled-35`, `-36` and `-37`.
+That is build hygiene, and this is not a build checklist — a spec that grows conventions for file
+names has started describing a repository instead of a system. The other 23 defects each produced a
+rule; this one did not, and the exclusion is stated here rather than leaving the reader to wonder why
+the count is 23.
+
+### 10.8 Owed before this section ships
+
+Two rules below name something the build does not have, and a spec must not name a token that does
+not resolve. Both are open decisions, not edits — the rule is right either way, only the noun changes.
+
+| Rule | Names | Status |
+|---|---|---|
+| 10.1, rule 2 | `--color-on-light` | Not a live token. Live declares `--color-on-gold`. Either it is created as an alias, or this rule switches noun — and three other places say the same thing, so it is one decision, not four. |
+| 10.2, rule 2 | `--font-instrument-serif` | **Live and correct.** Listed here only because the obvious alternative, `var(--font-serif)`, *is* declared and carries an OS-dependent generic tail. This one resolves; that one would not. |
+
+The first is recorded as README §18 item 10 and `SOURCE-TRUTH.md` C3.
 
 ---
 

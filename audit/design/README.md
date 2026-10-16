@@ -4,12 +4,13 @@
 > page of the V2 build is assembled from — plus the token set it compiles to, and the check that
 > keeps the two true.
 >
-> **Status:** gathering — **twelve of §7's fourteen sections are ready**, and **Workstream C is
+> **Status:** gathering — **eleven of §7's thirteen sections are ready**, and **Workstream C is
 > complete**: nine components locked in `COMPONENTS.md`. STEP1 (landing), STEP2
-> (marketplace) and STEP3 (MyStable) are closed. Colour and layout are both shut, and both collation
-> jobs closed on 2026-10-16 — **Do/Don't (#12)**, `SECTION10-DO-DONT.md`, and **Provenance (#13)**,
-> `SOURCE-TRUTH.md`. The document itself is **not yet written** — see **§7, the bill of materials**,
-> for the two rows still standing between this table and a one-pass write.
+> (marketplace) and STEP3 (MyStable) are closed. Colour, layout and the container are shut, and
+> **Do/Don't (#12) closed 2026-10-16** — `SECTION10-DO-DONT.md`. **Provenance was cut from the
+> skeleton** the same day (§9, §18 item 12): the evidence lives in `SOURCE-TRUTH.md`, not in the
+> spec. The document itself is **not yet written** — see **§7, the bill of materials**, for the two
+> rows still standing between this table and a one-pass write.
 >
 > **Shape:** this README, plus `STEP1-LANDING-PAGE.md`, `STEP2-MARKETPLACE.md`,
 > `STEP3-MYSTABLE.md` as the evidence files, `COMPONENTS.md` as the Workstream C working file,
@@ -507,13 +508,16 @@ where it comes from. When every line reads ✅, we write the document in one pas
 | 10 | Layout — breakpoints | ✅ | **Ruled 2026-10-16 — not tokenised.** Breakpoints stay out of the `@theme` set: page layouts and responsive behaviour differ legitimately per view, and forcing breakpoints into tokens manufactures constraints the pages do not share. Standard Tailwind prefixes (`sm:` / `md:` / `lg:`) apply, mobile-first, under one rule. The single exception already ruled is the *chrome* collapse point (`COMPONENTS.md` §8, 768px) — one value, because the nav, the drawer and the bar must agree with each other. `SPEC` originally excluded breakpoints too; the reference pattern's inclusion is declined |
 | 11 | Components | ✅ | **9 components locked — Workstream C complete** (`COMPONENTS.md`). All six on the §8 list, plus the mobile conversion bar, the mobile menu drawer and the button hierarchy — three the six-item list never knew existed. Four consolidation jobs remain and none of them is a component |
 | 12 | Do / Don't | ✅ | **Written 2026-10-16** — `SECTION10-DO-DONT.md`. `DEFECT-HISTORY`'s 24 defects collated into **21 rules**: 8 restated from the component locks, 11 from §6 (9 rules, after collating #21+#22 and folding #23 into #15), **4 written new** — #7, #11, #12, #17 — and 1 excluded as build hygiene (#24). Every rule is stated forward, carrying the drift that is its reason. Four corrections to `DEFECT-HISTORY` came out of the collation; see that file's §Corrections |
-| 13 | Provenance | ✅ | **Collated 2026-10-16** — `SOURCE-TRUTH.md`. Every value §6 locks, recorded against the element, property and `file:line` it was read from, in the seven categories §8 names, so the harvest can be re-run after the domain cutover. **It came back with eight corrections** — four values §6.3 presents as measured are proposals, one token and one label class are not in the build at all — all filed in `SOURCE-TRUTH.md` §Corrections and argued in §6 |
-| 14 | Agent Prompt Guide | ⚠️ decided | **Decided 2026-10-16 — include it.** Decision 4 closed: the section ships, because a one-pass build is the whole point and a machine reader of `DESIGN.md` needs the no-debt and token rules stated for it rather than inferred. **Not written yet** — the section itself is owed, and it is the only reason this row is not ✅ |
+| 13 | Agent Prompt Guide | ⚠️ decided | **Decided 2026-10-16 — include it.** Decision 4 closed: the section ships, because a one-pass build is the whole point and a machine reader of `DESIGN.md` needs the no-debt and token rules stated for it rather than inferred. **Not written yet** — the section itself is owed, and it is the only reason this row is not ✅. Becomes **section 11** of `DESIGN.md`, since Provenance was cut from the skeleton |
 
-**Reading it plainly:** twelve sections are ready, two are partial, none is not started.
-**We are close, and not at play.** Two rows stand between this table and fourteen ✅, and neither is
-a collation: **motion granularity (#9)**, ruled nowhere, where §18 item 1 proposes the shape without
-deciding it — and the **Agent Prompt Guide (#14)**, decided on 2026-10-16 but not yet written.
+**A row was removed from this table on 2026-10-16, and the tally below is recomputed from what
+remains.** It carried *"Provenance — collated, `SOURCE-TRUTH.md`"*. Provenance is no longer a
+`DESIGN.md` section (ruled 2026-10-16, §9), so it is not a line in a bill of materials scoped to *what
+`DESIGN.md` must contain*. **The work is not lost and was not undone:** `SOURCE-TRUTH.md` remains the
+forensic record of every locked value against its source (§17), and Workstream A remains complete
+(§8). It moved from *a deliverable* to *the evidence behind one*.
+
+**Reading it plainly:** eleven sections are ready, two are partial, none is not started.
 
 ---
 
@@ -666,9 +670,27 @@ them, and they are the three that do the most work here.
 8    Components          buttons · cards · inputs · nav · footer · drawer · mobile bar · badge · listing card
 9    Motion              durations, easings, and what is allowed to move
 10   Do / Don't          the anti-patterns, each naming the drift it caused
-11   Provenance          value → source element, so it can be re-verified
-12   Agent Prompt Guide  explicit instructions for machine readers   (open decision 4)
+11   Agent Prompt Guide  explicit instructions for machine readers   (open decision 4)
 ```
+
+**Provenance is deliberately not a section — ruled 2026-10-16.** The skeleton carried an 11th section,
+*"Provenance — value → source element, so it can be re-verified"*. It is **cut**. `DESIGN.md` is a
+forward-looking specification consumed by builders and agents; a table of `file:line` is forensic
+reference, and neither reader can act on it. The evidence lives where it is useful — `SOURCE-TRUTH.md`,
+in this folder (§17), which is what makes the locked values re-verifiable after the cutover. **Nothing
+is lost:** §11's third check compares `DESIGN.md` against `globals.css` by *value*, not by citation, so
+the check that makes the doc-first flip safe is unaffected. And §10's drift narratives stay — they are
+the reason a rule exists, not a citation to go and read.
+
+**A second consequence, applied rather than noted.** The same principle governs §10's citations: it
+restates each rule and previously added `(COMPONENTS.md §9)`-style references. Those point at files
+that do not leave this folder (§13, §17), so they dangle for the reader who holds only `DESIGN.md` and
+has been stripped from the shippable content. **The drift stays; the audit-folder citation goes.**
+
+**One number here does not resolve.** The sentence below used to read *"Sections 3, 9 and 13 are
+ours"*. There is no section 13 in a twelve-section skeleton, and there is now no section 11 either.
+Section 3 (Non-negotiables) and section 9 (Motion) are ours in the sense meant; the third is
+unidentified and needs a reader who has the two reference documents.
 
 ---
 
@@ -832,7 +854,7 @@ document kept by discipline, and it should be read that way.
 | `STEP3-MYSTABLE.md` | MyStable audit. **Closed.** Financial figures (mono, 500), the purple purge, dashboard heading, container width |
 | `COMPONENTS.md` | **Workstream C.** The decision-level locks — **complete at 9 components**, plus the shared rulings: the single container, the z-ladder, the touch law, hover guards, one focus ring. A working file; it does not leave this folder |
 | `SECTION10-DO-DONT.md` | **The target `DESIGN.md` section 10** (§7 row 12), closed 2026-10-16. 24 defects collated into 21 rules, plus the collation table and four corrections to `DEFECT-HISTORY`. A working file; it does not leave this folder |
-| `SOURCE-TRUTH.md` | **The target `DESIGN.md` section 11** (§7 row 13), collated 2026-10-16. Every value §6 locks against the element, property and `file:line` it came from, in §8's seven categories, plus eight corrections to §6 and the parked light scope. The file that makes the harvest re-runnable after the cutover. A working file; it does not leave this folder |
+| `SOURCE-TRUTH.md` | **The forensic record behind `DESIGN.md` §2 and §7** — not a `DESIGN.md` section itself, ruled 2026-10-16 (§9). Every value §6 locks against the element, property and `file:line` it came from, in §8's seven categories, plus eight corrections to §6 and the parked light scope. Kept so the harvest is re-runnable after the domain cutover. A working file; it does not leave this folder |
 | `DEFECT-HISTORY-2026-10-16.md` | The old build's 24 defects, each with the ruling that closed it. The source for §7 row 12 — `Do/Don't` is a collation of this file, not new work. Lives in the bridge folder |
 | `AUDIT-MISSING-PRIMITIVES-2026-10-16.md` | Texture utilities, keyframes, dead classes, raw hex, and **21 arbitrary shadows across 14 distinct values**. The material for §7 row 8 (Elevation) and §18 decision 5. Uncited until now. Lives in the bridge folder |
 
@@ -872,7 +894,7 @@ bridge stays read-only; what changes is that `#19` is no longer quotable as clos
 | 1 | Token granularity past colour and type | Open — spacing and radii yes; shadows and motion only if used in more than one place |
 | 2 | `@theme` in `globals.css`, or a separate `theme.css` it imports | Open — `PLAN.md:235` says `globals.css`; the archive's draft uses a separate file. **Now carries the z-binding too**: `--z-*` is not a Tailwind v4 namespace, so the z-ladder in `COMPONENTS.md` §3.2 generates no utility until this is settled |
 | 3 | Enforcement strength | Open — proposed **fail**, not warn |
-| 4 | Keep the reference's *Agent Prompt Guide* section? | **Resolved 2026-10-16 — include it.** A one-pass build is the point, and a machine reader of `DESIGN.md` needs the no-debt rule and the token prohibitions stated for it rather than inferred. Section 12 of the skeleton (§9) ships. **The section is owed** — §7 row 14 is partial until it is written |
+| 4 | Keep the reference's *Agent Prompt Guide* section? | **Resolved 2026-10-16 — include it.** A one-pass build is the point, and a machine reader of `DESIGN.md` needs the no-debt rule and the token prohibitions stated for it rather than inferred. Section **11** of the skeleton (§9) ships. **The section is owed** — §7 row 13 is partial until it is written |
 | 5 | Elevation: adopt the archive's 4 + 1 + 2 proposal? | **Resolved 2026-10-16 — adopted, with three adjudications.** Both the archive and `AUDIT-MISSING-PRIMITIVES` §5.2 derived the same seven tokens from the same 14 live literals, so the agreement is evidence rather than inheritance. See §6.5: one success glow not two, the blue glow dropped, Tailwind's named shadows banned. This unblocks the button hierarchy |
 | 6 | Layout rhythm and gutters: 224px and `px-12→20`, or the fluid clamp and `px-6→16`? | **Resolved 2026-10-16 — the harvest wins.** `theme.generated.css:87` declares `--spacing-section: 224px`, fixed; the page container is `px-12 md:px-16 lg:px-20` in every section. The clamp is declined and the `px-6 sm:px-10` family belongs to `NavBar.tsx:159`, not to a page container. No measurement was needed once the source was read — see §6.5 |
 | 7 | The dashboard container — `max-w-7xl` against the ruled `max-w-6xl` | **Resolved 2026-10-16 — one universal horizontal container.** Every page surface sits inside `max-w-6xl` with `px-12 md:px-16 lg:px-20`: zero conditional page widths, zero dashboard exceptions. `COMPONENTS.md` §3.1 carries the full table. **Two scope boundaries, both ruled:** dialogs and modals are *not* pages and keep their own caps under §10's rule 7 (`CtaLeadModal` 760px, the billing dialog 520px, `pedigree-tab.tsx:590`); and the lock is **horizontal only** — vertical rhythm varies by surface type (marketing `py-section` 224px, functional headers `pt-32 pb-24`), which must not be forced into one rule. **This ruling also corrected a miscount:** the "(4×)" this item and `COMPONENTS.md` §3.1 both carried attributed all four `max-w-7xl` sites to the dashboard; only **one** is — one is MyStable, two are the horse-about route, one is the pedigree modal |
@@ -880,6 +902,7 @@ bridge stays read-only; what changes is that `#19` is no longer quotable as clos
 | 9 | Breakpoints: tokenise them, as the reference pattern does? | **Resolved 2026-10-16 — no.** Breakpoints stay out of `@theme`. Page layouts differ legitimately per view, and tokenising the set constrains pages that share nothing. Standard Tailwind prefixes apply, mobile-first, under one rule. The one exception is the *chrome* collapse point, `COMPONENTS.md` §8 — 768px, one value for three surfaces that must agree with each other. Closes §7 row 10 |
 | 10 | `--color-on-light` — create it, or name `--color-on-gold`? | **Open, raised 2026-10-16 by the provenance pass.** Live declares only `--color-on-gold: #0a0a0a` (`theme.generated.css:40`); `--color-on-light` is a bridge proposal, and four rules already tell the builder to use `text-on-light` — §6.3, `COMPONENTS.md` §9 do-not 3, `SECTION10-DO-DONT.md` §10.1, and `DEFECT-HISTORY` #4's resolution. Either the alias is created or those four name `--color-on-gold`. `SOURCE-TRUTH.md` C3 |
 | 11 | `.label-badge` — create the class, or drop the fourth label role? | **Open, raised 2026-10-16 by the provenance pass.** §6.2 locks four roles; three exist as classes, and the fourth (`.label-badge`, 10 / 500 / 0.05em) exists nowhere in the build. The live fourth class is `.label-mono-intro`, declared with zero consumers. The **tracking** value `0.05em` is live as `tracking-wider`. A status pill plausibly needs the role, and `STEP2:155` already proposes the name `--tracking-tag` — but it is a decision, not a harvest. `SOURCE-TRUTH.md` C5 |
+| 12 | Should `DESIGN.md` carry a Provenance section? | **Resolved 2026-10-16 — no, cut.** The skeleton's 11th section is removed and the sections below it renumber (`Agent Prompt Guide` becomes 11). `DESIGN.md` is a forward-looking spec consumed by builders and agents; a value→source table is forensic reference and neither reader can act on it. `SOURCE-TRUTH.md` keeps the evidence in this folder. `§11`'s third check compares values against `globals.css`, not citations, so the doc-first flip is unaffected — and §10's drift narratives stay, since they are the reason a rule exists. §9 carries the full argument |
 
 ---
 
@@ -894,20 +917,23 @@ defects into 21 rules. Four needed writing from scratch (#7, #11, #12, #17) beca
 for them anywhere in the estate; one (#24, asset naming) is not a design rule and is excluded with
 that reason stated. The collation also corrected four rows of `DEFECT-HISTORY` — see §17.
 
-**Provenance (#13) — ✅ closed 2026-10-16.** `SOURCE-TRUTH.md` records every value §6 locks against
-the element, property and `file:line` it came from, in §8's seven categories. It was a collation, and
-it still found eight corrections: **four values §6.3 presents as measured are proposals** (the status
-slate, the disabled grey, the on-light alias, the badge class), and `#64748b` — the value actually
-live — fails AA where the proposed one clears it. Four more correct a rationale in §6.1, a derivation
-in §6.5, and three undercounts in `DEFECT-HISTORY`. All eight are filed in `SOURCE-TRUTH.md` and
-argued in §6.
+**Provenance — ✅ collated 2026-10-16, and no longer a `DESIGN.md` section.** `SOURCE-TRUTH.md`
+records every value §6 locks against the element, property and `file:line` it came from, in §8's
+seven categories. Provenance was **cut from the `DESIGN.md` skeleton** on 2026-10-16 (§9, §18 item 12):
+`DESIGN.md` is a forward spec consumed by builders and agents, and a `file:line` table serves neither.
+The file stays as the forensic record, so the values remain re-verifiable after the cutover. It was a
+collation, and it still found **eight corrections**: four values §6.3 presents as measured are
+proposals (the status slate, the disabled grey, the on-light alias, the badge class), and `#64748b` —
+the value actually live — fails AA where the proposed one clears it. Four more correct a rationale in
+§6.1, a derivation in §6.5, and three undercounts in `DEFECT-HISTORY`. All eight are filed in
+`SOURCE-TRUTH.md` and argued in §6.
 
-**Two rows stand between this table and fourteen ✅, and neither is a collation:**
+**Two rows stand between this table and thirteen ✅, and neither is a collation:**
 
 - **Rule on §7 row 9 — motion granularity.** The one row ruled nowhere. §18 item 1 already proposes
   the shape ("spacing and radii yes; shadows and motion only if used in more than one place"), and
   the durations are locked in §6.5. What is missing is the decision itself.
-- **Write §7 row 14 — the Agent Prompt Guide.** Decided 2026-10-16 (include it); the section is owed.
+- **Write §7 row 13 — the Agent Prompt Guide.** Decided 2026-10-16 (include it); the section is owed.
   It should say what a machine reader of `DESIGN.md` needs stated rather than inferred: zero debt,
   name a role never a value, and the four prohibitions this audit keeps re-learning.
 
@@ -918,10 +944,14 @@ Three smaller jobs beside them:
 - **Rule on §18 item 2** — whether the `@theme` block lives in `globals.css` or a `theme.css` it
   imports, and with it how the z-ladder binds. Not on the critical path; it has to be settled
   before the block is written.
-- **Rule on §18 item 7**, the dashboard's `max-w-7xl` against the ruled `max-w-6xl`. §10's new
-  column rule (#7 — a width is a cap, never a fixed value) is adjacent but does not settle it; the
-  dashboard question is whether a data grid may legitimately be wider than a marketing page, which
-  is a scope ruling, not a value one.
+- **Rule on §18 items 10 and 11** — whether `--color-on-light` is created or the four rules naming it
+  switch to `--color-on-gold`, and whether `.label-badge` becomes a real class or the fourth label
+  role is dropped. Both came out of the provenance pass; both are decisions, not edits.
+
+**Closed here since this list was written, and removed from it rather than left struck through:**
+§18 item 7, the dashboard container — ruled 2026-10-16, one universal horizontal container. §18 item
+9, breakpoints — not tokenised. §18 item 4, the Agent Prompt Guide — included, so it appears above as
+a writing job rather than a decision.
 
 **And the harvest's own follow-through**, if it is wanted: `SOURCE-TRUTH.md`'s eight corrections change
 four rows of §6.3, one reason in §6.1, one derivation in §6.5, the provenance claim in §6.2 and the

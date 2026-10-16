@@ -3,12 +3,15 @@
 > **What this is:** the provenance ledger for the locked token set (README §6). Every value README
 > §6 locks is recorded next to the element, the property and the `file:line` it was read from.
 >
-> **Why it exists.** README §7 row 13 read *"Provenance — **not collated**"* until this file closed
-> it on 2026-10-16. §8 Workstream A: *"Provenance is mandatory. Every value is recorded with the
-> element and property it came from, so it can be re-verified later."* The live page is the source of
-> truth and **it will change** — the domain cutover is coming (`PLAN.md:107`) — so this is a
-> **method**, not a copy-paste. It is the file that makes the harvest repeatable after the thing
-> being harvested is gone.
+> **Why it exists.** This file was briefly the target `DESIGN.md` section 11 (README §7 row 13, since
+> removed from the bill of materials). **Provenance was cut from the `DESIGN.md` skeleton on
+> 2026-10-16** — `DESIGN.md` is a forward-looking specification consumed by builders and agents, and a
+> table of `file:line` is forensic reference that neither can act on. So the evidence lives here
+> instead of in the spec, which is where it is useful. §8 Workstream A: *"Provenance is mandatory.
+> Every value is recorded with the element and property it came from, so it can be re-verified
+> later."* The live page is the source of truth and **it will change** — the domain cutover is coming
+> (`PLAN.md:107`) — so this is a **method**, not a copy-paste. It is the file that makes the harvest
+> repeatable after the thing being harvested is gone.
 >
 > **Status:** ✅ collated 2026-10-16 from STEP1–3, `DEFECT-HISTORY`, and a direct read of the live
 > source. Nothing below cites `/home/evo/audit/website/`.
