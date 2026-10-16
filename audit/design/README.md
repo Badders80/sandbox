@@ -547,15 +547,24 @@ flow keep the unscaled geometry. It lands as §10.4's rule 24, and the ban on `s
 absolute — **no exemptions written into `assert-no-anti-patterns.sh`.** V2 uses `overflow-x-auto` or
 SVG `viewBox` scaling instead, which reflow rather than zoom.
 
-**And the ban has surfaced the next family: `translate` is wide open.** Six distinct values across
-**29 sites** — `translate-x-full` ×12 (the sweeps), `translate-y-1` ×9 (hover lifts), `translate-y-0`
-×3, `translate-x-1` ×3 (the CTA arrow), `translate-y-2` and `translate-y-4` ×1 each. Nothing bans them
-and nothing tokenises them. **This is the asymmetry inside a single interaction:** the listing card's
-hover is `hover:-translate-y-1` **plus** `--shadow-card-hover` — the shadow half is one of seven
-elevation tokens, the translate half is a bare value. Scale became visible only when the ban forced a
-look; translate has had no such look. It needs a ruling — either translate values are structural
-offsets that need no vocabulary, or it is the next drift surface. Named here rather than left to be
-discovered by the same route scale was.
+**`translate` — ruled 2026-10-16, and the answer is that it does not need a vocabulary.**
+Translate values are directional mechanics attached to a specific component — the card's
+`-translate-y-1` lift, the arrow's `translate-x-1`, the sweep's `-translate-x-full`. Tokenising them
+would be over-tokenisation: they are offsets, not decisions. So they stay named Tailwind utilities,
+and CI bans only the **arbitrary bracketed form** (`translate-[…]`).
+
+**Checked against live before recording, and the ban has no live targets.** There are **zero**
+bracketed translates in the build. All 29 sites across 9 spellings are legitimate named utilities:
+`-translate-y-1/2` ×8 (centring), `translate-x-full` ×6 and `-translate-x-full` ×6 (the sweeps),
+`translate-y-0` ×3, `translate-x-1` ×2, `-translate-y-4`, `-translate-y-2`, `-translate-y-1` and
+`-translate-x-1/2` ×1 each. So this is a **guard, not a cleanup** — unlike duration, where the drift
+is in the bare numbers, and z and scale, where it is in the arbitrary values.
+
+**That also resolves the asymmetry properly.** The listing card's hover is `hover:-translate-y-1`
+**plus** `--shadow-card-hover`: the shadow half is one of seven elevation tokens, the translate half
+stays bare. That is now an **intentional distinction rather than an unexamined one** — a shadow is a
+design decision with a vocabulary; a directional offset is a mechanic. The earlier alarm was not that
+translate was wrong, but that nobody had looked. It has been looked at.
 
 **CollapsePanel:** the STEP1 version is canonical — pure grid rows, no JS measurement. Exit
 differentiates at 300ms/200ms, with a reduced-motion guard.
