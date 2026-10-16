@@ -472,11 +472,25 @@ correction of a value we never measured wrong.
 which is what `/mystable` does today, and that asymmetry is intended rather than a drift. Do not
 force the two into one value; they are different kinds of surface.
 
-**Two things this leaves unsettled, named rather than buried.** `PressShowcaseSection.tsx:171` runs
-`py-24` (96px) and **is** a marketing section, so under the rule above it needs changing rather than
-exempting — this document called it an "honest exception" until 2026-10-16, and the ruling makes it
-a defect. And `NavBar.tsx:159` still runs its own `max-w-[1440px] px-6 sm:px-10 lg:px-12`, which was
-where the bridge's `px-6 sm:px-10 lg:px-16` gutter numbers came from; §3.1 retires it.
+**`PressShowcaseSection` — ruled a defect, 2026-10-16, and closed as one.** `PressShowcaseSection.tsx:171`
+runs `py-24` (96px) where every other marketing section runs `py-section` (224px). This document called
+it an "honest exception" until 2026-10-16; **it is not an exception, it is the break.** Someone in the
+old build eyeballed the logo carousel, decided 224px felt too tall above it, and dropped the section to
+96px — which is a fifth page-level padding scheme arriving through a judgement call rather than a
+decision. **V2 wraps it in `py-section` like every other marketing section.** If the logos read as
+floating inside 224px, that is an internal component-layout concern to solve *inside* the section, and
+it is not a licence to invent a fifth rhythm.
+
+**Not in `DEFECT-HISTORY`'s 24, and this is where it is recorded.** That log is the extraction's
+record and is read-only (it lives in the bridge, outside version control — §17); this defect was found
+by the rhythm ruling rather than by the harvest. So it is the **25th**, logged here, and §10's
+collation still reads 24 because §10 was a collation of that file and this one postdates it. If a rule
+is wanted from it, it belongs in §10.4 — see §19.
+
+**One thing beside it, ruled rather than left unsettled.** `NavBar.tsx:159` still runs its own
+`max-w-[1440px] px-6 sm:px-10 lg:px-12`, which is where the bridge's `px-6 sm:px-10 lg:px-16` gutter
+numbers came from. `COMPONENTS.md` §3.1 retires it: the nav takes the one container like everything
+else.
 
 **One correction to what this paragraph used to say.** Until 2026-10-16 it read that the
 `px-6 sm:px-10 lg:px-12` family "belongs to the nav bar… They are not a page container." **That is
@@ -655,8 +669,9 @@ requires a ruling — a conversation instead of an accident.
 
 ## 9 · The target `DESIGN.md`
 
-The skeleton, in the fixed pattern of §1. Sections 3, 9 and 13 are ours — neither reference has
-them, and they are the three that do the most work here.
+The skeleton, in the fixed pattern of §1. **Rows 3 and 9 of §7's bill of materials are ours** —
+neither reference pattern has a Non-negotiables section or dedicated motion rules, and they are two of
+the additions that do the most work here.
 
 ```
 ---  YAML frontmatter: colors · typography · rounded · spacing · components
@@ -687,10 +702,14 @@ restates each rule and previously added `(COMPONENTS.md §9)`-style references. 
 that do not leave this folder (§13, §17), so they dangle for the reader who holds only `DESIGN.md` and
 has been stripped from the shippable content. **The drift stays; the audit-folder citation goes.**
 
-**One number here does not resolve.** The sentence below used to read *"Sections 3, 9 and 13 are
-ours"*. There is no section 13 in a twelve-section skeleton, and there is now no section 11 either.
-Section 3 (Non-negotiables) and section 9 (Motion) are ours in the sense meant; the third is
-unidentified and needs a reader who has the two reference documents.
+**One number here used to not resolve, and it was a §7 reference wearing a §9 number — solved
+2026-10-16.** The sentence above read *"Sections 3, 9 and 13 are ours"*. There is no section 13 in a
+twelve-section skeleton, so the numbers were never skeleton numbers: they were **§7 bill-of-materials
+row numbers** — row 3 Non-negotiables, row 9 Motion, and row 13 Provenance. All three resolve against
+§7 and none did against §9, which is what settles it. Provenance has since been cut, so the claim is
+rows 3 and 9, and the sentence above now names §7 explicitly to stop the next reader making the same
+substitution. **The claim itself is the founder's, read against the two reference documents, which are
+not in this folder — so it is recorded, not verified here.**
 
 ---
 
@@ -947,6 +966,12 @@ Three smaller jobs beside them:
 - **Rule on §18 items 10 and 11** — whether `--color-on-light` is created or the four rules naming it
   switch to `--color-on-gold`, and whether `.label-badge` becomes a real class or the fourth label
   role is dropped. Both came out of the provenance pass; both are decisions, not edits.
+- **Decide whether `PressShowcaseSection`'s `py-24` earns a §10 rule.** It is ruled a defect and its
+  V2 fix is recorded in §6.5, but §10.4 carries no vertical-rhythm anti-pattern — the rhythm rule lives
+  in §5's Layout, which is where a builder reads it. The candidate rule is *"Don't invent a fifth
+  page-level padding scheme; if a section feels wrong at its rhythm, fix the section, not the
+  rhythm."* It would be the **22nd rule**, from a defect outside `DEFECT-HISTORY`'s 24, so the
+  collation's opening line would need to say 24 + 1 rather than 24.
 
 **Closed here since this list was written, and removed from it rather than left struck through:**
 §18 item 7, the dashboard container — ruled 2026-10-16, one universal horizontal container. §18 item
