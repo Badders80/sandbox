@@ -273,7 +273,7 @@ Do these in order. Stop at the end of a step if something in the outcome does no
 
    **6a. Design tokens, logos, and the landing page.** Scope is `website/` only. Transcribe the tokens once into `website/src/app/globals.css` (the Tailwind v4 theme): canvas, gold `#d4a964` (`#c39853` is `gold-hover`, corrected 2026-10-17), the system sans for prose, `Geist Mono` for figures, `Instrument Serif` for the one italic emphasis. Copy the logos from `evolution/engine/brand`; `DESIGN.md` in that folder stays behind. Build the landing page at `/`. It reads zero rows from Postgres, so nothing here waits on a policy or on data. No design branch, no token package, no lookbook. This is the visual north star every later page reuses.
 
-   **6b-i. The read policies and the website's read layer.** The first deliverable is migration `00009_website_read_policies.sql`, because every table is deny-by-default and an anon read returns `[]` with no error raised:
+   **6b-i. The read policies and the website's read layer.** The first deliverable is migration `00009_website_read_policies.sql`, because every table is deny-by-default and an anon read fails with `42501 permission denied` — at the grant layer, before row level security is consulted (corrected 2026-10-17: this said the read "returns `[]` with no error raised"; the symptom is an error, not silence, and the conclusion is unchanged):
    - `trainers`, `owners`, `horses`: `for select using (true)`
    - `dsls`: `for select using (published = true)`
    - `accounts`: `for select using (auth.uid() = id)`
