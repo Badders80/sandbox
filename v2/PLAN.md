@@ -269,11 +269,11 @@ Do these in order. Stop at the end of a step if something in the outcome does no
    Public images only, for the horses that go through this flow. `image_count` is the only image fact in the database. Private KYC and proof-of-address files stay in Supabase Storage, not R2.
    
    **Configuration**: See `/r2-config/README.md` for full setup details and access patterns.
-6. Website. Split into two atomic steps on 2026-10-14, because 6a needs no database rows and 6b needs read policies that do not exist yet. Each is committed, gated, audited, and pushed on its own, per §1. This numbering replaces the earlier claim that the landing page was already built; it was not, and `website/src/app/page.tsx` still says the landing page lands here.
+6. Website. Split into atomic steps on 2026-10-14 and again on 2026-10-17, because 6a needs no database rows, 6b-i needs no status vocabulary, and 6b-ii cannot start until the status map is ruled. Each is committed, gated, audited, and pushed on its own, per §1. This numbering replaced the earlier claim that the landing page was already built. It was not, and 6a has since built it: `b4b1e10`, CI green, with the follow-ups `6e321aa` and `29d110e`.
 
    **6a. Design tokens, logos, and the landing page.** Scope is `website/` only. Transcribe the tokens once into `website/src/app/globals.css` (the Tailwind v4 theme): canvas, gold `#d4a964` (`#c39853` is `gold-hover`, corrected 2026-10-17), the system sans for prose, `Geist Mono` for figures, `Instrument Serif` for the one italic emphasis. Copy the logos from `evolution/engine/brand`; `DESIGN.md` in that folder stays behind. Build the landing page at `/`. It reads zero rows from Postgres, so nothing here waits on a policy or on data. No design branch, no token package, no lookbook. This is the visual north star every later page reuses.
 
-   **6b. Read policies, the marketplace, the horse page, and search.** The first deliverable is migration `00009_website_read_policies.sql`, because every table is deny-by-default and an anon read returns `[]` with no error raised:
+   **6b-i. The read policies and the website's read layer.** The first deliverable is migration `00009_website_read_policies.sql`, because every table is deny-by-default and an anon read returns `[]` with no error raised:
    - `trainers`, `owners`, `horses`: `for select using (true)`
    - `dsls`: `for select using (published = true)`
    - `accounts`: `for select using (auth.uid() = id)`
@@ -281,7 +281,20 @@ Do these in order. Stop at the end of a step if something in the outcome does no
 
    Four negative constraints on `website/`: it never imports `engine/` source; it never holds a Stripe secret; it never prices and never compiles; and it never queries `horses`, `trainers`, or `owners` directly. `published` lives only on `dsls`, so the site reads `dsls` and joins outward — a direct `from('horses')` would leak unpublished and unregistered rows.
 
-   Then the marketplace, the horse page at `/marketplace/[slug]`, and the search layer in "Search" above. Coming Soon is visible and cannot be bought. Available means Buy Now. Unpublished stays off the marketplace and out of the sitemap. Press, updates, and the FAQ do not live on the horse, trainer, or owner. 6b introduces no new tokens: it reuses the 6a theme file.
+   **6b-ii. The marketplace, the horse page, and the search layer.** Then the marketplace, the horse page at `/marketplace/[slug]`, and the search layer in "Search" above. Coming Soon is visible and cannot be bought. Available means Buy Now. Unpublished stays off the marketplace and out of the sitemap. Press, updates, and the FAQ do not live on the horse, trainer, or owner. 6b-ii introduces no new tokens: it reuses the 6a theme file.
+
+   **Status vocabulary, ruled 2026-10-17.** The database enum and `DESIGN.md`'s locked status table name the same states differently, and `DESIGN.md` says an unrecognised value is an error rather than a fallback. Neither file is amended. The website carries one translation module, and a value it cannot translate is an error:
+
+   | DB enum | `DESIGN.md` key | Label | Variant |
+   |---|---|---|---|
+   | `coming_soon` | `coming_soon` | COMING SOON | active |
+   | `available` | `listed` | AVAILABLE | active |
+   | `fully_allocated` | `fully_subscribed` | FULLY ALLOCATED | pending |
+   | `completed` | `completed` | COMPLETED | settled |
+
+   `draft` and `coming_soon_details` have no database equivalent and are never emitted by the site. `draft` in particular is `published = false`, which is not a status to render but an absence from the marketplace.
+
+   **Sitemap set, ruled 2026-10-17.** The sitemap lists the landing page, the marketplace, and one URL per horse that carries at least one published DSL. "Each public horse" and "every published DSL" are the same set: a horse may carry more than one DSL, and the public URL is one page per horse at `/marketplace/[slug]`. Unpublished DSLs, unregistered horses, buyer documents, MyStable, login, and checkout stay out.
 7. Compiler, against the legal authority above. Copy the PDF, the three pro-formas, and the principles note into the repo as the read-only reference set. PDS reads the horse soft text columns (`about_horse`, `racing_outlook_and_pedigree`, `race_expectation`), the trainer bio, and the DSL terms. Strictly forbid filesystem content scans or frontmatter lookups. SA reads hard facts and commercial terms, no soft prose. Promoter line on every document: Alex Baddeley, Evolution Stables Ltd. Payment default, prize freeze, and forfeiture are printed procedures. A system that runs them is not part of this outcome. The self-audit checks both documents against the principles note.
 8. Purchase, per "Buy workflow" above. Logged-in buyer. The website modal asks the engine for the PDS and SA compiled with the account name. Buyer accepts. Engine starts Stripe Identity if the account is not verified, and records the result on the account. Engine creates Checkout and returns the URL. Webhook writes the sale: stake, amount, Stripe session id, Identity id, both documents, both hashes. A later edit to the horse does not change a document already sold. Browser returns to MyStable. MyStable reads that account and that user's sales. Checkout does not create another profile. Do not import `sandbox/rebuild`.
 9. Four emails, sent by the engine, and no others. Buyer: sale written (stake, amount, link to MyStable). Buyer: KYC failed. Founder: sale succeeded. Founder: checkout or webhook failed for a reason that is ours. A card decline does not send that alert. Later monthly charges and defaults are manual.
