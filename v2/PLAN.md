@@ -147,7 +147,7 @@ ANTHROPIC_AUTH_TOKEN="$OLLAMA_API_KEY" \
 ANTHROPIC_API_KEY= \
 claude -p "$(cat /tmp/audit-prompt.txt)" --model kimi-k2.7-code \
   --allowedTools "Read,Grep,Glob,Bash" --output-format json \
-  > /tmp/audit.out 2> /tmp/audit.err &
+  > /tmp/audit.out 2> /tmp/audit.err < /dev/null &
 AUDIT_PID=$!
 
 # Blocking wait — 15 minute cap. Timeout is FAIL, never a silent pass.
@@ -156,7 +156,12 @@ while kill -0 "$AUDIT_PID" 2>/dev/null; do
   [ "$SECONDS" -ge "$DEADLINE" ] && { kill "$AUDIT_PID"; echo "VERDICT: FAIL (audit timeout)"; exit 1; }
   sleep 5
 done
-grep -q 'VERDICT: PASS' /tmp/audit.out || { echo "No PASS verdict — do not commit."; exit 1; }
+# The verdict is the LAST non-empty line of .result. Never grep the whole file:
+# the returned checklist legitimately quotes the phrase "VERDICT: PASS" when it
+# specifies the gate, so a substring match passes a FAIL. Proven 2026-10-17 —
+# exactly that happened: a FAIL was read as a PASS and nearly committed.
+python3 -I -c "import json,sys;r=json.load(open('/tmp/audit.out')).get('result','');L=[x.strip() for x in r.splitlines() if x.strip()];sys.exit(0 if L and L[-1]=='VERDICT: PASS' else 1)" \
+  || { echo "No PASS on the final line — do not commit."; exit 1; }
 ```
 
 - The trailing `&` returns the shell immediately, so the audit is not a gate until the session blocks on it. `--output-format json` is single-shot and prints nothing until the whole turn ends, so silence is not evidence of progress.
@@ -266,7 +271,7 @@ Do these in order. Stop at the end of a step if something in the outcome does no
    **Configuration**: See `/r2-config/README.md` for full setup details and access patterns.
 6. Website. Split into two atomic steps on 2026-10-14, because 6a needs no database rows and 6b needs read policies that do not exist yet. Each is committed, gated, audited, and pushed on its own, per §1. This numbering replaces the earlier claim that the landing page was already built; it was not, and `website/src/app/page.tsx` still says the landing page lands here.
 
-   **6a. Design tokens, logos, and the landing page.** Scope is `website/` only. Transcribe the tokens once into `website/src/app/globals.css` (the Tailwind v4 theme): canvas, gold `#c39853`, the system sans for prose, `Geist Mono` for figures, `Instrument Serif` for the one italic emphasis. Copy the logos from `evolution/engine/brand`; `DESIGN.md` in that folder stays behind. Build the landing page at `/`. It reads zero rows from Postgres, so nothing here waits on a policy or on data. No design branch, no token package, no lookbook. This is the visual north star every later page reuses.
+   **6a. Design tokens, logos, and the landing page.** Scope is `website/` only. Transcribe the tokens once into `website/src/app/globals.css` (the Tailwind v4 theme): canvas, gold `#d4a964` (`#c39853` is `gold-hover`, corrected 2026-10-17), the system sans for prose, `Geist Mono` for figures, `Instrument Serif` for the one italic emphasis. Copy the logos from `evolution/engine/brand`; `DESIGN.md` in that folder stays behind. Build the landing page at `/`. It reads zero rows from Postgres, so nothing here waits on a policy or on data. No design branch, no token package, no lookbook. This is the visual north star every later page reuses.
 
    **6b. Read policies, the marketplace, the horse page, and search.** The first deliverable is migration `00009_website_read_policies.sql`, because every table is deny-by-default and an anon read returns `[]` with no error raised:
    - `trainers`, `owners`, `horses`: `for select using (true)`
