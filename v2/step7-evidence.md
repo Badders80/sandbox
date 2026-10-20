@@ -10,6 +10,7 @@ Recorded 2026-10-20, after the Step 7 commits. Full stdout for each run is in `/
 | `30fb926` | 7a, payment-model eligibility | `39402608126` | success |
 | `40b1a40` | 7b, the legal compiler | `39403685601` | success |
 | `6237942` | 7c, month-boundary term dates | `39405544011` | success |
+| `85939c6` | 7d, precise term-date messages | `39406874066` | success |
 
 ## Gates
 
@@ -70,6 +71,8 @@ Both fixtures removed; `dsls` and `horses` returned to 0 rows.
 | 2, 7b | `/tmp/audit2b.out` | PASS |
 | 2, 7c, run 1 | `/tmp/audit2c.out` (overwritten) | FAIL — SQL helper lacked the `months >= 1` guard |
 | 2, 7c, run 2 | `/tmp/audit2c.out` | PASS |
+| 2, 7d, run 1 | `/tmp/audit2d.out` (overwritten) | FAIL — rubric scoping: item 3 bundles the 7a payment lock with the 7d form message |
+| 2, 7d, run 2 | `/tmp/audit2d.out` | PASS |
 
 Run 1 of Moment 1 and run 1 of the 7c audit are recorded from the session; their stdout was overwritten by the passing rerun. The defects they found are fixed in `fa24084` and `6237942`.
 
