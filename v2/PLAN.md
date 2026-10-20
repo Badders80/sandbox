@@ -26,15 +26,17 @@ Change these before the first commit if you want a different shape. They are not
 
 ## Legal authority
 
-Settled 2026-10-13. The compiler writes the PDS and the SA as markdown from the horse, the trainer, and the DSL. It does not fill the Word files, and it does not port `legal_engine`.
+Settled 2026-10-13. Ruled and locked 2026-10-20. The compiler writes the PDS and the SA as Markdown. It does not fill the Word files, and it does not port `legal_engine`.
 
-The reference set lives in the new repo, read-only, copied in at build. It is three pieces:
+**The document authority is the two locked templates in the repo:** `engine/src/templates/PDS.template.md` and `engine/src/templates/SA.template.md`. Their fixed text is law; only `{{tokens}}` are data. The compiler is a deterministic string interpolator: it loads these templates, substitutes database fields and pricing calculations, and writes the rendered Markdown. It does not generate, paraphrase, or improve legal prose.
 
-1. The Rules of Racing PDF, effective 21 September 2026: `https://nztr.co.nz/sites/nztrindustry/files/2026-09/RULES-OF-RACING_effective-from-September-2026.pdf`. This is the rules authority. The Bloodstock Syndication Code of Practice is inside it, as the Second Appendix, made under Rule 432 (the Code text itself is marked amended 1 January 2016). The disclosure-statement requirements follow that appendix. The other pages of the 209-page rules are not part of the compiler check.
-2. The three NZTR pro-forma `.docx` files now in `evolution/engine/website/packages/legal_engine/reference/nztr-pro-forma/`. They sit with the PDF as the official forms. They are a base reference. They are not the 26 MB content registry, and they are not templates to compile against. Fixed Monthly Contribution is the form that matches this product. The Monthly Invoiced form stays in the set so that difference stays visible.
-3. A principles note beside those files. The compiler's self-audit checks the generated markdown against this note. Each line in the note points at the PDF clause, or at the Fixed Monthly form, that it came from.
+The reference set is read-only and is not a template source. It lives in the new repo under `docs/legal/reference/`. It exists to prove the documents neither contradict nor omit a required NZTR disclosure. It is three pieces:
 
-The note carries these disclosure sections. Dropping one is a red flag:
+1. The Rules of Racing PDF, effective 21 September 2026: `https://nztr.co.nz/sites/nztrindustry/files/2026-09/RULES-OF-RACING_effective-from-September-2026.pdf`. This is the reference authority for NZTR disclosure, not the source of Evolution's terms. The Bloodstock Syndication Code of Practice is inside it, as the Second Appendix, made under Rule 432 (the Code text itself is marked amended 1 January 2016). The disclosure-statement requirements follow that appendix. The other pages of the 209-page rules are not part of the compiler check.
+2. The three NZTR pro-forma `.docx` files now in `evolution/engine/website/packages/legal_engine/reference/nztr-pro-forma/`. They are reference only. They sit with the PDF as the official forms, not as templates to compile against. Fixed Monthly Contribution is the form that matches this product. The Monthly Invoiced form stays in the set so that difference stays visible.
+3. The disclosure checklist beside those files, at `reference/nztr-pro-forma/README.md`. The compiler's self-audit checks the rendered Markdown against this checklist. Each required disclosure maps to the PDF clause or the Fixed Monthly form.
+
+The checklist carries these disclosure sections. Dropping one is a red flag:
 
 - About the syndicate: horse, trainer, share structure, monthly costs, prizemoney split, New Zealand training, governed by the SA, post-career plan
 - Upfront costs, including GST
@@ -49,7 +51,7 @@ The note carries these disclosure sections. Dropping one is a red flag:
 - Declaration: Authorised Syndicator under the NZTR Code of Practice; NZTR does not endorse or guarantee the offer
 - Applicant acknowledgement: 18 or over, not prohibited from owning a racehorse, share percent, purchase price, personal details, signature
 
-The note carries these syndicate-agreement points, which the SA must not contradict:
+The checklist carries these syndicate-agreement points, which the SA must not contradict:
 
 - Formed under the NZTR Bloodstock Syndication Code of Practice. The object is to acquire the horse, by purchase or lease, and to race it as a recreational pursuit.
 - Binding on the Promoter, the Syndicate Manager, and each shareholder. A change needs a 75% special resolution.
@@ -64,14 +66,19 @@ The note carries these syndicate-agreement points, which the SA must not contrad
 - Definitions in Code sections 1.1 and 1.2 are incorporated.
 - The Fixed Monthly form adds financial statements, prepared to GAAP, within five months of a 31 March balance date.
 
-Four differences are locked. The audit must keep them:
+**Positive legal rules, locked 2026-10-20.** These are the rules the templates print. They are stated positively, not by contrast with the pro-formas.
 
-- Stakes are 1%, with the owner's minimum and step. The pro-forma's 5% example is not ours.
-- Forfeiture is the stricter procedure already in the outcome: printed, not a system that runs it. The pro-forma's 14-day remedy, then sale at Fair Value less 20%, is not ours.
-- The fee is the 5% and the 3% already in the listed-price formula. The Monthly Invoiced form's $365 flat manager fee is not ours.
-- The investor split is the fixed percent on that DSL. An empty form shows 75%, and that is not a horse's split. The 16% statutory deduction is not the investor's return math.
+- **Float and billing start.** Five months are collected upfront: three months security deposit reserve and two months prepaid. Recurring monthly billing starts on the 1st of the month following join, paying for Month 3 in advance, which holds a constant five-month float buffer.
+- **Termination and refunds.** The syndicate winds down on retirement or early lease end. Refunds are calculated strictly on full calendar months remaining and are remitted only after trailing care and operational expenses are settled with the owner. There are zero day-count apportionments.
+- **Insurance.** The interest is a fixed-term leasehold, not equity. Members have zero entitlement to insurance proceeds. Any owner policy is at the owner's sole discretion and expense, with no rights passed to syndicate members.
+- **Default, prize freeze, and forfeiture.** Prize distributions pause immediately on a missed payment. If the balance is not cleared before the next billing cycle, the stake and deposit are forfeited directly to the horse owner. Evolution receives no financial benefit.
+- **Soft prose.** Confined to four database columns: `horses.about_horse`, `horses.racing_outlook_and_pedigree`, `horses.race_expectation`, and `trainers.bio`. The PDS renders all four. The SA carries zero soft prose.
+- **Schedules.** Schedule 1 is Investment Particulars. Schedule 2 is Statutory Declarations.
+- **Constants and vocabulary.** Legal names only. Split bounds are 50–85%. The special resolution threshold (75%) and the investor split are separate variables. No Tokinvest, VARA, or token references.
+- **Pricing.** Listed price per 1% per month is wholesale cost per 1% × 1.05 × 1.03, rounded up to the next whole dollar. The engine writes the retail figure; the website never prices and never compiles.
+- **Stakes.** Sold in percentage points, with the owner's minimum and step.
 
-Insurance, the vet report, and the valuation line are not columns yet. They get a home when the compiler is written.
+Insurance, the veterinary report, and the valuation are fixed template text, not database columns.
 
 ## Search
 
@@ -295,7 +302,15 @@ Do these in order. Stop at the end of a step if something in the outcome does no
    `draft` and `coming_soon_details` have no database equivalent and are never emitted by the site. `draft` in particular is `published = false`, which is not a status to render but an absence from the marketplace.
 
    **Sitemap set, ruled 2026-10-17.** The sitemap lists the landing page, the marketplace, and one URL per horse that carries at least one published DSL. "Each public horse" and "every published DSL" are the same set: a horse may carry more than one DSL, and the public URL is one page per horse at `/marketplace/[slug]`. Unpublished DSLs, unregistered horses, buyer documents, MyStable, login, and checkout stay out.
-7. Compiler, against the legal authority above. Copy the PDF, the three pro-formas, and the principles note into the repo as the read-only reference set. PDS reads the horse soft text columns (`about_horse`, `racing_outlook_and_pedigree`, `race_expectation`), the trainer bio, and the DSL terms. Strictly forbid filesystem content scans or frontmatter lookups. SA reads hard facts and commercial terms, no soft prose. Promoter line on every document: Alex Baddeley, Evolution Stables Ltd. Payment default, prize freeze, and forfeiture are printed procedures. A system that runs them is not part of this outcome. The self-audit checks both documents against the principles note.
+7. Compiler. Deterministic token interpolation against the two locked templates in `engine/src/templates/`. It loads `SA.template.md` and `PDS.template.md`, substitutes database fields and pricing calculations for `{{tokens}}`, and writes the rendered Markdown. It does not generate legal prose dynamically.
+   - The PDS reads the four soft-prose columns: `horses.about_horse`, `horses.racing_outlook_and_pedigree`, `horses.race_expectation`, `trainers.bio`. The SA reads zero soft prose. Strictly forbid filesystem content scans or frontmatter lookups.
+   - Assert all four soft-prose slots are populated before rendering.
+   - Assert zero dangling `{{...}}` brackets remain in either rendered document.
+   - Assert no banned term appears in the rendered Markdown prose: `Tokinvest`, `VARA`, `digital token`, `tokenised`, `tokens`, `Fair Value`, `14 business days`, `absorb`. Code identifiers and the `{{token}}` template syntax are exempt; the scan runs on rendered prose, not on the interpolation engine.
+   - Write both rendered Markdown strings and their SHA-256 hashes to the sale row.
+   - Promoter line on every document: Alex Baddeley, Evolution Stables Ltd.
+   - Payment default, prize freeze, and forfeiture are printed procedures in the templates. A system that runs them is not part of this outcome.
+   - The self-audit checks both rendered documents against the disclosure checklist in `reference/nztr-pro-forma/README.md`. The reference set under `docs/legal/reference/` is read-only and is not a template source.
 8. Purchase, per "Buy workflow" above. Logged-in buyer. The website modal asks the engine for the PDS and SA compiled with the account name. Buyer accepts. Engine starts Stripe Identity if the account is not verified, and records the result on the account. Engine creates Checkout and returns the URL. Webhook writes the sale: stake, amount, Stripe session id, Identity id, both documents, both hashes. A later edit to the horse does not change a document already sold. Browser returns to MyStable. MyStable reads that account and that user's sales. Checkout does not create another profile. Do not import `sandbox/rebuild`.
 9. Four emails, sent by the engine, and no others. Buyer: sale written (stake, amount, link to MyStable). Buyer: KYC failed. Founder: sale succeeded. Founder: checkout or webhook failed for a reason that is ours. A card decline does not send that alert. Later monthly charges and defaults are manual.
 10. Preview with the buy path off, on the new Vercel projects. Listings may show Coming Soon. Prove the purchase wiring on a preview, not on the live domain. The flip to Buy Now is a readiness decision. The proof is one real sale after that flip. `evolution-3-0` keeps serving `www.evolutionstables.nz` until then, and the new build does not call back into the old one.
