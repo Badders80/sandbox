@@ -68,7 +68,8 @@ The checklist carries these syndicate-agreement points, which the SA must not co
 
 **Positive legal rules, locked 2026-10-20.** These are the rules the templates print. They are stated positively, not by contrast with the pro-formas.
 
-- **Float and billing start.** Five months are collected upfront: three months security deposit reserve and two months prepaid. Recurring monthly billing starts on the 1st of the month following join, paying for Month 3 in advance, which holds a constant five-month float buffer.
+- **Float and billing start.** Five months are collected upfront: three months security deposit reserve and two months prepaid. Recurring monthly billing starts on the 1st of the month following join, paying for Month 3 in advance, which holds a five-month float buffer, drawn down in the final months of the term.
+- **Payment models.** `upfront` is available for any term and collects 100% of the lease term at checkout with zero recurring charges. A term of 5 months or less must use `upfront`, because the five-month initial payment already covers the whole term. A term of 6 months or more may use either model, defaulting to `subscription_float`.
 - **Termination and refunds.** The syndicate winds down on retirement or early lease end. Refunds are calculated strictly on full calendar months remaining and are remitted only after trailing care and operational expenses are settled with the owner. There are zero day-count apportionments.
 - **Insurance.** The interest is a fixed-term leasehold, not equity. Members have zero entitlement to insurance proceeds. Any owner policy is at the owner's sole discretion and expense, with no rights passed to syndicate members.
 - **Default, prize freeze, and forfeiture.** Prize distributions pause immediately on a missed payment. If the balance is not cleared before the next billing cycle, the stake and deposit are forfeited directly to the horse owner. Evolution receives no financial benefit.
@@ -305,6 +306,7 @@ Do these in order. Stop at the end of a step if something in the outcome does no
 7. Compiler. Deterministic token interpolation against the two locked templates in `engine/src/templates/`. It loads `SA.template.md` and `PDS.template.md`, substitutes database fields and pricing calculations for `{{tokens}}`, and writes the rendered Markdown. It does not generate legal prose dynamically.
    - The PDS reads the four soft-prose columns: `horses.about_horse`, `horses.racing_outlook_and_pedigree`, `horses.race_expectation`, `trainers.bio`. The SA reads zero soft prose. Strictly forbid filesystem content scans or frontmatter lookups.
    - Assert all four soft-prose slots are populated before rendering.
+   - Assert the payment-model rule: a term of 5 months or less renders as `upfront`; a term of 6 months or more may render either model.
    - Assert zero dangling `{{...}}` brackets remain in either rendered document.
    - Assert no banned term appears in the rendered Markdown prose: `Tokinvest`, `VARA`, `digital token`, `tokenised`, `tokens`, `Fair Value`, `14 business days`, `absorb`. Code identifiers and the `{{token}}` template syntax are exempt; the scan runs on rendered prose, not on the interpolation engine.
    - Write both rendered Markdown strings and their SHA-256 hashes to the sale row.

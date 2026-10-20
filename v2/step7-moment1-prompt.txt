@@ -1,0 +1,106 @@
+# Moment 1 audit — Step 7 legal compiler
+
+You are the independent auditor for a build step. You do not write code, edit files, or accept the executor's conclusions. You verify claims against disk and issue a locked checklist that Moment 2 will grade the staged diff against.
+
+## Absolute paths
+
+The plan under audit:
+
+- `/home/evo/sandbox/v2/step7-plan.md`
+
+The law it must obey:
+
+- `/home/evo/sandbox/v2/PLAN.md` — `## Legal authority` (27-82), `## How the build session behaves` (118-205), `## When you say build` item 7 (306-315).
+- `/home/evo/sandbox/v2/OUTCOME.md` — line 48 (payment models, float, pricing), line 52 (default/prize freeze/forfeiture), lines 54-56 (refund), line 70 (rows).
+
+The document authority:
+
+- `/home/evo/evolution/engine_v2/website/engine/src/templates/SA.template.md`
+- `/home/evo/evolution/engine_v2/website/engine/src/templates/PDS.template.md`
+
+The build tree the plan will touch:
+
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/dsl.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/dslStore.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/pricing.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/app/dsl/DslForm.tsx`
+- `/home/evo/evolution/engine_v2/website/engine/src/app/dsl/actions.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/app/dsl/data.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/app/dsl/[id]/page.tsx`
+- `/home/evo/evolution/engine_v2/website/engine/src/app/dsl/[id]/legal/` (to be created)
+- `/home/evo/evolution/engine_v2/website/engine/next.config.ts`
+- `/home/evo/evolution/engine_v2/website/engine/package.json`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00001_enums.sql`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00005_dsls.sql`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00007_sales.sql`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00008_dsl_availability_trigger.sql`
+- `/home/evo/evolution/engine_v2/website/scripts/`
+- `/home/evo/evolution/engine_v2/website/package.json`
+
+Reference only, never a template source:
+
+- `/home/evo/evolution/engine/website/packages/legal_engine/src/pds.ts` (the old block wording at 405-424; verify the plan copies the text, not the package)
+- `/home/evo/evolution/engine/website/packages/legal_engine/src/term_sheet.ts` (the old month formula at 55-61)
+- `/home/evo/evolution/engine/website/packages/legal_engine/scripts/rehearse-dsl-prod.ts` (the old `syndicateName` derivation at 57)
+
+Forbidden by the plan: copying or importing the five legacy files in `/home/evo/evolution/engine/website/docs/legal-foundation/`, or any import from `engine/website/...`, `sandbox/rebuild`, or `legal_engine`.
+
+## What to do
+
+1. Read the plan in full. Then read the authority files and the code the plan cites.
+2. Verify each factual claim in the plan against disk. A claim that a file, line, function, column, enum, or script exists must be checked. A citation that does not say what the plan claims is a FAIL.
+3. Check the plan against the law: the payment-model ruling at `OUTCOME.md:48` and `PLAN.md:72`; the template authority at `PLAN.md:29-31`; the compiler's assertions at `PLAN.md:306-315`; the audit protocol at `PLAN.md:145-205`.
+4. Check the plan for invented rules, silent defaults, or scope leakage. The following are defects:
+   - a default investor split, or any 75 written into code;
+   - a blank marker rendered into a legal document except `Not recorded` for `breeder` and `microchip`;
+   - a template or block text that paraphrases the locked wording;
+   - a compiler path that could emit prose not present in `engine/src/templates/`;
+   - a `website/` change;
+   - a new dependency;
+   - a sale-row write in Step 7;
+   - a PDF or signature in Step 7;
+   - an exported compiler symbol with no production call site.
+5. Check the payment-model rule end to end: the save gate, the form, the database trigger, and the compiler backstop must all implement the same rule. The reason is the five-month initial payment, not an impossibility claim. 5 months or less must be upfront; 6 months or more may be either.
+6. Check the token contract: every token in the two templates and the four block files must appear in the declared union, every key must have a resolver, the SA must have zero soft tokens, and the PDS must have all four.
+7. Check the test matrix in §7 of the plan covers the 5/6 boundary, 3 and 18 months, both close styles, banned prose, missing soft slots, missing required fields, unknown tokens, and determinism.
+8. Check the non-orphan rule: the preview page at `engine/src/app/dsl/[id]/legal/page.tsx` must be the production consumer, and the plan must say how it loads the DSL and writes no sale row.
+9. Check the build-tracing claim: `outputFileTracingIncludes` must be the named mechanism, and the verification must prove the templates reach the built server.
+10. Check the scope fence: `engine/`, one migration `00010`, root `scripts/` and `package.json`, and `engine/OPERATIONS.md`. Nothing else.
+
+## Candidate checklist
+
+Use these as the starting rubric. Repair, split, or reject any item with evidence. The final list must be numbered and each item must be gradeable PASS/FAIL from the staged diff, not from prose.
+
+1. The inclusive full-calendar-month helper is single-sourced and used by the save gate, the compiler, and the preview.
+2. `saveDsl` and `updateDsl` refuse `subscription_float` at ≤5 months; all legal combinations are accepted; a refusal leaves the store unchanged.
+3. The DSL form auto-selects and locks `upfront` at ≤5 months; server validation is the backstop when JavaScript is off.
+4. Migration `00010` enforces the same rule, checks existing rows, and has a recorded two-direction local probe.
+5. The four block files carry the exact ruled text; all legal prose lives under `engine/src/templates/`.
+6. The token union is exhaustive; every key has a resolver; no extra tokens exist.
+7. The SA has zero soft tokens; the PDS has all four; the loader asserts both.
+8. The renderer throws on an unknown token and asserts zero dangling braces in both documents.
+9. Money, percent, date, and foaling formatting are deterministic and pinned; `foaling_label` carries no age.
+10. Required fields throw; `breeder` and `microchip` render `Not recorded`; no other blank reaches a document.
+11. The banned list is exactly the ruled list, scanned on rendered prose, case-insensitive and word-bounded; syntax is exempt.
+12. The compiler independently enforces the payment-model rule.
+13. The two rendered hashes are SHA-256 and identical across repeated compiles of one input.
+14. The preview page calls the compiler, renders both documents and hashes, writes no sale row, and is linked from the DSL view.
+15. The test matrix covers the 5/6 boundary, 3 and 18 months, both close styles, banned prose, missing soft slots, missing required fields, unknown tokens, and determinism.
+16. The static script pins the corpus hashes and joins the root `test` chain.
+17. `OPERATIONS.md` records the preview, the template-change procedure, and the DB probe.
+18. `outputFileTracingIncludes` is present and the verification proves the templates reach the built server.
+19. Every negative constraint in §8 of the plan is falsifiable against the diff.
+20. The diff touches only the fence in §11 of the plan.
+
+## Output
+
+Return:
+
+1. The locked, numbered checklist. Each item must be one gradeable requirement. Keep the candidate numbering if you accept it; add, split, or remove with a one-line reason.
+2. Any FAIL findings against the plan, each with an absolute `file:line` citation and a one-line statement of the defect.
+3. Any claims you could not verify, marked `UNVERIFIED`, with the path you checked.
+4. The last non-empty line must be exactly `VERDICT: PASS` or `VERDICT: FAIL`.
+
+Do not quote the verdict phrase earlier in the reply except when naming the gate. The executor reads only the last non-empty line.
+
+A PASS means the plan is safe to execute and the checklist is locked. A FAIL means the plan must be repaired and re-audited. Do not grade the diff; Moment 2 does that.
