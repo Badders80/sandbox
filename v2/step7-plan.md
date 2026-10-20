@@ -118,6 +118,8 @@ Every token in the two templates and the four block files resolves from one decl
 | `trainer.bio`, `trainer.location`, `trainer.name` | the trainer row; `bio` is **required non-empty** |
 | `pds.costs_summary_block`, `pds.close_style_block` | D4 block selection; not scalar |
 
+**Block call sites.** `pds-costs-summary.float.md` uses `{{pricing.float_per_percent_nzd}}` for the initial 3+2 payment per 1%; `pds-costs-summary.upfront.md` uses `{{pricing.upfront_per_percent_nzd}}` for the full-term payment per 1%. Those two block files are the production call sites for both keys. A key in `TOKEN_KEYS` that appears in neither template nor block fails the load, the same way an unknown token does.
+
 **Formatters** are local and deterministic:
 
 - `money(n)` → `$71.00`, `$1,775.00`; `Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD' })`.
@@ -134,7 +136,7 @@ Every token in the two templates and the four block files resolves from one decl
 - `LEGAL_DIR = path.join(process.cwd(), 'src/templates')` when the engine app runs; the loader is called only from the engine app and its tests.
 - `loadLegalCorpus()` reads the two templates and the four block files, throws on a missing file, and returns raw text plus SHA-256 per file.
 - `selectCostsBlock(paymentModel)` and `selectCloseBlock(closeStyle)` throw on an unknown branch; there is no silent default.
-- Static checks at load: the SA raw text contains **none** of the four soft tokens; the PDS raw text contains **all four**; every `{{...}}` in the corpus is in `TOKEN_KEYS`; no `{{`/`}}` imbalance.
+- Static checks at load: the SA raw text contains **none** of the four soft tokens; the PDS raw text contains **all four**; every `{{...}}` in the corpus is in `TOKEN_KEYS`; every `TOKEN_KEYS` entry appears in the corpus (no orphan resolver key); no `{{`/`}}` imbalance.
 
 **`compile.ts`:**
 
@@ -206,7 +208,7 @@ The verification runs `pnpm --filter engine build` and then confirms `SA.templat
 2. `sha256sum -c engine/src/templates/SHA256SUMS` passes — any legal-prose edit is deliberate and updates the manifest.
 3. No banned term appears in the raw corpus.
 4. The SA raw text has zero soft tokens; the PDS raw text has all four.
-5. Every `{{...}}` is in `TOKEN_KEYS` (the list is duplicated in the script as fixed strings), and braces are balanced.
+5. Every `{{...}}` is in `TOKEN_KEYS` (the list is duplicated in the script as fixed strings), every `TOKEN_KEYS` entry appears in the corpus, and braces are balanced.
 6. `engine/src/lib/legal/` is imported by the preview page and by the compiler tests (non-orphan wiring).
 
 The script prints one `ok`/`FAIL` line per check and exits non-zero on any FAIL, matching `assert-read-policies.sh`.
@@ -215,7 +217,7 @@ The script prints one `ok`/`FAIL` line per check and exits non-zero on any FAIL,
 
 **`term.test.ts`:** inclusive months: Jan 1→May 31 = 5; Jan 1→Jun 1 = 6; Jan 15→Jun 30 = 6; 18-month case; same month = 1; invalid dates = null; `paymentModelAllowed` truth table.
 
-**`legal-templates.test.ts`:** corpus presence; pinned hashes; token contract; SA zero soft / PDS four; banned corpus scan; block files present and each branch selectable.
+**`legal-templates.test.ts`:** corpus presence; pinned hashes; token contract in both directions (no unknown token, no orphan key); SA zero soft / PDS four; banned corpus scan; block files present and each branch selectable.
 
 **`legal-compile.test.ts`:** the fixture matrix:
 
