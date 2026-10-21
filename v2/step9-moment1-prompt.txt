@@ -1,0 +1,406 @@
+# Moment 1 audit — Step 9 the four transactional emails (revision 2)
+
+You are the independent auditor for Step 9 of Evolution Stables V2. You do not write code, edit files, or accept the executor's conclusions. Everything you need to verify is inlined below so you can answer in a single turn (`--tools "" --strict-mcp-config --setting-sources ""`) without calling any tools.
+
+## Rules
+1. Verify every factual claim and `file:line` citation in `/home/evo/sandbox/v2/step9-plan.md` (revision 2) against the inlined authority files and build-tree excerpts below. A citation to an existing file that does not match disk is a FAIL. New files declared as "to be created in Step 9" (`engine/src/lib/email.ts`, `engine/tests/email.test.ts`, `scripts/assert-email-fences.sh`) should be listed under `UNVERIFIED`, not graded FAIL.
+2. Check the plan against the law:
+   - `OUTCOME.md:74`: "Emails, sent by the engine. Four messages, and no others. The buyer receives one when the sale is written: the stake, the amount, and a link to MyStable. The buyer receives one if KYC fails. The founder receives one when a sale succeeds, and one when checkout or the webhook fails for a reason that is ours. A card decline does not send that alert."
+   - `PLAN.md:234`: "A failure stops the sale, sends the buyer the KYC-failed email, and does not open Checkout."
+   - `PLAN.md:236`: "A card decline writes no sale and sends no founder email."
+   - `PLAN.md:238`: "An our-fault failure of Checkout or the webhook sends the founder email and leaves no sale."
+   - `PLAN.md:317`: "9. Four emails, sent by the engine, and no others. Buyer: sale written (stake, amount, link to MyStable). Buyer: KYC failed. Founder: sale succeeded. Founder: checkout or webhook failed for a reason that is ours. A card decline does not send that alert. Later monthly charges and defaults are manual."
+   - `PLAN.md:343` & `engine/OPERATIONS.md:195-204`: Gmail SMTP is not used; sender is configured on the engine.
+3. Check the plan for invented rules, silent defaults, bundled checklist items, or orphan exports with no production call site.
+4. Return:
+   - The locked, numbered checklist (each item must be one single gradeable requirement).
+   - Any FAIL findings against the plan, each with an absolute `file:line` citation and a one-line statement of the defect (or `Zero FAIL findings.` if none).
+   - Any claims for files to be created in Step 9, marked `UNVERIFIED`, with the path.
+   - The VERY LAST non-empty line must be literally `VERDICT: PASS` or `VERDICT: FAIL`.
+
+=== INLINED AUTHORITY EXCERPTS ===
+
+--- /home/evo/sandbox/v2/OUTCOME.md (lines 72-75) ---
+72: **Purchase.** The buyer is logged in on the website. The modal asks the engine for the PDS and SA, compiled with the account name, and shows them. After the buyer accepts, the engine starts KYC if the account is not verified and records the result on the account. It then creates the Stripe Checkout session and returns the URL. The browser goes to Stripe. The webhook hits the engine, which writes the sale. The browser returns to MyStable. MyStable reads the account and that user's sales. Checkout does not create another profile.
+73: 
+74: **Emails, sent by the engine.** Four messages, and no others. The buyer receives one when the sale is written: the stake, the amount, and a link to MyStable. The buyer receives one if KYC fails. The founder receives one when a sale succeeds, and one when checkout or the webhook fails for a reason that is ours. A card decline does not send that alert.
+75: 
+
+--- /home/evo/sandbox/v2/PLAN.md (lines 11, 23, 92, 120, 125, 207-216, 234-239, 290, 316-318, 343, 350) ---
+11: 1. The repo root is `/home/evo/evolution/engine_v2/website`. One private repo, two hosted apps. `DoD.md` still lists an option to put the repo at `engine_v2/` level (O7). `OUTCOME.md` closed that: do not `git init` the parent. The parent keeps `OUTCOME.md`, `CONTINUE.md`, and `DoD.md`.
+...
+23: - Both apps are Next.js, in the one repo: `engine/` and `website/`. The engine hosts the DSL page, the rules, the compiler, the migrations, and the Stripe webhook. The website reads Supabase, holds the tokens, and never prices, compiles, or holds a Stripe secret.
+...
+92: - The public host is `https://www.evolutionstables.nz`. Canonicals, the sitemap, and structured data use that host. The apex `https://evolutionstables.nz` is not a second canonical. The current code uses the apex, and that mistake stays behind.
+...
+120: Settled 2026-10-13. Updated 2026-10-14. This section is the sole operational law for any CLI model or agent session driving this build. The new repository receives NO `AGENTS.md`, NO `CLAUDE.md`, and NO separate `HOW-WE-WORK.md` or meta-rule files.
+...
+125: - The build executes exactly ONE numbered step at a time from "When you say build" (Steps 1–10).
+...
+207: 1. **Target Working Directory**: Explicit single app boundary. The build repo is `Badders80/engine-v2`, checked out at `/home/evo/evolution/engine_v2/website`, with `engine/` and `website/` as its two apps. Name the app, never the repo root.
+208: 2. **Strict Negative Constraints**: Explicit scope fences, banned files (`AGENTS.md`, `CLAUDE.md`), banned standalone CRUD screens, prohibition against multi-step execution.
+209: 3. **Deliverables & Physical Invariants**: Exact schemas, column names, formulas, and data boundaries.
+210: 4. **Local Verification Protocol**: `pnpm verify` (exit code 0, `--max-warnings=0`).
+211: 5. **Adversarial Audit Protocol**: Two mandatory moments per §5 — Moment 1 audits the plan before code execution and locks the numbered checklist; Moment 2 audits the staged diff against that checklist. Staged diff (`git diff --cached -- . ':(exclude)pnpm-lock.yaml'`) **pre-numbered before dispatch**, Ollama Cloud model `kimi-k2.7-code` via `$OLLAMA_API_KEY`, invoked headless per §5 (stdout/stderr split, blocking wait with a 15-minute timeout, timeout = FAIL), self-contained literal expected values, mandatory non-dummy line citations, explicit exemption for `engine/OPERATIONS.md`, requiring literal `VERDICT: PASS`. Tiers, and the milestone gates that are not step gates: `docs/plans/VERIFICATION-TIERS.md`.
+212: 6. **Push & CI Gate**: Conventional commit, `git push origin main` from `/home/evo/evolution/engine_v2/website` — where `origin` is `Badders80/engine-v2`, not the sandbox planning repo — then `gh run watch --exit-status`.
+...
+216: Settled 2026-10-13. Updated 2026-10-14. `/home/evo/sandbox/rebuild` is a reference only. It does not become part of this plan's repo, and the new repo does not import it. Its README still aims the prototype at the live monorepo. That aim is ignored.
+...
+234: 3. Identity. If the account is already verified, the buyer confirms they are the account's full name and continues. If not, the engine starts Stripe Identity. The screen asks for a current NZ driver licence or passport. It does not say the buyer is an NZTR-verified member. Identity is Stripe Identity on the account. A failure stops the sale, sends the buyer the KYC-failed email, and does not open Checkout. Footer: encrypted, handled under the NZ Privacy Act 2020.
+235: 
+236: 4. Pay. The screen repeats the initial payment, the monthly amount, the lease period, and the investor split, then says the card is processed by Stripe Checkout. The button sends the browser to the Checkout URL the engine returns. Cancelling Checkout returns to the horse page and writes no sale. A card decline writes no sale and sends no founder email.
+237: 
+238: 5. Return. The browser comes back to MyStable. If the webhook has not written the sale yet, MyStable shows that purchase as pending. It does not say the stake is owned. When the sale row exists, MyStable shows the stake, the amount, and the two documents. An our-fault failure of Checkout or the webhook sends the founder email and leaves no sale.
+...
+290:    Four negative constraints on `website/`: it never imports `engine/` source; it never holds a Stripe secret; it never prices and never compiles; and it never queries `horses`, `trainers`, or `owners` directly. `published` lives only on `dsls`, so the site reads `dsls` and joins outward — a direct `from('horses')` would leak unpublished and unregistered rows.
+...
+316: 8. Purchase, per "Buy workflow" above. Logged-in buyer. The website modal asks the engine for the PDS and SA compiled with the account name. Buyer accepts. Engine starts Stripe Identity if the account is not verified, and records the result on the account. Engine creates Checkout and returns the URL. Webhook writes the sale: stake, amount, Stripe session id, Identity id, both documents, both hashes. A later edit to the horse does not change a document already sold. Browser returns to MyStable. MyStable reads that account and that user's sales. Checkout does not create another profile. Do not import `sandbox/rebuild`.
+317: 9. Four emails, sent by the engine, and no others. Buyer: sale written (stake, amount, link to MyStable). Buyer: KYC failed. Founder: sale succeeded. Founder: checkout or webhook failed for a reason that is ours. A card decline does not send that alert. Later monthly charges and defaults are manual.
+318: 10. Preview with the buy path off, on the new Vercel projects. Listings may show Coming Soon. Prove the purchase wiring on a preview, not on the live domain. The flip to Buy Now is a readiness decision. The proof is one real sale after that flip. `evolution-3-0` keeps serving `www.evolutionstables.nz` until then, and the new build does not call back into the old one.
+...
+343: | Observability vendor, and the email sender that replaces Gmail SMTP | Needed before the public buy path, not before the first commit. |
+...
+350: |Physical trigger check (`00008`)|`00008_dsl_availability_trigger.sql` is a constraint trigger and cannot be a `CHECK` because `image_count` and `registered` sit on `horses`, not `dsls`. Nothing in the repo has ever run it: no test imports a database driver, and every mention of `00008` in `engine/` is prose in a comment. `image_count` is now written and source-asserted, not proven to satisfy the trigger.|Run the four cases (unregistered refused, `< 3` images refused, null split refused, valid row accepted) against the local stack before the first listing goes live, and record the check in `engine/OPERATIONS.md`. Keep it out of `engine/tests/`, which must stay hermetic.|
+
+=== INLINED BUILD TREE EXCERPTS ===
+
+--- /home/evo/evolution/engine_v2/website/engine/OPERATIONS.md (lines 11-16, 62-67, 195-205) ---
+11: ## Payments
+12: 
+13: The buyer pays by hosted Stripe Checkout, on the existing Evolution Stables Limited account. The website never holds a Stripe secret. The engine creates the Checkout session and returns the URL. The webhook on the engine writes the sale: stake, amount, Stripe session id, Identity id, both documents, both hashes. A card decline writes no sale and sends no founder email. Cancelling Checkout returns the buyer to the horse page and writes no sale. An our-fault failure of Checkout or the webhook sends the founder email and leaves no sale.
+...
+62: ## Identity and private files
+...
+66: KYC is Stripe Identity on that account. It is not an NZTR membership check. A buyer who is already verified confirms their name and continues. A buyer who is not verified is sent to Stripe Identity before Checkout. A failure stops the sale, sends the buyer the KYC-failed email, and does not open Checkout.
+...
+195: ## Emails
+196: 
+197: The engine sends four, and no others.
+198: 
+199: - Sale written: to the buyer, with the stake, the amount, and a link to MyStable.
+200: - KYC failed: to the buyer.
+201: - Sale succeeded: to the founder.
+202: - Checkout or the webhook failed for a reason that is ours: to the founder.
+203: 
+204: The sender that replaces Gmail SMTP is named here when it is chosen, before the public buy path.
+
+--- /home/evo/evolution/engine_v2/website/engine/src/lib/purchaseStore.ts (lines 34-163) ---
+34: export type AccountRow = {
+35:   id: string
+36:   fullName: string
+37:   email: string
+38:   kycStatus: KycStatus
+39:   createdAt: string
+40: }
+41: 
+42: export type NewSale = {
+43:   dslId: string
+44:   userId: string
+45:   printedName: string
+46:   email: string
+47:   stake: number
+48:   amount: number
+49:   stripeSessionId: string
+50:   stripeIdentityId: string | null
+51:   pdsMarkdown: string
+52:   saMarkdown: string
+53:   pdsHash: string
+54:   saHash: string
+55: }
+56: 
+57: export type SaleRow = NewSale & {
+58:   id: string
+59:   createdAt: string
+60: }
+61: 
+62: export interface PurchaseStore extends DslStore {
+63:   findAccountById(id: string): Promise<AccountRow | null>
+64:   insertAccount(row: NewAccount): Promise<AccountRow>
+65:   updateAccountKycStatus(id: string, kycStatus: KycStatus): Promise<AccountRow>
+66:   findSaleByStripeSessionId(stripeSessionId: string): Promise<SaleRow | null>
+67:   listSalesByUserId(userId: string): Promise<SaleRow[]>
+68:   insertSale(row: NewSale): Promise<SaleRow>
+69: }
+...
+88: export function createInMemoryPurchaseStore(): InMemoryPurchaseStore {
+...
+138:     async insertSale(row) {
+139:       if (sales.some((existing) => existing.stripeSessionId === row.stripeSessionId)) {
+140:         throw new Error(`sale with stripe_session_id ${row.stripeSessionId} already exists`)
+141:       }
+142:       const created: SaleRow = {
+143:         ...row,
+144:         id: newId(),
+145:         createdAt: nowIso(),
+146:       }
+147:       sales.push(created)
+148:       return { ...created }
+149:     },
+...
+163: }
+
+--- /home/evo/evolution/engine_v2/website/engine/src/lib/purchaseStoreSupabase.ts (lines 104-173) ---
+104: export function createSupabasePurchaseStore(
+105:   client: SupabaseClient = supabaseClientFromEnv(),
+106: ): PurchaseStore {
+107:   const base = createSupabaseDslStore(client)
+...
+163:     async insertSale(row) {
+164:       const { data, error } = await client
+165:         .from('sales')
+166:         .insert(saleColumns(row))
+167:         .select('*')
+168:         .single()
+169:       if (error) fail('sales', error.message)
+170:       return toSale(data)
+171:     },
+172:   }
+173: }
+
+--- /home/evo/evolution/engine_v2/website/engine/src/lib/purchase.ts (lines 324-504) ---
+324: export async function openCheckoutSession(
+325:   input: {
+326:     dslId: string
+327:     accountId: string
+328:     stake: number
+329:     acceptance: DocumentAcceptanceInput
+330:     stripeIdentityId?: string | null
+331:     executedDate?: string
+332:     successUrl: string
+333:     cancelUrl: string
+334:   },
+335:   store: PurchaseStore,
+336:   stripe: StripeGateway,
+337: ): Promise<Result<{ checkoutSessionId: string; checkoutUrl: string; quote: PurchaseQuote }>> {
+338:   const accepted = verifyDocumentAcceptance(input.acceptance)
+339:   if (!accepted.ok) return accepted
+340: 
+341:   const account = await store.findAccountById(input.accountId)
+342:   if (account === null) {
+343:     return { ok: false, reason: `account ${input.accountId} does not exist` }
+344:   }
+345: 
+346:   if (account.kycStatus !== 'verified') {
+347:     return {
+348:       ok: false,
+349:       reason: `identity verification is required before checkout (current status: ${account.kycStatus})`,
+350:     }
+351:   }
+352: 
+353:   const quoteResult = await computeQuote({ dslId: input.dslId, stake: input.stake }, store)
+354:   if (!quoteResult.ok) return quoteResult
+355: 
+356:   const executedDate = input.executedDate ?? new Date().toISOString().slice(0, 10)
+357:   const session = await stripe.createCheckoutSession({
+358:     dslId: input.dslId,
+359:     accountId: account.id,
+360:     horseLegalName: quoteResult.value.horseLegalName,
+361:     stake: quoteResult.value.stake,
+362:     amountNzd: quoteResult.value.initialPaymentNzd,
+363:     executedDate,
+364:     stripeIdentityId: input.stripeIdentityId ?? null,
+365:     successUrl: input.successUrl,
+366:     cancelUrl: input.cancelUrl,
+367:   })
+368: 
+369:   return {
+370:     ok: true,
+371:     value: {
+372:       checkoutSessionId: session.id,
+373:       checkoutUrl: session.url,
+374:       quote: quoteResult.value,
+375:     },
+376:   }
+377: }
+378: 
+379: export type WebhookResult =
+380:   | { action: 'sale_written'; sale: SaleRow; idempotentReplay: boolean }
+381:   | { action: 'kyc_updated'; accountId: string; kycStatus: AccountRow['kycStatus'] }
+382:   | { action: 'ignored'; eventType: string }
+383: 
+384: function metadataString(metadata: Record<string, unknown>, key: string): string {
+385:   const raw = metadata[key]
+386:   return typeof raw === 'string' ? raw.trim() : ''
+387: }
+388: 
+389: export async function recordWebhookEvent(
+390:   event: StripeWebhookEvent,
+391:   store: PurchaseStore,
+392:   corpus?: LegalCorpus,
+393: ): Promise<Result<WebhookResult>> {
+394:   const obj = event.data.object ?? {}
+395:   const metadata =
+396:     typeof obj.metadata === 'object' && obj.metadata !== null
+397:       ? (obj.metadata as Record<string, unknown>)
+398:       : {}
+399: 
+400:   if (event.type === 'identity.verification_session.verified') {
+401:     const accountId = metadataString(metadata, 'account_id')
+402:     if (accountId === '') {
+403:       return { ok: false, reason: 'identity event is missing metadata.account_id' }
+404:     }
+405:     const updated = await store.updateAccountKycStatus(accountId, 'verified')
+406:     return {
+407:       ok: true,
+408:       value: { action: 'kyc_updated', accountId: updated.id, kycStatus: updated.kycStatus },
+409:     }
+410:   }
+411: 
+412:   if (
+413:     event.type === 'identity.verification_session.requires_input' ||
+414:     event.type === 'identity.verification_session.canceled'
+415:   ) {
+416:     const accountId = metadataString(metadata, 'account_id')
+417:     if (accountId === '') {
+418:       return { ok: false, reason: 'identity event is missing metadata.account_id' }
+419:     }
+420:     const updated = await store.updateAccountKycStatus(accountId, 'failed')
+421:     return {
+422:       ok: true,
+423:       value: { action: 'kyc_updated', accountId: updated.id, kycStatus: updated.kycStatus },
+424:     }
+425:   }
+426: 
+427:   if (event.type === 'payment_intent.payment_failed' || event.type === 'checkout.session.expired') {
+428:     // Card declines and expired checkouts write no sale and send no founder alert (PLAN.md:236).
+429:     return { ok: true, value: { action: 'ignored', eventType: event.type } }
+430:   }
+431: 
+432:   if (event.type !== 'checkout.session.completed') {
+433:     return { ok: true, value: { action: 'ignored', eventType: event.type } }
+434:   }
+435: 
+436:   const stripeSessionId = typeof obj.id === 'string' ? obj.id.trim() : ''
+437:   if (stripeSessionId === '') {
+438:     return { ok: false, reason: 'checkout.session.completed is missing session id' }
+439:   }
+440: 
+441:   const existingSale = await store.findSaleByStripeSessionId(stripeSessionId)
+442:   if (existingSale !== null) {
+443:     return {
+444:       ok: true,
+445:       value: { action: 'sale_written', sale: existingSale, idempotentReplay: true },
+446:     }
+447:   }
+448: 
+449:   const dslId = metadataString(metadata, 'dsl_id')
+450:   const accountId = metadataString(metadata, 'account_id')
+451:   const stake = Number(metadataString(metadata, 'stake'))
+452:   const executedDateRaw = metadataString(metadata, 'executed_date')
+453:   const executedDate =
+454:     executedDateRaw !== '' ? executedDateRaw : new Date().toISOString().slice(0, 10)
+455:   const stripeIdentityIdRaw = metadataString(metadata, 'stripe_identity_id')
+456:   const stripeIdentityId = stripeIdentityIdRaw !== '' ? stripeIdentityIdRaw : null
+457: 
+458:   if (dslId === '' || accountId === '' || !Number.isFinite(stake) || stake <= 0) {
+459:     return {
+460:       ok: false,
+461:       reason: 'checkout.session.completed is missing required metadata (dsl_id, account_id, stake)',
+462:     }
+463:   }
+464: 
+465:   const compiled = await compileBuyerDocuments(
+466:     { dslId, accountId, stake, executedDate },
+467:     store,
+468:     corpus,
+469:   )
+470:   if (!compiled.ok) return compiled
+471: 
+472:   const { account, quote, pack } = compiled.value
+473:   const dsl = await store.findDslById(dslId)
+474:   if (dsl === null) return { ok: false, reason: `DSL ${dslId} does not exist` }
+475: 
+476:   const sale = await store.insertSale({
+477:     dslId: dsl.id,
+478:     userId: account.id,
+479:     printedName: account.fullName,
+480:     email: account.email,
+481:     stake: quote.stake,
+482:     amount: quote.initialPaymentNzd,
+483:     stripeSessionId,
+484:     stripeIdentityId,
+485:     pdsMarkdown: pack.pds.markdown,
+486:     saMarkdown: pack.sa.markdown,
+487:     pdsHash: pack.pds.hash,
+488:     saHash: pack.sa.hash,
+489:   })
+490: 
+491:   const remainingCents = Math.round(dsl.stakeRemaining * 100) - Math.round(quote.stake * 100)
+492:   const nextRemaining = Math.max(0, remainingCents) / 100
+493:   const nextStatus = nextRemaining === 0 ? 'fully_allocated' : dsl.status
+494: 
+495:   await store.updateDsl(dsl.id, {
+496:     stakeRemaining: nextRemaining,
+497:     status: nextStatus,
+498:   })
+499: 
+500:   return {
+501:     ok: true,
+502:     value: { action: 'sale_written', sale, idempotentReplay: false },
+503:   }
+504: }
+
+--- /home/evo/evolution/engine_v2/website/engine/src/app/api/purchase/checkout/route.ts (lines 60-88) ---
+60:     const store = createSupabasePurchaseStore()
+61:     const stripe = createStripeGatewayFromEnv()
+62:     const result = await openCheckoutSession(
+63:       {
+64:         dslId,
+65:         accountId,
+66:         stake,
+67:         acceptance,
+68:         stripeIdentityId,
+69:         executedDate,
+70:         successUrl,
+71:         cancelUrl,
+72:       },
+73:       store,
+74:       stripe,
+75:     )
+76: 
+77:     if (!result.ok) {
+78:       return NextResponse.json(result, { status: 400 })
+79:     }
+80: 
+81:     return NextResponse.json(result, { status: 200 })
+82:   } catch (error) {
+83:     return NextResponse.json(
+84:       { ok: false, reason: error instanceof Error ? error.message : 'checkout creation failed' },
+85:       { status: 500 },
+86:     )
+87:   }
+88: }
+
+--- /home/evo/evolution/engine_v2/website/engine/src/app/api/stripe/webhook/route.ts (lines 33-46) ---
+33:   try {
+34:     const store = createSupabasePurchaseStore()
+35:     const result = await recordWebhookEvent(event, store)
+36:     if (!result.ok) {
+37:       return NextResponse.json(result, { status: 400 })
+38:     }
+39:     return NextResponse.json(result, { status: 200 })
+40:   } catch (error) {
+41:     return NextResponse.json(
+42:       { ok: false, reason: error instanceof Error ? error.message : 'webhook execution failed' },
+43:       { status: 500 },
+44:     )
+45:   }
+46: }
+
+--- /home/evo/evolution/engine_v2/website/package.json (lines 10-23) ---
+10:     "prepare": "git config core.hooksPath .githooks || true",
+11:     "typecheck": "pnpm --recursive --if-present run typecheck",
+12:     "lint": "pnpm --recursive --if-present run lint",
+13:     "test": "bash scripts/assert-no-anti-patterns.sh && bash scripts/assert-operations-doc.sh && bash scripts/assert-design-tokens.sh && bash scripts/assert-read-policies.sh && bash scripts/assert-search-layer.sh && bash scripts/assert-legal-templates.sh && bash scripts/assert-purchase-fences.sh && pnpm --recursive --if-present run test",
+14:     "test:anti-patterns": "bash scripts/assert-no-anti-patterns.sh",
+15:     "test:operations-doc": "bash scripts/assert-operations-doc.sh",
+16:     "test:design": "bash scripts/assert-design-tokens.sh",
+17:     "test:read-policies": "bash scripts/assert-read-policies.sh",
+18:     "test:search-layer": "bash scripts/assert-search-layer.sh",
+19:     "test:legal-templates": "bash scripts/assert-legal-templates.sh",
+20:     "test:purchase-fences": "bash scripts/assert-purchase-fences.sh",
+21:     "build": "pnpm --recursive --if-present run build",
+22:     "verify": "pnpm run typecheck && pnpm run lint && pnpm run test && pnpm run build"
+23:   }
+
+=== PLAN UNDER AUDIT: /home/evo/sandbox/v2/step9-plan.md ===
