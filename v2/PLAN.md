@@ -237,6 +237,8 @@ One surface. The same five screens are used on a phone and on a desktop. The lay
 
 5. Return. The browser comes back to MyStable. If the webhook has not written the sale yet, MyStable shows that purchase as pending. It does not say the stake is owned. When the sale row exists, MyStable shows the stake, the amount, and the two documents. An our-fault failure of Checkout or the webhook sends the founder email and leaves no sale.
 
+> **Implementation invariant — "leaves no sale" is not free.** Any path that writes more than one row must compensate in reverse when a later write throws. The webhook writes the sale and updates the DSL; if the second write fails, the sale must be deleted (`deleteSaleById`), not left behind. Applies to every future two-step store write, not just this one.
+
 ## Operations
 
 Settled 2026-10-13. `OPERATIONS.md` in this folder is the one operator guide, and the operating law. `OUTCOME.md` remains the product law. `PLAN.md` remains the build law. If the guide and the outcome disagree, the outcome wins and the guide is corrected.
