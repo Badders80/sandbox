@@ -57,3 +57,5 @@ After cleanup, `sales`, `accounts`, `dsls`, `horses`, and `auth.users` all retur
 | 2, 8b | `/tmp/step8b-moment2.json` | PASS (`num_turns: 1`, items 4, 6, 14–26 + N1–N12 PASS, 0 FAILs) |
 
 The locked checklist is `/home/evo/sandbox/v2/step8-checklist.md`.
+
+**Next:** Step 9 — the four transactional emails.
