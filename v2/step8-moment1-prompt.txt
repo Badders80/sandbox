@@ -1,0 +1,69 @@
+# Moment 1 audit — Step 8 purchase, the sale write, and MyStable
+
+You are the independent auditor for a build step. You do not write code, edit files, or accept the executor's conclusions. You verify claims against disk and issue a locked checklist that Moment 2 will grade the staged diff against.
+
+## Absolute paths
+
+The plan under audit:
+
+- `/home/evo/sandbox/v2/step8-plan.md`
+
+The law it must obey:
+
+- `/home/evo/sandbox/v2/PLAN.md` — `## Working defaults` (20-26), `## How the build session behaves` (118-213), `## Reference: sandbox/rebuild` (214-222), `## Buy workflow` (224-239), `## When you say build` item 8 (316), `## Parked` `effectiveMinStake` (349).
+- `/home/evo/sandbox/v2/OUTCOME.md` — `## Sale` (33-37), `## Pricing Rules` (39-52), `## Refund` (54-56), `## How it runs` `Rows` and `Purchase` (70-73).
+
+The build tree the plan cites and will touch:
+
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/pricing.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/dsl.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/dslStore.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/dslStoreSupabase.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/legal/compile.ts`
+- `/home/evo/evolution/engine_v2/website/engine/src/lib/legal/tokens.ts`
+- `/home/evo/evolution/engine_v2/website/engine/tests/structure.test.ts`
+- `/home/evo/evolution/engine_v2/website/engine/OPERATIONS.md`
+- `/home/evo/evolution/engine_v2/website/website/DESIGN.md`
+- `/home/evo/evolution/engine_v2/website/website/src/app/globals.css`
+- `/home/evo/evolution/engine_v2/website/website/src/lib/listings.ts`
+- `/home/evo/evolution/engine_v2/website/website/src/lib/supabaseRead.ts`
+- `/home/evo/evolution/engine_v2/website/website/src/app/marketplace/[slug]/page.tsx`
+- `/home/evo/evolution/engine_v2/website/website/tests/listings.test.ts`
+- `/home/evo/evolution/engine_v2/website/website/.env.example`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00001_enums.sql`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00005_dsls.sql`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00006_accounts.sql`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00007_sales.sql`
+- `/home/evo/evolution/engine_v2/website/supabase/migrations/00009_website_read_policies.sql`
+- `/home/evo/evolution/engine_v2/website/scripts/`
+- `/home/evo/evolution/engine_v2/website/package.json`
+
+## What to do
+
+1. Read `/home/evo/sandbox/v2/step8-plan.md` in full. Then read the authority files and the code the plan cites.
+2. Verify each factual claim and `file:line` citation in the plan against disk. A citation that does not say what the plan claims is a FAIL.
+3. Check the plan against the law:
+   - `PLAN.md:224-239` (the five screens: Terms, Documents, Identity, Pay, Return)
+   - `PLAN.md:316` (logged-in buyer, PDS and SA compiled with account name, buyer accepts, Stripe Identity if not verified, Stripe Checkout URL returned, webhook writes the sale: stake, amount, Stripe session id, Identity id, both documents, both hashes; later edit to the horse does not change a document already sold; MyStable reads that account and that user's sales; Checkout does not create another profile; do not import `sandbox/rebuild`)
+   - `PLAN.md:349` (`effectiveMinStake` wired into the buy path)
+   - `PLAN.md:23` and `:290` (`website/` never imports `engine/`, never holds a Stripe secret, never prices, never compiles, never queries `horses`, `trainers`, or `owners` directly)
+4. Check the plan for invented rules, silent defaults, or scope leakage:
+   - any `'75'` or `75` fallback for `investor_split`;
+   - any day-count expression in the refund text;
+   - any claim that the buyer is an "NZTR-verified member";
+   - any screen claiming the buyer owns the stake before the webhook writes the `sales` row;
+   - any Buy Now control on `coming_soon`, `fully_allocated`, or `completed`;
+   - any exported symbol with no production call site;
+   - any non-hermetic test opening a database connection in `engine/tests/` or `website/tests/`.
+5. Review the candidate checklist in §7 of `/home/evo/sandbox/v2/step8-plan.md`. Repair, split, or reject any item with evidence. The final list must be numbered and each item must be gradeable PASS/FAIL from the staged diff.
+
+## Output
+
+Return:
+
+1. The locked, numbered checklist. Each item must be one gradeable requirement.
+2. Any FAIL findings against the plan, each with an absolute `file:line` citation and a one-line statement of the defect.
+3. Any claims you could not verify (because the files are to be created in Step 8), marked `UNVERIFIED`, with the path.
+4. The last non-empty line must be exactly `VERDICT: PASS` or `VERDICT: FAIL`.
+
+Do not quote the verdict phrase earlier in the reply except when naming the gate. The executor reads only the last non-empty line.
