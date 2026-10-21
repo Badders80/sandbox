@@ -6,7 +6,7 @@ Recorded 2026-10-21, after the Step 9 commit (`c3ec894`). Full stdout for each r
 
 | Commit | What | CI run | Result |
 |---|---|---|---|
-| `c3ec894` | Step 9, the four transactional emails (`engine/src/lib/email.ts`), compensating `deleteSaleById` rollback, checkout/webhook wiring, and `scripts/assert-email-fences.sh` | `39536613709` | success (1m0s) |
+| `c3ec894` | Step 9 (12 files): `engine/src/lib/email.ts`, `purchaseStore.ts`, `purchaseStoreSupabase.ts`, `purchase.ts`, `checkout/route.ts`, `stripe/webhook/route.ts`, `email.test.ts`, `purchase.test.ts`, `stripe-webhook.test.ts`, `scripts/assert-email-fences.sh`, `package.json`, and `engine/OPERATIONS.md` | `39536613709` | success (1m0s) |
 
 ## Gates
 
