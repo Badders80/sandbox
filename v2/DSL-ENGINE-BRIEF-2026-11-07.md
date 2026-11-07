@@ -37,6 +37,24 @@ website listing
 
 ## 3. Decisions the deep-dive must close
 
+**Locked so far (2026-11-07):**
+
+- **Model:** horse, trainer, owner are static records authored independently. **Trainer attaches to the horse** (one at a time, change propagates to live DSLs). **Owner attaches to the DSL** (a horse can have several owners, each listing their own stake).
+- **No cross-DSL 100% ceiling.** The operator is trusted to list a valid stake. The 50% policy is out of scope.
+- **No oversell inside a DSL.** Reserve at Checkout (decrement `stake_remaining` on session creation), 5-minute hold, cron expires overdue sessions, atomic conditional decrement at the webhook as backstop. This is purchase-workflow work, not DSL-engine work.
+- **A refused buyer is told on screen**, never silently refunded: *"No stock available right now. Evolution Stables will be in touch with a new offer."* No fifth email kind.
+- **Trainer change:** no system action. Sold documents stay frozen and the founder tells investors by hand. Live listings read the current trainer; new buyers compile from it.
+- **One publication object:** the DSL. No horse-level `listed` flag.
+- **Four visible states** = `published` × `status` × derived completeness:
+  not listed · coming soon (no commercials) · coming soon (with commercials) · live.
+- **Nine commercial/date columns become nullable.** Completeness is computed, never stored.
+- **One readiness function** used by the `available` trigger, the save action, and the compiler. Ready = complete commercials **and** the pack compiles.
+- **Edit semantics:** create resolves by natural key; edit updates by id. The DSL form needs an existing-entity picker as well as create-new fields.
+- **One write surface:** the engine DSL page. The Python console is retired (moved to `_archive/engine-v2-operator-console-2026-11-07/`). No Streamlit.
+- **`distribution_schedule` is free text** for MVP. The compiler prints it verbatim; nothing validates its shape. Structured comes later.
+- **Rename moves the image folder.** Copy every object to the new slug prefix, delete the old, then update the slug. The claim in `OUTCOME.md` is implemented, not deleted.
+- **Operator UI:** sidebar with three sections — **Records** (Horse/Trainer/Owner tiles + New), **Listings** (DSLs by row, term sheet + pre-execution PDS/SA preview), **Sales** (one row per sale, grouped by DSL, read-only). `saveDsl` takes ids; it no longer creates trainers or owners.
+
 Each is one-word answerable. Ordered by what blocks what.
 
 **D1 — Where do trainer and owner live?**
