@@ -2,15 +2,28 @@
 
 This folder is the plan. It is the canonical planning repository (Badders80/sandbox).
 
+**Where we are — verified 2026-11-09.** Code is built and green at `0095106`: `pnpm verify` exit 0, 339 engine / 54 website tests, both builds, CI green, tree clean. Nothing has shipped since the 2026-11-07 push. The DoD — one horse sells end to end, real money, real investor — is **not** met. Head of the critical path is **10.3 (data spine)**, blocked on a hosted Supabase project: `SUPABASE_URL` is still `http://127.0.0.1:54421`. Two decisions sit in front of it: build `/horses/new` or seed by script, and which hosted project.
+
+Facts as they actually are (2026-11-09), not as the older notes assumed:
+
+- The local DB (`:54422`) holds **2 horses and 2 DSLs** — Mulan `available` + published, Hottathanafantasy `coming_soon` + draft. That is already one sellable horse; the DoD does not need six.
+- The six-horse content lives in the **old** engine at `/home/evo/evolution/engine/content/horses/` (profile.md, pedigree.json, race-record.json, images). `engine_v2` has no content folder — the spine is empty.
+- There is **no `/horses/new` route**. `insertHorse` has one call site, `dsl.ts:460` inside `saveDsl`. Trainers and owners both have `new/` pages.
+- `WEBSITE_BUY_ENABLED=false`; `ENGINE_EXPIRE_URL`/`ENGINE_EXPIRE_TOKEN` unset, so the scheduled expiry workflow runs green and does nothing.
+- Git hygiene: `STEP10-PLAN-2026-11-07.md` is modified-but-uncommitted, and `ALIGNMENT-*`, `PILOT-MULAN`, `SESSION-NOTE-2026-10-23` are untracked. Commit these before handing the folder to a clean clone.
+
+Read `STEP10-PLAN-2026-11-07.md` §4–§6 for the status table and critical path; `engine_v2/CONTINUE.md` for the build log and evidence.
+
 | Role | Path |
 |---|---|
 | Working plan | `/home/evo/sandbox/v2/PLAN.md` (this folder) |
-| Locked brief | `/home/evo/evolution/engine_v2/OUTCOME.md`, then `CONTINUE.md` |
-| Old brief, audit only | `/home/evo/evolution/engine_v2/DoD.md` |
+| Locked brief | `/home/evo/sandbox/v2/OUTCOME.md`, then `/home/evo/evolution/engine_v2/CONTINUE.md` |
+| Step-10 plan + status | `/home/evo/sandbox/v2/STEP10-PLAN-2026-11-07.md` |
+| Old brief, audit only | `/home/evo/evolution/engine_v2/DoD.md` (not present; `OUTCOME.md` wins) |
 | Forensic background | `/home/evo/sandbox/v2/background/` |
 | Code, after the word **build** | `/home/evo/evolution/engine_v2/website` |
 
-`engine_v2/` itself is not the repo. Do not `git init` it. The three brief files stay there.
+`engine_v2/` itself is not the repo. Do not `git init` it. Only `CONTINUE.md` lives there now; `OUTCOME.md` is in this folder and `DoD.md` no longer exists.
 
 ## What to open
 
