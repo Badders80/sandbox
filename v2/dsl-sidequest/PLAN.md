@@ -71,11 +71,13 @@ the long-standing gap where a horse could only exist as a side-effect of a DSL.
 A centred panel on its own route (pop-up look, linkable, refresh-safe; not a
 fragile modal). Four steps, matching how a deal is actually assembled:
 
-1. **Parties** — select an existing horse, trainer and owner, by id. The three
-   are the DSL's link; Records only supplies the candidates. Readiness badges say
-   at once whether the horse (<3 images, missing prose, unregistered) or the
-   chosen trainer (missing bio) is ready, with a link to fix it in Records. **No
-   inline creation, no edits** — this step attaches, never authors.
+1. **Parties** — select an existing horse and two profiles: one holding the
+   trainer role, one the owner role. Records only supplies the candidates. A
+   profile may hold both roles, and may be both trainer and owner on one deal.
+   Readiness badges say at once whether the horse (<3 images, missing prose,
+   unregistered) or the chosen trainer profile (missing bio) is ready, with a
+   link to fix it in Records. **No inline creation, no edits** — this step
+   attaches, never authors.
 2. **Commercials** — payment model, term start and end (they decide payment
    eligibility, so they stay here), price entered as wholesale **or** retail with
    the other derived, investor split, listed stake, minimum, step, stake
@@ -275,7 +277,8 @@ status, trainer; links to the profile. ~1 h
 ~30 min
 
 **U3 — Trainer/owner: three sections + socials + links (schema `00019`).**
-Confirmed 2026-11-09. Both tables gain `achievements`, `other`, `x_url`,
+Confirmed 2026-11-09; folded into `parties` by P0 (2026-11-10) and carried over
+by `00021`. Both tables gain `achievements`, `other`, `x_url`,
 `facebook_url`, `instagram_url`, `links` jsonb. Fixed order: Profile →
 Achievements → Other → Social → Links. Optional, so readiness and legal templates
 are untouched. Admin-only private store. ~3 h
@@ -299,8 +302,8 @@ its DSLs. ~2 h
 executed** banner and the blocking-field list on failure. ~1 h
 
 **U11 — The create/edit flow.** The four-step panel described in §3, reusing the
-form system. Step 1 selects horse, trainer and owner from existing records only;
-one atomic `dsls` write at Confirm. ~7 h
+form system. Step 1 selects a horse and two role-holding profiles from existing
+records only; one atomic `dsls` write at Confirm. ~7 h
 
 **U12 — `/horses/new`.** Horse-only flow. **No trainer and no owner** — the
 horse/trainer/owner link happens at DSL creation (ruling 10). Lands on the
@@ -373,10 +376,11 @@ Gate: typecheck + lint + test green, engine 346/346, website 54/54.
 **Chunks 2–4 are LOCKED (2026-11-10).** Contents change only by ruling.
 
 **Chunk 2 — Harden the engine** · LOCKED
-H2 → H1 (no migration) → H3 (`00021`) → H4a → U2 → R1 (Records derives the link).
+P0 (profiles + roles) → H2 → H1 (no migration) → H3 (`00021`, shared with P0) →
+H4a → U2 → R1.
 Gate: `pnpm verify`; psql parity; an unapproved DSL refused `available` by SQL;
-the status matrix test over all `from × to` pairs; Records pages show the DSL's
-trainer while `horses` no longer stores one.
+the status matrix test over all `from × to` pairs; `/trainers` and `/owners`
+are role-filtered views of one profile table; `horses` stores no trainer.
 
 **Chunk 3 — Deal assembly (2A → 2B → 2C)** · LOCKED
 U4 → U7 → U11 → U14 → U10. No migration — the sign-off columns ride in `00021`.
@@ -458,14 +462,16 @@ separate and not counted here.
    with a live preview; the term sheet stays hard, clean and locked
    (2026-11-09).
 9. Budget 6 days, stop 9 (locked 2026-11-09).
-10. **Link model (re-ruled 2026-11-10)** — horses, trainers and owners are
-    independent records. **The DSL is the only place they are linked.**
-    `horses` carries no trainer; `dsls` carries `horse_id`, `trainer_id` and
-    `owner_id`, all selected at creation. Records pages show the link as a
-    **derived view** (horse → its DSL → trainer; trainer/owner → their DSLs) and
-    never author it. **No `horse_owners` table and no second link table** — that
-    would be a second source of truth for a link the DSL already carries. Trainer
-    may be blank while Coming Soon and is required before Available, like owner.
+10. **Link model (re-ruled 2026-11-10)** — one **profile** per real-world person
+    or company (`parties`), with roles ticked on it (`party_roles`: `trainer`,
+    `owner`, extensible). Shared fields live once; the trainer block and owner
+    block render by role, so one profile serves both surfaces with no duplicate to
+    drift. The **DSL is the only place a deal links them**: `dsls.horse_id`,
+    `dsls.trainer_id`, `dsls.owner_id`, each pointing at a horse or a party
+    holding the required role. Records pages show the link as a **derived view**
+    and never author it. Horses stay assets, not profiles. **No `horse_owners`
+    table and no second link table.** Trainer may be blank while Coming Soon and
+    is required before Available, like owner.
 11. **Strict SSOT boundary** — Records own entities; the DSL attaches ids and
     writes `dsls` only. No inline creation or editing in `/dsl`.
 12. **Three-stage pipeline** — Records → DSL → Ledger, matching the sidebar.
@@ -494,6 +500,10 @@ separate and not counted here.
     link to a dedicated `/[id]/edit` route, same breadcrumb and heading.
 21. **Dev servers get their own cache** (2026-11-10) — `NEXT_DIST_DIR` selects the
     build directory so a build cannot rewrite a running dev server's chunks.
+22. **Roles are relationships, not permissions** (2026-11-10) — a role says what
+    a profile is to a deal, never what it may do in the app; auth stays
+    Cloudflare Access. Unticking a role a live DSL references is refused, never
+    cascaded.
 
 ## Ready
 

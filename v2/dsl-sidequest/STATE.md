@@ -34,12 +34,14 @@
 8. **U12** — horse-only create is in scope.
 9. **U14** — the four PDS soft slots get their own structured editor; the term
    sheet stays hard and locked.
-10. **Link model (re-ruled 2026-11-10)** — the **DSL is the only place horse,
-    trainer and owner are linked**. `horses` carries no trainer; `dsls` carries
-    `horse_id`, `trainer_id` and `owner_id`, all selected at creation from
-    existing Records. Records pages show the link as a **derived view** (horse →
-    its DSL → trainer; trainer/owner → their DSLs) and never author it. No
-    `horse_owners` table and no second link table. Trainer may be blank while
+10. **Link model (re-ruled 2026-11-10)** — one **profile** per real-world
+    person or company (`parties`), with roles ticked on it (`party_roles`:
+    `trainer`, `owner`, extensible). Shared fields live once; the trainer block
+    and owner block render by role. The **DSL is the only place a deal links
+    them**: `dsls.horse_id`, `dsls.trainer_id`, `dsls.owner_id`, each pointing
+    at a horse or a party holding the required role. Records pages show the link
+    as a **derived view** and never author it. Horses stay assets, not profiles.
+    No `horse_owners` table and no second link table. Trainer may be blank while
     Coming Soon and is required before Available, exactly like the owner.
 11. **Strict SSOT** — Records own entities; `/dsl` attaches ids and writes
     `dsls` only.
@@ -67,6 +69,9 @@
     the foot of the profile.
 21. **Dev servers get their own cache** — `NEXT_DIST_DIR` selects the build
     directory so a `next build` cannot rewrite a running `next dev`'s chunks.
+22. **Roles are relationships, not permissions** — a role says what a profile is
+    to a deal, never what it may do in the app. Auth stays Cloudflare Access.
+    Unticking a role that a live DSL references is refused, never cascaded.
 
 ## Chunks
 
@@ -81,30 +86,40 @@ without a ruling; work lands in this order, one chunk at a time.
 DoD: **no write path can produce an incomplete, illegal or partially-saved
 listing.** The rules hold whatever the source, in TS *and* in SQL.
 
-1. **H2 — status is a machine.** Encode `coming_soon → available`,
+1. **P0 — one profile, roles.** Merge `trainers` and `owners` into `parties` +
+   `party_roles` (`trainer`, `owner`, extensible). Shared fields live once —
+   name/entity, contact, location, website, bio, achievements, other, socials,
+   links; the trainer block (company + people names) and owner block render only
+   when that role is ticked. `/trainers` and `/owners` become filtered views;
+   each profile's edit page ticks roles ("Add as an owner" / "Add as a
+   trainer"). `dsls.trainer_id` and `dsls.owner_id` become FKs to
+   `parties(id)`; a write is refused unless the party holds that role.
+   `00021` copies existing rows into `parties` with the matching role, then
+   drops the old tables. No compatibility views, no dead columns.
+2. **H2 — status is a machine.** Encode `coming_soon → available`,
    `available → fully_allocated`, `available → coming_soon`,
    `fully_allocated → completed`, `available → completed`, plus the two legal
    non-transitions: no-op (`from === to`) and initial (`null → coming_soon |
    available`). Refuse the rest. TS `checkStatusTransition` and the `00021`
    trigger must agree. Completion stays manual (ruling 13).
-2. **H1 — the DSL writes one table.** `saveDsl`/`updateDsl` accept `horseId`,
+3. **H1 — the DSL writes one table.** `saveDsl`/`updateDsl` accept `horseId`,
    `trainerId` and `ownerId`; delete `resolveTrainer`, `resolveOwner`, the horse
    insert and the four-table path. One `dsls` write at Confirm. A failure leaves
    zero rows.
-3. **H3 — readiness cannot be cheated.** Guard triggers on `horses`, `trainers`
-   and `owners` re-check every dependent Available DSL, including
-   `dsls.trainer_id` changes. Non-empty edits flow (ruling 16). `00021` adds
-   `dsls.trainer_id`, **drops `horses.trainer_id`**, and adds
+4. **H3 — readiness cannot be cheated.** Guard triggers on `parties`,
+   `party_roles`, `horses` and `dsls` re-check every dependent Available DSL,
+   including a role untick (refused, never cascaded) and a `dsls.trainer_id`
+   change. Non-empty edits flow (ruling 16). The same `00021` adds
    `narrative_signoff jsonb`, `narrative_approved_at`,
    `narrative_approved_hash`; the Available trigger requires all four slots
    approved.
-4. **H4a — wholesale is private.** Admin surfaces stop quoting the 100% total;
+5. **H4a — wholesale is private.** Admin surfaces stop quoting the 100% total;
    the column drop waits for P1.
-5. **U2 — `/dsl` list shows the horse name** via the page-side join.
-6. **R1 — Records shows the link, never authors it.** Remove the trainer from
+6. **U2 — `/dsl` list shows the horse name** via the page-side join.
+7. **R1 — Records shows the link, never authors it.** Remove the trainer from
    `HorseForm`, `/horses/new`, `/horses/[id]/edit` and `updateHorseAction`; the
-   horse profile and `/horses` derive the trainer from the horse's DSL; trainer
-   and owner profiles derive their horses from their DSLs. Zero writes here.
+   horse profile and `/horses` derive the trainer through its DSL; `/trainers`
+   and `/owners` are role-filtered views of `parties`. Zero writes here.
 
 Pins inside this chunk: Pin 1 (`stake_remaining` set when null, never reset),
 Pin 3 (existing ids accepted; a horse already holding a DSL is refused),
