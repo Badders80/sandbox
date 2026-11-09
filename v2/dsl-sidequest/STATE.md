@@ -17,7 +17,7 @@
 | Public DB | old project `ejdenhlpvtldiljxawtd` — untouched until cutover |
 | Public flow-ons | `PUBLIC-WRAP.md` — no new rows from chunks 1–1d (`public-sweep: none`) |
 | Execution | Claude Code harness · DeepSeek V4.1 Flash (Ollama Cloud) · agent mode |
-| Audit | Gemma 4 31B (Ollama Cloud), one per chunk diff |
+| Audit | `kimi-code` (Ollama Cloud), one per chunk diff — the **single** auditor; Gemma is not run in addition (2026-11-10) |
 | Public wrap | deferred to its own integration review (`PUBLIC-WRAP.md`) |
 
 ## Rulings
