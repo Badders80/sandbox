@@ -32,10 +32,12 @@ It is a resource, not a brief: we take its tokens, not its page composition.
 
 Four chunks, one at a time, each ending gate-green and audited:
 
-1. Records, Home and the form system
-2. Harden the engine
-3. Deal assembly (2A → 2B → 2C)
-4. Ledger
+1. Records, Home and the form system — **done** (1, 1b, 1c, 1d)
+2. Harden the engine — **LOCKED, next**
+3. Deal assembly (2A → 2B → 2C) — **LOCKED**
+4. Ledger — **LOCKED**
+
+Chunk contents are in `STATE.md`; they change only by ruling.
 
 The rename with its R2 image move (S1), and the public wrap (P1–P3), are **not**
 chunks of this quest. They are a separate follow-on integration review,

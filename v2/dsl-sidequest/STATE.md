@@ -1,23 +1,23 @@
 # DSL Side Quest — state
 
-**Last updated: 2026-11-09. Chunk 1 is built, gate-green, committed and audited.**
+**Last updated: 2026-11-10. Chunks 1–1d are built and gate-green on
+`dsl-sidequest`. Chunks 2–4 are LOCKED below. Chunk 2 is next.**
 
 ## Position
 
 | Fact | Value |
 |---|---|
-| Current chunk | **1c — horse edit** — committed `82a702d`, gate-green, audited PASS |
-| Status | **Chunk 1b done; chunk 2 not started** — awaiting the founder's go |
-| Branch | `dsl-sidequest` (off `main` @ `0095106`), one commit, not pushed, not merged |
-| Gate | `pnpm verify` — **green**, engine **340/340**, website **54/54**, exit 0 |
+| Current chunk | **2 — harden the engine** — LOCKED, not started |
+| Status | **Chunks 1–1d done**; chunk 2 awaits the founder's go |
+| Branch | `dsl-sidequest` (off `main` @ `0095106`) — `main` untouched, nothing pushed or merged |
+| Gate | typecheck + lint + test **green 2026-11-10** at `d387225` — engine **346/346**, website **54/54**; the full `pnpm verify` (which adds build) was last green at `0844487` |
 | Plan | `PLAN.md` — what to build |
 | Run contract | `EXECUTION-DOD-2026-11-09.md` — branch, gate, decision policy, tools |
-| Target DB | `evolution-engine` (`rkcptsghxovoeaycabah`, Sydney) — **19 migrations replayed, zero rows, parity 171/171, `engine/.env.local` now points at it** |
+| Target DB | `evolution-engine` (`rkcptsghxovoeaycabah`, Sydney) — **20 migrations replayed (`00001`–`00020`), zero rows**; schema parity 171/171 at `00019`, column parity 101/101 after `00020`; `engine/.env.local` points at it |
 | Public DB | old project `ejdenhlpvtldiljxawtd` — untouched until cutover |
-| Public flow-ons | `PUBLIC-WRAP.md` — no new rows from chunk 1 (`public-sweep: none`) |
+| Public flow-ons | `PUBLIC-WRAP.md` — no new rows from chunks 1–1d (`public-sweep: none`) |
 | Execution | Claude Code harness · DeepSeek V4.1 Flash (Ollama Cloud) · agent mode |
 | Audit | Gemma 4 31B (Ollama Cloud), one per chunk diff |
-| Budget | 6 working days, hard stop 9 |
 | Public wrap | deferred to its own integration review (`PUBLIC-WRAP.md`) |
 
 ## Rulings
@@ -47,18 +47,105 @@
     sold documents never change or reissue; investor notice is manual.
 16. **Stage 1 edits flow through** — non-empty edits feed live DSLs; locking is
     at the sale. Only blanking a required field (or a bio-less trainer) is refused.
+17. **Trainer row = company + names** — the form asks Company name and one or more
+    Trainer names; the store keeps **one row per company**, names joined `' & '`,
+    because a horse attaches to a single `trainer_id` and the PDS prints
+    `trainer.name`. Separate rows would drop names from documents.
+18. **Links are a raw registry** — one URL per row, stored as given, label is the
+    hostname. No fetching, no title reading, no rewriting. Headless drafting is
+    the operator's job.
+19. **Social renders as a handle** — `socialHandle` (X, Twitter, Instagram,
+    Facebook) shows `@handle`; the full URL stays in the link and its title.
+20. **Trainer/owner Edit uses the horse pattern** — a top-right Edit link to a
+    dedicated `/[id]/edit` route, same breadcrumb and heading; no inline form at
+    the foot of the profile.
+21. **Dev servers get their own cache** — `NEXT_DIST_DIR` selects the build
+    directory so a `next build` cannot rewrite a running `next dev`'s chunks.
 
 ## Chunks
 
-- [x] 1 — Records, Home and the form system (U13, U8, U1, U9, U12, U3) · done `8b6baf4`
-- [x] 1b — loveracing load, barn name, slug law · done `e30e50c`, audit PASS
-- [x] 1c — horse edit + trainer assignment · done `82a702d`, audit PASS
-- [ ] 2 — Harden the engine (H2, H1, H3, H4a, U2) · ~9 h
-- [ ] 3 — Deal assembly (U4, U7, U11, U14, U10) · ~16.5 h
-- [ ] 4 — Ledger (U15, H6) · ~4.5 h
+Done: **1** (`8b6baf4`) · **1b** (`e30e50c`, audit PASS) · **1c** (`82a702d`,
+audit PASS) · **1d** (`2bccb1b → d387225`, gate-green).
 
-The rename and its R2 image move (S1), and the public wrap (P1–P3), are **not** in
-this quest. They are one separate follow-on integration review.
+The remaining chunks are **LOCKED 2026-11-10**. Their contents do not change
+without a ruling; work lands in this order, one chunk at a time.
+
+### Chunk 2 — Harden the engine · LOCKED
+
+DoD: **no write path can produce an incomplete, illegal or partially-saved
+listing.** The rules hold whatever the source, in TS *and* in SQL.
+
+1. **H2 — status is a machine.** Encode `coming_soon → available`,
+   `available → fully_allocated`, `available → coming_soon`,
+   `fully_allocated → completed`, `available → completed`, plus the two legal
+   non-transitions: no-op (`from === to`) and initial (`null → coming_soon |
+   available`). Refuse the rest. TS `checkStatusTransition` and the `00021`
+   trigger must agree. Completion stays manual (ruling 13).
+2. **H1 — the DSL writes one table.** `saveDsl`/`updateDsl` accept `horseId` and
+   `ownerId`; delete `resolveTrainer`, `resolveOwner`, the horse insert and the
+   four-table path. One `dsls` write at Confirm. A failure leaves zero rows.
+3. **H3 — readiness cannot be cheated.** Guard triggers on `horses`, `trainers`
+   and `owners` re-check every dependent Available DSL, including
+   `horses.trainer_id` changes. Non-empty edits flow (ruling 16). `00021` adds
+   `narrative_signoff jsonb`, `narrative_approved_at`,
+   `narrative_approved_hash`; the Available trigger requires all four slots
+   approved.
+4. **H4a — wholesale is private.** Admin surfaces stop quoting the 100% total;
+   the column drop waits for P1.
+5. **U2 — `/dsl` list shows the horse name** via the page-side join.
+
+Pins inside this chunk: Pin 1 (`stake_remaining` set when null, never reset),
+Pin 3 (existing ids accepted; a horse already holding a DSL is refused),
+Pin 4 (matrix includes no-op and initial).
+
+Gate: `pnpm verify`; psql parity local ↔ hosted; an unapproved DSL is refused
+`available` **by SQL**; the status-matrix test over every `from × to` pair.
+
+### Chunk 3 — Deal assembly · LOCKED
+
+DoD: **an operator can create and edit a deal without getting lost, sees it
+before committing, and the documents derive from what was stored.**
+
+1. **U4 — term sheet one-pager.** The internal term sheet: existing numbers,
+   better hierarchy, plus owner contact, trainer stable, horse facts, image
+   count, slug and readiness gaps.
+2. **U7 — two-way price entry.** Wholesale or retail; the other derived; retail
+   stays a whole dollar, rounded up; refuses where no whole-dollar wholesale
+   reproduces the retail.
+3. **U11 — the four-step create/edit panel.** Step 1 attaches existing records
+   only; one atomic `dsls` write at Confirm; ends in the term sheet with
+   Confirm / Edit / Close. No horse, trainer or owner authoring here.
+4. **U14 — narrative editor.** The four PDS soft slots per horse, live PDS
+   preview, readiness count, *Copy the drafting brief*, sign-off writing the
+   three `00021` columns.
+5. **U10 — draft PDS/SA.** The existing `/dsl/[id]/legal` gains the
+   **DRAFT — not executed** banner and the blocking-field list on refusal.
+
+Pins inside this chunk: Pin 1, Pin 2 (Coming Soon may have no owner; Available
+still requires one), Pin 3.
+
+Gate: `pnpm verify`; a full step-1→2A walk ending in the term-sheet review;
+2B narration and sign-off; a rendered draft PDS/SA; a two-way price round-trip.
+
+### Chunk 4 — Ledger · LOCKED
+
+DoD: **a sold term is visible, closable and immutable.**
+
+1. **U15 — sales ledger.** Cap table per DSL (listed, sold, remaining, live
+   holds, revenue, term end), investor rows with the frozen PDS/SA and hashes,
+   and the manual term-close action.
+2. **H6 — sales are append-only.** `00022` adds a trigger refusing update and
+   delete on `sales`.
+3. **Sale fixture** created deliberately before the proof.
+
+Gate: `pnpm verify`; a ledger walk over the fixture; an update and a delete on
+`sales` refused; a manual close.
+
+### Not chunks of this quest
+
+The rename and its R2 image move (S1), and the public wrap (P1–P3), are one
+separate follow-on integration review. So are auth, public pages and any v2 doc
+reconciliation.
 
 ## Target DB — evidence (2026-11-09)
 
@@ -168,6 +255,29 @@ the decision policy (a FAIL the driver believes is wrong is recorded, not fixed)
 - Evidence: gate green engine **343/343**, website **54/54**; `/horses/[id]` and
   `/horses/[id]/edit` both `200` with Mulan's fields prefilled.
 
+## Chunk 1d — what landed because it was needed (2026-11-10)
+
+Work found necessary while exercising the Records screens after 1c. It is on the
+same branch, gate-green, and **has no separate audit pass** — the next audit
+(chunk 2 diff) reviews it too.
+
+1. **Profile headings deduplicated** — Profile, Achievements, Other and Links
+   rendered a group legend and a field label with the same text. Social keeps its
+   group heading because its three fields have distinct labels.
+2. **Trainer = company + one or more names** (`TrainerNames.tsx`, ruling 17) —
+   Company name plus Trainer name rows with **+ Add another trainer**; stored as
+   one row with names joined `' & '`, split back into boxes on edit. Verified
+   against the hosted DB with a probe row, then deleted.
+3. **Links are a plain registry** (`LinkRows.tsx`, ruling 18) — one Link input,
+   **+ Add another link**, Remove; raw URL stored as given; `label` is the
+   hostname. The title-reading route was removed with its feature.
+4. **Social handles + locked Edit pattern** (`lib/social.ts`, ruling 19/20) —
+   X/Twitter/Instagram/Facebook URLs render as `@handle`, full URL kept in the
+   link and title; `/trainers/[id]/edit` and `/owners/[id]/edit` are dedicated
+   routes with the horse profile's top-right Edit link, breadcrumb and error slot.
+5. **Dev/build cache isolation** (`NEXT_DIST_DIR`, ruling 21) — a `next build`
+   no longer rewrites a running `next dev`'s chunks; `.next-*/` is ignored.
+
 ## Known defects (open)
 
 1. ~~loveracing loader cannot fetch~~ — **fixed in chunk 1b** via `curl_cffi`. The
@@ -191,4 +301,5 @@ the decision policy (a FAIL the driver believes is wrong is recorded, not fixed)
 
 ## Next action
 
-Say **go** to start chunk 2 at H2 (status is a machine).
+Say **`go chunk 2`**. It starts at H2 (status is a machine), then H1, H3
+(`00021`), H4a and U2 — the locked contract above is the whole scope.

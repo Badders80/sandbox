@@ -362,19 +362,30 @@ L1 + B1: fetch through `curl_cffi`, parse the real Stud Book markup, accept
 `/horses/[id]/edit` with `updateHorseAction`, shared `HorseForm`, trainer
 assignment, Edit link on the profile. Slug fixed on edit. Gate green; audit PASS.
 
-**Chunk 2 — Harden the engine** · ~9 h
+**Chunk 1d — profile polish found necessary in use** · **DONE 2026-11-10**
+(head `d387225`; no separate audit — the chunk-2 audit covers the diff)
+Deduplicated profile headings; trainer = Company name + one or more Trainer names
+joined `' & '` (rulings 17); links as a raw registry with add/remove, title
+fetching removed (ruling 18); social URLs render as handles (ruling 19);
+`/trainers/[id]/edit` and `/owners/[id]/edit` use the horse Edit pattern
+(ruling 20); `NEXT_DIST_DIR` isolates a dev server from a build (ruling 21).
+Gate: typecheck + lint + test green, engine 346/346, website 54/54.
+
+**Chunks 2–4 are LOCKED (2026-11-10).** Contents change only by ruling.
+
+**Chunk 2 — Harden the engine** · LOCKED
 H2 → H1 (no migration) → H3 (`00021`) → H4a → U2.
 Gate: `pnpm verify`; psql parity; an unapproved DSL refused `available` by SQL;
 the status matrix test over all `from × to` pairs.
 
-**Chunk 3 — Deal assembly (2A → 2B → 2C)** · ~16.5 h
+**Chunk 3 — Deal assembly (2A → 2B → 2C)** · LOCKED
 U4 → U7 → U11 → U14 → U10. No migration — the sign-off columns ride in `00021`.
 The pieces land before the wizard that uses them, so the review step is built
 against the final term sheet and price entry.
 Gate: `pnpm verify`; a full 2A walk ending in the term sheet review; 2B narration
 and sign-off; a rendered draft PDS/SA; two-way price round-trip.
 
-**Chunk 4 — Ledger** · ~4.5 h
+**Chunk 4 — Ledger** · LOCKED
 U15 + H6 (`00022`). Gate: `pnpm verify`; a ledger walk over the existing sale
 fixture; an update/delete on `sales` refused.
 
@@ -468,7 +479,18 @@ separate and not counted here.
 14. **Headless drafting** — the narrative editor copies a brief out and pastes
     suggestions back; the engine never calls a model and never writes prose.
     Approval is recorded against the text by hash, never enforced.
+17. **Trainer row = company + names** (2026-11-10) — Company name plus one or
+    more Trainer names; one row per company, names joined `' & '`, because a
+    horse attaches to a single `trainer_id` and the PDS prints `trainer.name`.
+18. **Links are a raw registry** (2026-11-10) — one URL per row, stored as given,
+    label is the hostname; no fetching, title reading or rewriting.
+19. **Social renders as a handle** (2026-11-10) — X, Twitter, Instagram and
+    Facebook URLs show `@handle`; the full URL stays in the link and its title.
+20. **Trainer/owner Edit uses the horse pattern** (2026-11-10) — a top-right Edit
+    link to a dedicated `/[id]/edit` route, same breadcrumb and heading.
+21. **Dev servers get their own cache** (2026-11-10) — `NEXT_DIST_DIR` selects the
+    build directory so a build cannot rewrite a running dev server's chunks.
 
 ## Ready
 
-Say **go** to start chunk 1.
+Chunks 1–1d are done. The next action is **`go chunk 2`** — H2 first.
