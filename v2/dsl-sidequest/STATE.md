@@ -34,8 +34,13 @@
 8. **U12** — horse-only create is in scope.
 9. **U14** — the four PDS soft slots get their own structured editor; the term
    sheet stays hard and locked.
-10. **Link model** — independent records; horse has 0..1 nullable trainer; owner
-    attaches per DSL; owner↔trainer derived; no `horse_owners` table.
+10. **Link model (re-ruled 2026-11-10)** — the **DSL is the only place horse,
+    trainer and owner are linked**. `horses` carries no trainer; `dsls` carries
+    `horse_id`, `trainer_id` and `owner_id`, all selected at creation from
+    existing Records. Records pages show the link as a **derived view** (horse →
+    its DSL → trainer; trainer/owner → their DSLs) and never author it. No
+    `horse_owners` table and no second link table. Trainer may be blank while
+    Coming Soon and is required before Available, exactly like the owner.
 11. **Strict SSOT** — Records own entities; `/dsl` attaches ids and writes
     `dsls` only.
 12. **Three stages** — Records → DSL → Ledger.
@@ -43,8 +48,9 @@
     early close allowed; expired terms surfaced first.
 14. **Headless drafting** — copy the brief out, paste suggestions back; the
     engine never calls a model. Approval hash kept as a record, not a lock.
-15. **Trainer change** — edit on the horse; new documents use the new trainer;
-    sold documents never change or reissue; investor notice is manual.
+15. **Trainer change** — edit the trainer on the **DSL**; new documents use the
+    new trainer; sold documents never change or reissue; investor notice is
+    manual. Records shows the new link immediately because it is derived.
 16. **Stage 1 edits flow through** — non-empty edits feed live DSLs; locking is
     at the sale. Only blanking a required field (or a bio-less trainer) is refused.
 17. **Trainer row = company + names** — the form asks Company name and one or more
@@ -81,25 +87,32 @@ listing.** The rules hold whatever the source, in TS *and* in SQL.
    non-transitions: no-op (`from === to`) and initial (`null → coming_soon |
    available`). Refuse the rest. TS `checkStatusTransition` and the `00021`
    trigger must agree. Completion stays manual (ruling 13).
-2. **H1 — the DSL writes one table.** `saveDsl`/`updateDsl` accept `horseId` and
-   `ownerId`; delete `resolveTrainer`, `resolveOwner`, the horse insert and the
-   four-table path. One `dsls` write at Confirm. A failure leaves zero rows.
+2. **H1 — the DSL writes one table.** `saveDsl`/`updateDsl` accept `horseId`,
+   `trainerId` and `ownerId`; delete `resolveTrainer`, `resolveOwner`, the horse
+   insert and the four-table path. One `dsls` write at Confirm. A failure leaves
+   zero rows.
 3. **H3 — readiness cannot be cheated.** Guard triggers on `horses`, `trainers`
    and `owners` re-check every dependent Available DSL, including
-   `horses.trainer_id` changes. Non-empty edits flow (ruling 16). `00021` adds
+   `dsls.trainer_id` changes. Non-empty edits flow (ruling 16). `00021` adds
+   `dsls.trainer_id`, **drops `horses.trainer_id`**, and adds
    `narrative_signoff jsonb`, `narrative_approved_at`,
    `narrative_approved_hash`; the Available trigger requires all four slots
    approved.
 4. **H4a — wholesale is private.** Admin surfaces stop quoting the 100% total;
    the column drop waits for P1.
 5. **U2 — `/dsl` list shows the horse name** via the page-side join.
+6. **R1 — Records shows the link, never authors it.** Remove the trainer from
+   `HorseForm`, `/horses/new`, `/horses/[id]/edit` and `updateHorseAction`; the
+   horse profile and `/horses` derive the trainer from the horse's DSL; trainer
+   and owner profiles derive their horses from their DSLs. Zero writes here.
 
 Pins inside this chunk: Pin 1 (`stake_remaining` set when null, never reset),
 Pin 3 (existing ids accepted; a horse already holding a DSL is refused),
 Pin 4 (matrix includes no-op and initial).
 
 Gate: `pnpm verify`; psql parity local ↔ hosted; an unapproved DSL is refused
-`available` **by SQL**; the status-matrix test over every `from × to` pair.
+`available` **by SQL**; the status-matrix test over every `from × to` pair;
+Records pages show the DSL's trainer while `horses` no longer stores one.
 
 ### Chunk 3 — Deal assembly · LOCKED
 
@@ -112,9 +125,10 @@ before committing, and the documents derive from what was stored.**
 2. **U7 — two-way price entry.** Wholesale or retail; the other derived; retail
    stays a whole dollar, rounded up; refuses where no whole-dollar wholesale
    reproduces the retail.
-3. **U11 — the four-step create/edit panel.** Step 1 attaches existing records
-   only; one atomic `dsls` write at Confirm; ends in the term sheet with
-   Confirm / Edit / Close. No horse, trainer or owner authoring here.
+3. **U11 — the four-step create/edit panel.** Step 1 selects horse, trainer and
+   owner from existing records; one atomic `dsls` write at Confirm; ends in the
+   term sheet with Confirm / Edit / Close. No horse, trainer or owner authoring
+   here.
 4. **U14 — narrative editor.** The four PDS soft slots per horse, live PDS
    preview, readiness count, *Copy the drafting brief*, sign-off writing the
    three `00021` columns.

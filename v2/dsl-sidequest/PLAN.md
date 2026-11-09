@@ -71,10 +71,10 @@ the long-standing gap where a horse could only exist as a side-effect of a DSL.
 A centred panel on its own route (pop-up look, linkable, refresh-safe; not a
 fragile modal). Four steps, matching how a deal is actually assembled:
 
-1. **Parties** — select an existing horse and an existing owner, by id. The
-   horse's trainer is shown read-only; it is authored on the horse. Readiness
-   badges say at once whether the horse (<3 images, missing prose, unregistered)
-   or its trainer (missing bio) is ready, with a link to fix it in Records. **No
+1. **Parties** — select an existing horse, trainer and owner, by id. The three
+   are the DSL's link; Records only supplies the candidates. Readiness badges say
+   at once whether the horse (<3 images, missing prose, unregistered) or the
+   chosen trainer (missing bio) is ready, with a link to fix it in Records. **No
    inline creation, no edits** — this step attaches, never authors.
 2. **Commercials** — payment model, term start and end (they decide payment
    eligibility, so they stay here), price entered as wholesale **or** retail with
@@ -299,13 +299,12 @@ its DSLs. ~2 h
 executed** banner and the blocking-field list on failure. ~1 h
 
 **U11 — The create/edit flow.** The four-step panel described in §3, reusing the
-form system. Step 1 attaches existing records only; one atomic `dsls` write at
-Confirm. ~7 h
+form system. Step 1 selects horse, trainer and owner from existing records only;
+one atomic `dsls` write at Confirm. ~7 h
 
-**U12 — `/horses/new`.** Horse-only flow with an **optional current trainer**
-(pick existing or leave unassigned). No owner. Widens
-`NewHorse.trainerId` to `string | null` (`dslStore.ts:70`) — one TS line, no
-schema change. Lands on the profile. ~3 h
+**U12 — `/horses/new`.** Horse-only flow. **No trainer and no owner** — the
+horse/trainer/owner link happens at DSL creation (ruling 10). Lands on the
+profile. ~3 h
 
 **U13 — Form system and admin theme.** The engine theme tokens (the app has none
 today), shared primitives, validation display, keyboard and mobile behaviour, used
@@ -374,9 +373,10 @@ Gate: typecheck + lint + test green, engine 346/346, website 54/54.
 **Chunks 2–4 are LOCKED (2026-11-10).** Contents change only by ruling.
 
 **Chunk 2 — Harden the engine** · LOCKED
-H2 → H1 (no migration) → H3 (`00021`) → H4a → U2.
+H2 → H1 (no migration) → H3 (`00021`) → H4a → U2 → R1 (Records derives the link).
 Gate: `pnpm verify`; psql parity; an unapproved DSL refused `available` by SQL;
-the status matrix test over all `from × to` pairs.
+the status matrix test over all `from × to` pairs; Records pages show the DSL's
+trainer while `horses` no longer stores one.
 
 **Chunk 3 — Deal assembly (2A → 2B → 2C)** · LOCKED
 U4 → U7 → U11 → U14 → U10. No migration — the sign-off columns ride in `00021`.
@@ -458,20 +458,24 @@ separate and not counted here.
    with a live preview; the term sheet stays hard, clean and locked
    (2026-11-09).
 9. Budget 6 days, stop 9 (locked 2026-11-09).
-10. **Link model** — horses, trainers and owners are independent records. A horse
-    has 0..1 current trainer (`horses.trainer_id`, nullable); owners attach per
-    DSL (`dsls.owner_id`); owner↔trainer is derived (owner → DSL → horse →
-    trainer), never stored. **No `horse_owners` table in this quest** — it would
-    be a second source of truth for a link the DSL already carries.
+10. **Link model (re-ruled 2026-11-10)** — horses, trainers and owners are
+    independent records. **The DSL is the only place they are linked.**
+    `horses` carries no trainer; `dsls` carries `horse_id`, `trainer_id` and
+    `owner_id`, all selected at creation. Records pages show the link as a
+    **derived view** (horse → its DSL → trainer; trainer/owner → their DSLs) and
+    never author it. **No `horse_owners` table and no second link table** — that
+    would be a second source of truth for a link the DSL already carries. Trainer
+    may be blank while Coming Soon and is required before Available, like owner.
 11. **Strict SSOT boundary** — Records own entities; the DSL attaches ids and
     writes `dsls` only. No inline creation or editing in `/dsl`.
 12. **Three-stage pipeline** — Records → DSL → Ledger, matching the sidebar.
 13. **Completion is manual** — `available → completed` and
     `fully_allocated → completed`, set by the operator from the ledger; no cron,
     no auto-sweep. Early close allowed; expired terms surfaced first.
-15. **Trainer change** — edit the trainer on the horse; every **new** document
+15. **Trainer change** — edit the trainer on the **DSL**; every **new** document
     uses the new trainer; sold documents are never changed or reissued; investor
-    notification is manual.
+    notification is manual. Records shows the new link immediately because it is
+    derived.
 16. **Stage 1 edits flow through** — a non-empty edit to horse, trainer or owner
     feeds every live DSL and the next compilation; locking happens at the sale,
     which freezes the PDS/SA and hashes. Only blanking a required field (or

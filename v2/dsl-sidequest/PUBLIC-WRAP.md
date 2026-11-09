@@ -18,6 +18,7 @@ Read with `STATE.md` and `PLAN.md` §4 (Public flow-ons).
 | P2 | Buy flow defaults to 1%, bounded by min, step, remaining | retired U6 | open |
 | P3 | Prove the public site renders the full listing projection | retired S2 | open |
 | S1 | Rename changes public image URLs (slug-derived); copy-first, no 404 window | S1 — deferred with the wrap | open |
+| R1 | `horses.trainer_id` is dropped; the DSL carries `trainer_id` | ruling 10 re-rule | **dropped — no public consequence** (checked 2026-11-10: `website/src` never reads a horse trainer; only marketing copy names the word) |
 
 `S1` is deferred with the rest of the wrap. The marketplace derives
 image URLs from the slug (`website/src/lib/site.ts` → `imageKey(slug, 1)`), so the
