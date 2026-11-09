@@ -72,6 +72,13 @@ on `dsl-sidequest`. Chunks 3–4 are LOCKED. Chunk 3 is next.**
 22. **Roles are relationships, not permissions** — a role says what a profile is
     to a deal, never what it may do in the app. Auth stays Cloudflare Access.
     Unticking a role that a live DSL references is refused, never cascaded.
+23. **A horse may hold several DSLs** (2026-11-10) — different expiries,
+    commercials and owners. Pin 3 is retired: `saveDsl` no longer refuses a horse
+    with an existing deal. The **100%-listed cap is a manual operator check** for
+    now, not a DB constraint. A deal is identified
+    `Horse | Price | Investor Return % | Expiry` (`Mulan The Brave $60 75%
+    Jun2028`); the `/dsl` list reads Horse · Price · Investor · Return % ·
+    Expiry · Status.
 
 ## Chunks
 
@@ -116,15 +123,17 @@ listing.** The rules hold whatever the source, in TS *and* in SQL.
    approved.
 5. **H4a — wholesale is private.** Admin surfaces stop quoting the 100% total;
    the column drop waits for P1.
-6. **U2 — `/dsl` list shows the horse name** via the page-side join.
+6. **U2 — `/dsl` list reads as a contract:** Horse · Price · Investor · Return
+   % · Expiry · Status. Horse joins page-side; Price is retail per 1%/month;
+   Investor is the owner party; Return % is the split; status in plain words
+   (done 2026-11-10, `0d912d9`).
 7. **R1 — Records shows the link, never authors it.** Remove the trainer from
    `HorseForm`, `/horses/new`, `/horses/[id]/edit` and `updateHorseAction`; the
    horse profile and `/horses` derive the trainer through its DSL; `/trainers`
    and `/owners` are role-filtered views of `parties`. Zero writes here.
 
 Pins inside this chunk: Pin 1 (`stake_remaining` set when null, never reset),
-Pin 3 (existing ids accepted; a horse already holding a DSL is refused),
-Pin 4 (matrix includes no-op and initial).
+Pin 3 (existing ids accepted), Pin 4 (matrix includes no-op and initial).
 
 Gate: `pnpm verify`; psql parity local ↔ hosted; an unapproved DSL is refused
 `available` **by SQL**; the status-matrix test over every `from × to` pair;
@@ -170,7 +179,7 @@ before committing, and the documents derive from what was stored.**
    `party_roles.role` check. **H6 moves to `00023`.**
 
 Pins inside this chunk: Pin 1, Pin 2 (Coming Soon may have no owner; Available
-still requires one), Pin 3.
+still requires one).
 
 Gate: `pnpm verify`; a full step-1→Narrative walk ending in the term-sheet
 review; an override that survives a Records edit plus its one-time warning; a

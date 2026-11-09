@@ -74,6 +74,8 @@ fragile modal). Four steps, matching how a deal is actually assembled:
 1. **Parties** — select an existing horse and two profiles: one holding the
    trainer role, one the owner role. Records only supplies the candidates. A
    profile may hold both roles, and may be both trainer and owner on one deal.
+   A horse may hold several terms: the step lists its existing DSLs and the
+   listed capacity so far, for the operator's manual 100% check (ruling 23).
    Readiness badges say at once whether the horse (<3 images, missing prose,
    unregistered) or the chosen trainer profile (missing bio) is ready, with a
    link to fix it in Records. **No inline creation, no edits** — this step
@@ -261,9 +263,10 @@ non-null, because buyers have drawn it down.
 Fix in U11: a Coming Soon draft may have no owner; the Available gate still
 requires one.
 
-**Pin 3 — `saveDsl` must accept existing ids.** Now the core of H1, not a side
-note: Step 1 hands over `horseId` and `ownerId`; keep the rule that a horse already
-holding a DSL is refused — multiple concurrent DSLs per horse is out of scope.
+**Pin 3 — `saveDsl` must accept existing ids.** The core of H1: Step 1 hands over
+`horseId`, `trainerId` and `ownerId`. **Retired 2026-11-10:** a horse may hold
+several DSLs across different expiries; the 100%-listed cap is a manual operator
+check for now (ruling 23).
 
 **Pin 4 — no-op and initial transitions.** Part of H2; called out here so the
 matrix test includes them.
@@ -276,8 +279,9 @@ matrix test includes them.
 **U1 — `/horses` tile grid.** Same pattern as trainers/owners: image, name,
 status, trainer; links to the profile. ~1 h
 
-**U2 — `/dsl` list shows the horse name.** Page-side join against `listHorses`.
-~30 min
+**U2 — `/dsl` list reads as a contract (done 2026-11-10).** Horse · Price ·
+Investor · Return % · Expiry · Status. Horse joins page-side; Price is retail per
+1%/month; Investor is the owner party; Return % is the split; status in words.
 
 **U3 — Trainer/owner: three sections + socials + links (schema `00019`).**
 Confirmed 2026-11-09; folded into `parties` by P0 (2026-11-10) and carried over
@@ -515,6 +519,12 @@ separate and not counted here.
     a profile is to a deal, never what it may do in the app; auth stays
     Cloudflare Access. Unticking a role a live DSL references is refused, never
     cascaded.
+23. **A horse may hold several DSLs** (2026-11-10) — different expiries,
+    commercials and owners. Pin 3 is retired; `saveDsl` no longer refuses a horse
+    with an existing deal. The **100%-listed cap is a manual operator check** for
+    now, not a DB constraint. A deal is identified
+    `Horse | Price | Investor Return % | Expiry`; the `/dsl` list reads Horse ·
+    Price · Investor · Return % · Expiry · Status.
 
 ## Ready
 
