@@ -156,16 +156,18 @@ before committing, and the documents derive from what was stored.**
 4. **U14 — soft content, re-ruled 2026-11-10.** Records own the base text: the
    horse profile gains one **Soft content** section with three horse slots
    editable in place; the trainer bio shows read-only with a link to its edit
-   page. The wizard's Narrative step prefills all four and keeps edits as
-   **deal-local overrides on `dsls`**, never written back. Untouched slots follow
-   Records live; an overridden slot shows one dismissible warning when its source
-   changes (keyed by source hash). *Copy the drafting brief*; sign-off lives on
-   the deal.
+   page. The wizard's Narrative step prefills all four; **only the three horse
+   slots are overridable**, kept as deal-local text on `dsls`, never written back.
+   The trainer bio always resolves from the party. Untouched slots follow Records
+   live; an overridden slot shows one dismissible warning when its source changes.
+   **One resolver** (`resolveNarrative`) is imported by readiness, the compiler,
+   the term-sheet preview and the editor; SQL mirrors the fallback. *Copy the
+   drafting brief*; sign-off lives on the deal and hashes the resolved texts.
 5. **U10 — draft PDS/SA.** The existing `/dsl/[id]/legal` gains the
    **DRAFT — not executed** banner and the blocking-field list on refusal.
-6. **Migration `00022`.** `narrative_overrides jsonb` (value, source hash,
-   dismissed hash per slot) and a `party_roles.role` check.
-   **H6 moves to `00023`.**
+6. **Migration `00022`.** Three text columns on `dsls` + `narrative_override_meta
+   jsonb` (source/dismissed hashes, keys constrained to the three) + the
+   `party_roles.role` check. **H6 moves to `00023`.**
 
 Pins inside this chunk: Pin 1, Pin 2 (Coming Soon may have no owner; Available
 still requires one), Pin 3.

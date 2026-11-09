@@ -326,10 +326,12 @@ reappear. ~5 h
 **U14 — Soft content (re-ruled 2026-11-10).** Records own the base text: one
 **Soft content** section on the horse profile with the three horse slots editable
 in place, and the trainer bio read-only with a link to its edit page. The wizard's
-Narrative step prefills all four; edits there are **deal-local overrides** stored
-on `dsls` and never written back, untouched slots follow Records live, and an
-overridden slot shows one dismissible warning when its source changes. **Copy the
-drafting brief**; sign-off writes the three `dsls` columns.
+Narrative step prefills all four; **only the three horse slots are overridable**,
+stored as deal-local text on `dsls` and never written back. The trainer bio always
+resolves from the party. Untouched slots follow Records live; an overridden slot
+shows one dismissible warning when its source changes. One `resolveNarrative`
+serves readiness, the compiler, the preview and the editor, with SQL mirroring the
+fallback. **Copy the drafting brief**; sign-off hashes the resolved texts.
 
 **U15 — Sales ledger.** Cap table per DSL (listed, sold, remaining, live holds,
 revenue, term end), investor rows with the frozen PDS/SA and hashes, and the term
@@ -390,8 +392,8 @@ the status matrix test over all `from × to` pairs; `/trainers` and `/owners`
 are role-filtered views of one profile table; `horses` stores no trainer.
 
 **Chunk 3 — Deal assembly (2A → 2B → 2C)** · LOCKED
-U4 → U7 → U11 → U14 → U10. Migration `00022` adds `narrative_overrides` and the
-`party_roles.role` check; H6 moves to `00023`.
+U4 → U7 → U11 → U14 → U10. Migration `00022` adds three narrative text columns,
+`narrative_override_meta` and the `party_roles.role` check; H6 moves to `00023`.
 The pieces land before the wizard that uses them, so the review step is built
 against the final term sheet and price entry.
 Gate: `pnpm verify`; a full 2A walk ending in the term sheet review; 2B narration
