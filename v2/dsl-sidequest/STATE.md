@@ -149,21 +149,30 @@ before committing, and the documents derive from what was stored.**
 2. **U7 — two-way price entry.** Wholesale or retail; the other derived; retail
    stays a whole dollar, rounded up; refuses where no whole-dollar wholesale
    reproduces the retail.
-3. **U11 — the four-step create/edit panel.** Step 1 selects horse, trainer and
-   owner from existing records; one atomic `dsls` write at Confirm; ends in the
-   term sheet with Confirm / Edit / Close. No horse, trainer or owner authoring
-   here.
-4. **U14 — narrative editor.** The four PDS soft slots per horse, live PDS
-   preview, readiness count, *Copy the drafting brief*, sign-off writing the
-   three `00021` columns.
+3. **U11 — the four-step create/edit panel.** Parties → Commercials → Terms →
+   Narrative, ending in the term-sheet **Review** (the Review is the popup, not a
+   step). Step 1 selects horse, trainer and owner from existing records; one
+   atomic `dsls` write at Confirm; Confirm / Edit / Close. No entity authoring.
+4. **U14 — soft content, re-ruled 2026-11-10.** Records own the base text: the
+   horse profile gains one **Soft content** section with three horse slots
+   editable in place; the trainer bio shows read-only with a link to its edit
+   page. The wizard's Narrative step prefills all four and keeps edits as
+   **deal-local overrides on `dsls`**, never written back. Untouched slots follow
+   Records live; an overridden slot shows one dismissible warning when its source
+   changes (keyed by source hash). *Copy the drafting brief*; sign-off lives on
+   the deal.
 5. **U10 — draft PDS/SA.** The existing `/dsl/[id]/legal` gains the
    **DRAFT — not executed** banner and the blocking-field list on refusal.
+6. **Migration `00022`.** `narrative_overrides jsonb` (value, source hash,
+   dismissed hash per slot) and a `party_roles.role` check.
+   **H6 moves to `00023`.**
 
 Pins inside this chunk: Pin 1, Pin 2 (Coming Soon may have no owner; Available
 still requires one), Pin 3.
 
-Gate: `pnpm verify`; a full step-1→2A walk ending in the term-sheet review;
-2B narration and sign-off; a rendered draft PDS/SA; a two-way price round-trip.
+Gate: `pnpm verify`; a full step-1→Narrative walk ending in the term-sheet
+review; an override that survives a Records edit plus its one-time warning; a
+rendered draft PDS/SA; a two-way price round-trip; parity for `00022`.
 
 ### Chunk 4 — Ledger · LOCKED
 
@@ -172,7 +181,7 @@ DoD: **a sold term is visible, closable and immutable.**
 1. **U15 — sales ledger.** Cap table per DSL (listed, sold, remaining, live
    holds, revenue, term end), investor rows with the frozen PDS/SA and hashes,
    and the manual term-close action.
-2. **H6 — sales are append-only.** `00022` adds a trigger refusing update and
+2. **H6 — sales are append-only.** `00023` adds a trigger refusing update and
    delete on `sales`.
 3. **Sale fixture** created deliberately before the proof.
 

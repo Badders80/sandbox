@@ -78,20 +78,23 @@ fragile modal). Four steps, matching how a deal is actually assembled:
    unregistered) or the chosen trainer profile (missing bio) is ready, with a
    link to fix it in Records. **No inline creation, no edits** — this step
    attaches, never authors.
-2. **Commercials** — payment model, term start and end (they decide payment
-   eligibility, so they stay here), price entered as wholesale **or** retail with
-   the other derived, investor split, listed stake, minimum, step, stake
-   remaining shown as derived.
-3. **Conditions** — break and exit terms (close style: 14-day notice or 3×
-   remaining buyout), distribution schedule, status and published, plus the
-   readiness checklist naming anything still missing before Available.
-4. **Review** — **the term sheet pops up**: the internal one-pager, with
+2. **Commercials** — price entered as wholesale **or** retail with the other
+   derived, investor split, listed stake, minimum, step, stake remaining shown as
+   derived. The 100% wholesale total never renders.
+3. **Terms** — term start (the 1st) and **Expiry** (the last day), payment model
+   limited by term length, close style (14-day notice or 3× remaining buyout),
+   distribution schedule, status and published, plus the readiness checklist
+   naming anything still missing before Available.
+4. **Narrative** — the four soft slots prefilled from Records; edits are
+   deal-local overrides, untouched slots follow Records; *Copy the drafting
+   brief*. Blank slots are readiness gaps, not errors.
+5. **Review** — **the term sheet pops up**: the internal one-pager, with
    **Confirm · Edit · Close**. Confirm performs the single atomic save and lands
    on `/dsl/[id]`; it is allowed for a Coming Soon draft with gaps, and blocked
    only where the chosen status is illegal. Edit returns to the step that owns
    the field. Close discards; no draft row is written mid-flow.
 
-Same four steps for edit, prefilled, with Review saying “Save changes”.
+Same four steps for edit, prefilled, with the Review saying “Save changes”.
 
 Step rules: client-side checks per step for speed, the server and DB remain
 authoritative; a step cannot advance while a blocking field is invalid; the
@@ -243,7 +246,7 @@ so the image-count clobber cannot happen. It disappears with H1.
 **H6 — Sales are append-only in fact, not just in comment (MEDIUM).** `00007`
 calls the table read-only, but there is no policy or trigger, and `00013` grants
 the service role `update, delete`. Add a trigger refusing update and delete on
-`sales`. Migration `00022`.
+`sales`. Migration `00023`.
 
 ### Pins — defects to fix inside the named items
 
@@ -320,9 +323,13 @@ from the old white theme (`trainers/[id]`, `trainers/new`, `trainers/page`,
 one with the token hairline, and add a source guard so `border-black` cannot
 reappear. ~5 h
 
-**U14 — Narrative editor.** The four PDS soft slots on one page per horse, with a
-live PDS preview, a readiness count and **Copy the drafting brief**; reached from
-the 2A term sheet and the DSL page. Sign-off writes the three columns above. ~3.5 h
+**U14 — Soft content (re-ruled 2026-11-10).** Records own the base text: one
+**Soft content** section on the horse profile with the three horse slots editable
+in place, and the trainer bio read-only with a link to its edit page. The wizard's
+Narrative step prefills all four; edits there are **deal-local overrides** stored
+on `dsls` and never written back, untouched slots follow Records live, and an
+overridden slot shows one dismissible warning when its source changes. **Copy the
+drafting brief**; sign-off writes the three `dsls` columns.
 
 **U15 — Sales ledger.** Cap table per DSL (listed, sold, remaining, live holds,
 revenue, term end), investor rows with the frozen PDS/SA and hashes, and the term
@@ -383,14 +390,15 @@ the status matrix test over all `from × to` pairs; `/trainers` and `/owners`
 are role-filtered views of one profile table; `horses` stores no trainer.
 
 **Chunk 3 — Deal assembly (2A → 2B → 2C)** · LOCKED
-U4 → U7 → U11 → U14 → U10. No migration — the sign-off columns ride in `00021`.
+U4 → U7 → U11 → U14 → U10. Migration `00022` adds `narrative_overrides` and the
+`party_roles.role` check; H6 moves to `00023`.
 The pieces land before the wizard that uses them, so the review step is built
 against the final term sheet and price entry.
 Gate: `pnpm verify`; a full 2A walk ending in the term sheet review; 2B narration
 and sign-off; a rendered draft PDS/SA; two-way price round-trip.
 
 **Chunk 4 — Ledger** · LOCKED
-U15 + H6 (`00022`). Gate: `pnpm verify`; a ledger walk over the existing sale
+U15 + H6 (`00023`). Gate: `pnpm verify`; a ledger walk over the existing sale
 fixture; an update/delete on `sales` refused.
 
 ### After this quest — the public integration review
@@ -454,13 +462,14 @@ separate and not counted here.
 3. Six profile fields, migration `00019`.
 4. Wholesale private; 100% total dropped (P1).
 5. Retail is a whole dollar, rounded up; two-way entry.
-6. **Create flow is a 4-step panel — Parties · Commercials · Conditions ·
-   Review — ending in the term sheet with Confirm / Edit / Close**
-   (2026-11-09).
+6. **Create flow is a 4-step panel — Parties · Commercials · Terms · Narrative —
+   ending in the term sheet Review with Confirm / Edit / Close** (re-ruled
+   2026-11-10; the Review is the popup, not a step).
 7. **Horse-only create path is in scope** (2026-11-09).
-8. **Soft content is a separate structured editor** — the four fixed PDS slots,
-   with a live preview; the term sheet stays hard, clean and locked
-   (2026-11-09).
+8. **Soft content (re-ruled 2026-11-10)** — Records own the base text: one Soft
+   content section on the horse profile for the three horse slots, trainer bio on
+   its own page. The wizard's Narrative step keeps deal-local overrides on `dsls`
+   and never writes back. The term sheet stays hard, clean and locked.
 9. Budget 6 days, stop 9 (locked 2026-11-09).
 10. **Link model (re-ruled 2026-11-10)** — one **profile** per real-world person
     or company (`parties`), with roles ticked on it (`party_roles`: `trainer`,
