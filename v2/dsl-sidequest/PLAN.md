@@ -83,10 +83,11 @@ fragile modal). Four steps, matching how a deal is actually assembled:
 2. **Commercials** — price entered as wholesale **or** retail with the other
    derived, investor split, listed stake, minimum, step, stake remaining shown as
    derived. The 100% wholesale total never renders.
-3. **Terms** — term start (the 1st) and **Expiry** (the last day), payment model
-   limited by term length, close style (14-day notice or 3× remaining buyout),
-   distribution schedule, status and published, plus the readiness checklist
-   naming anything still missing before Available.
+3. **Terms** — start is the **1st of the current month**, read-only (whole months
+   only); **Expiry** is chosen as a month and stored as its last day; length is
+   inclusive. Payment model limited by term length, close style (14-day notice or
+   3× remaining buyout), distribution schedule, status and published, plus the
+   readiness checklist naming anything still missing before Available.
 4. **Narrative** — the four soft slots prefilled from Records; edits are
    deal-local overrides, untouched slots follow Records; *Copy the drafting
    brief*. Blank slots are readiness gaps, not errors.
@@ -533,6 +534,11 @@ separate and not counted here.
     **listed** DSL always carries a start and an expiry; a draft may be dateless,
     and readiness refuses Available without dates. The legal templates keep their
     full split wording.
+25. **Dates are whole months (2026-11-10)** — the term start is **the 1st of the
+    current month**, not a picker; "today" means the month we are in. The
+    operator chooses an **Expiry month**, stored as its last day. Length is
+    `termMonthsBetween`, inclusive of both months. Both dates stay editable until
+    the sale freezes the documents.
 
 ## Ready
 

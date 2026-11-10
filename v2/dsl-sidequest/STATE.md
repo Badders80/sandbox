@@ -86,6 +86,11 @@ on `dsl-sidequest`. Chunks 3–4 are LOCKED. Chunk 3 is next.**
     **listed** DSL (`available` / `fully_allocated`) always carries a start and
     an expiry; a draft may be dateless, and readiness refuses Available without
     dates. The legal templates keep their full split wording.
+25. **Dates are whole months (2026-11-10)** — the term start is **the 1st of the
+    current month**, not a picker; "today" means the month we are in. The
+    operator chooses an **Expiry month**, stored as its last day. Length is
+    `termMonthsBetween`, inclusive of both months. Both dates stay editable until
+    the sale freezes the documents.
 
 ## Chunks
 
