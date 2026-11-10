@@ -15,8 +15,8 @@ the public wrap (P1–P3) are a separate follow-on review, not part of this DoD.
 |---|---|
 | Repo | `/home/evo/evolution/engine_v2/website` (monorepo: `engine/`, `website/`) |
 | Branch | `main` @ `0095106`, working tree clean, no `dsl-sidequest` branch yet |
-| Gate | `pnpm verify` = typecheck && lint && test && build |
-| Migrations | `00019` (profiles) and `00020` (barn name) applied. Next free: `00021` for chunk 2, `00022` for chunk 4; the public review takes the next free after that |
+| Gate | `pnpm verify` = typecheck && lint && test && build. Plus `just verify-db` at every chunk close: every `scripts/probe-*.sql` against localhost only, schema-version assert, advisory lock, then `check-db` narrative parity |
+| Migrations | `00024`–`00026` applied local and hosted. Next free: `00027` |
 | U13 premise | `engine/src/app/globals.css` is one line: `@import 'tailwindcss'` ✓ |
 | H2 premise | `dsl.ts:57-66` `checkStatusTransition` never reads `from` ✓ |
 | Pin 5 | `dslStore.ts:70` is `trainerId: string` ✓ |

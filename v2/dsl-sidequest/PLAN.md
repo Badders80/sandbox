@@ -340,9 +340,66 @@ shows one dismissible warning when its source changes. One `resolveNarrative`
 serves readiness, the compiler, the preview and the editor, with SQL mirroring the
 fallback. **Copy the drafting brief**; sign-off hashes the resolved texts.
 
-**U15 — Sales ledger.** Cap table per DSL (listed, sold, remaining, live holds,
-revenue, term end), investor rows with the frozen PDS/SA and hashes, and the term
-close action. ~4 h
+**U15 — Sales ledger.** Upgrade the existing read-only `/sales` page into the
+ledger: per-DSL cap table (listed, sold, open holds, remaining, revenue, term
+end), investor rows with the frozen PDS/SA and hashes, and the manual term-close
+action. ~2 h
+
+**U18 — Sale snapshot (snapshot only).** `sales` stores the terms as executed:
+`wholesale_monthly_per_percent`, `retail_monthly_per_percent`, `investor_split`,
+`listed_stake`, `min_stake`, `step`, `end_date`, `payment_model`, `close_style`,
+`distribution_schedule`, and the `trainer_id` / `owner_id` at sale. The **ledger
+reads the snapshot**. The live `dsls` row may still drift until F2; **no
+post-sale guard lands in chunk 4**, and ruling 15 still governs operational
+changes. ~1.5 h
+
+**U19 — Close guard.** `dsls` gains `closed_at`, `closed_reason` and, where the
+access layer supplies it, `closed_by`. The manual close sweeps stale holds, then
+refuses while any `open` or `paid_unfulfilled` checkout exists — held **or**
+returned, because money was taken without a sale. ~1 h
+
+**U20 — Cap-table identity and fixture.** In horse points:
+`listed = sold + open holds + held paid_unfulfilled + remaining`. `00024` adds
+`checkout_sessions.stake_returned_at timestamptz`: **null** = the stake is still
+held; **set** = release or expiry returned it. A `paid_unfulfilled` row
+contributes capacity only when null. Proven by a SQL probe and a test. The
+fixture goes through the real reserve → sale path and is labelled synthetic. ~1 h
+
+**U21 — Sale-time start and remaining-month pricing.** A listing carries an expiry and
+**no start** (ruling 25). At checkout the start is the first day of the buyer's month;
+`remaining = termMonthsBetween(start, end)`. The effective model is `upfront` when the
+listing is upfront or `remaining <= 5`, else `subscription_float`. Price the remaining
+months, compile the documents with that start, and store `term_start`, `term_end`,
+`term_months` and `payment_model_at_sale` on `sales`. `dsls.term_start` is not written.
+Add `isListableDsl` (no `termStart`) for purchase pricing. ~2 h
+
+**H6 — Sales are append-only in fact.** `00024` adds `record_sale_atomically` — one
+SECURITY DEFINER function that writes the sale and claims the hold in a single
+transaction, so the webhook has **no delete path**. It is idempotent by
+`stripe_session_id`, locks the checkout and DSL rows, validates amount, currency
+and hold status, writes the snapshot, claims the hold, updates the DSL and
+completes the checkout in one transaction. On an expired/released hold or
+insufficient stake it writes no sale, marks `paid_unfulfilled` and alerts the
+founder. Tests: replay, duplicate webhook, lapsed hold, concurrent claim.
+`deleteSaleById` leaves the store interface and the live path. It then refuses
+update, delete and truncate on `sales` with no exception, and revokes `UPDATE`,
+`DELETE` and `TRUNCATE`. ~2–3 h
+
+**Verification — the buyer email.** The email links to MyStable; it does not
+attach the documents from this repo. Confirm MyStable renders the stored
+`sales.pds_markdown` / `sales.sa_markdown` — the frozen bytes, not a recompile.
+Record the result; any fix is a follow-up.
+
+### Follow-up register — after chunk 4
+
+**F1** contract ID printed on the PDS/SA and indexed. **F2** post-sale
+economic-term freeze guard. **F3** external immutable document archive with its
+own hash manifest. **F4** offsite database backup and a restore drill. **F5**
+recovery test: rebuild one position from the retained documents.
+
+**D1 deferred, not resolved (2026-11-11):** the email is a **link**, not a copy,
+so until **F3** document recovery is **database-only**. Chunk 4 may proceed, but
+no secondary copy may be claimed to exist.
 
 ### Step-10 leftovers
 
@@ -352,6 +409,49 @@ consequence is why: the marketplace builds image URLs from the slug (`site.ts`
 `heroImageUrl` → `imageKey(slug, 1)`), so a naive move opens a 404 window. When it
 runs, order it **copy → update the slug → verify the new keys serve → delete the
 old ones**. No window, no broken card. ~3 h
+
+### Soft content — manual until the wizard
+
+**Ruled 2026-11-11.** The three horse blocks and the trainer bio are written by
+hand. That is the whole of the content step for chunks 1–4; no drafting wizard is
+built here.
+
+The manual path, in order:
+
+1. Draft against `evolution/legals/legal-foundation/soft-content-guide.md` — the
+   authority and the headless brief. Give it the horse; it must not invent.
+2. Paste the three blocks into the horse's Records page → **Soft content**
+   (`/horses/[id]`). They store `horses.about_horse`,
+   `horses.racing_outlook_and_pedigree` and `horses.race_expectation`.
+3. Write the trainer bio on the trainer's own record (`/trainers/[id]/edit` →
+   `parties.bio`). It is never authored on the horse.
+
+The breadcrumb map — what reads what:
+
+| Artefact | Path | Read by |
+|---|---|---|
+| Writer's brief (authority) | `evolution/legals/legal-foundation/soft-content-guide.md` | a person or a headless agent |
+| Renderer contract | `evolution/engine/website/packages/legal_engine/SOFT-CONTENT.md` | the v1 legal generator |
+| Legacy draft source | `evolution/engine/content/horses/<slug>/profile.md` | `soft-prefill.ts` (v1) |
+| Sidequest store | `horses.*` and `parties.bio` | Records, the wizard, the legal compile |
+
+**Parked — U16, not chunk 4. Soft prefill reads the wrong sections.** The v1
+`soft-prefill.ts:152-216` reads `## Profile` / `## Pedigree`, so it never sees the
+`## Soft content — the three PDS blocks` block the guide now writes. The fix is to
+prefer `### About the horse` / `### Racing outlook and pedigree` /
+`### Race expectation` under that block, falling back to today's behaviour.
+~15 min. It runs in the v1 tree (`evolution/engine/website`), not `engine_v2`, so
+it is a follow-on and does not block the ledger.
+
+**Point at v1, never half-migrate (ruled 2026-11-11).** The three pointers above
+are exact while v1 is the live generator. Moving `legal_engine` and reconciling
+`content/` is a separate project — it re-hashes sold PDS/SA packs and is not
+started here. At v1 retirement the renderer contract moves or is rewritten
+against v2; that is a migration, not a copy, and it gets its own plan.
+
+**Later — the drafting wizard (not planned, not estimated).** One screen that
+takes the horse, reads the same sources, drafts the three blocks to the brief and
+writes the same three columns. No new store, no new source of truth.
 
 ### Public flow-ons — deferred to the integration review
 
@@ -406,9 +506,11 @@ against the final term sheet and price entry.
 Gate: `pnpm verify`; a full 2A walk ending in the term sheet review; 2B narration
 and sign-off; a rendered draft PDS/SA; two-way price round-trip.
 
-**Chunk 4 — Ledger** · LOCKED
-U15 + H6 (`00024`). Gate: `pnpm verify`; a ledger walk over the existing sale
-fixture; an update/delete on `sales` refused.
+**Chunk 4 — Ledger** · **DONE 2026-11-11** (`be5b3d4`, merged `72d7335`, audit 12/12 PASS)
+U15 + U18 + U19 + U20 + U21 + H6 (`00024`) + `00025`. Delivered: gate 390/54,
+probes 27/27, a dateless listing sold with the correct start and remaining
+months, the ledger reads the snapshot, and update, delete and truncate on `sales`
+are refused. The MyStable frozen-byte check remains open (`O-10`).
 
 ### After this quest — the public integration review
 
@@ -436,7 +538,7 @@ still shows the wholesale total.
 **6 working days** (planning estimate, ~48 h), hard stop **9 days**.
 
 Breakdown: records, Home and forms 15 h; hardening 9 h; deal assembly 16.5 h;
-ledger 4.5 h; audits and rework ~3 h. The rename (S1) and the public review are
+ledger 10–12 h; audits and rework ~3 h. The rename (S1) and the public review are
 separate and not counted here.
 
 ## 8. How the work runs
@@ -549,7 +651,44 @@ separate and not counted here.
     ignore `image_count` (`00023`). Images are authored on the horse's Records page
     and flow through; the public card shows a templated "images coming soon"
     placeholder while the folder is empty. H6 moves to `00024`.
+27. **Soft content is manual (2026-11-11)** — the three horse blocks are pasted
+    into Records and the trainer bio is written on the party record. The drafting
+    wizard is a later follow-on, not part of chunks 1–4. The authority is
+    `legals/legal-foundation/soft-content-guide.md`. The v1 prefill stays a draft
+    path until U16 lands.
+28. **Break clause (2026-11-11)** — the owner may end the DSL by either **14-day
+    notice** (Case B, the default) or a **3× remaining-lease-value buyout**
+    (Case B1, where the head lease provides exit proceeds). It is one switch per
+    listing, `dsls.close_style`. Both documents print the matching block (PDS
+    close paragraph, SA §15), and the SA states the settlement for both payment
+    models. Full definition: `legals/legal-foundation/break-clause.md`.
+29. **Two SSOTs (2026-11-11)** — the structured investment row is the operational
+    SSOT; the executed PDS/SA is the legal SSOT and wins on conflict. The hashes
+    bind the two. A DSL is a contract series; the cap table is a derived
+    projection, never a stored table.
+30. **Horse percentage points only (2026-11-11)** — stakes are stored, transmitted,
+    contracted and displayed in percentage points of the horse. Contract
+    percentage ("20% of this DSL") is derived display only: never stored, never
+    printed in the PDS/SA, never used in a calculation. Every "100%" names its
+    scope.
+31. **Founder owns external capacity (2026-11-11)** — the system is authoritative
+    for executed investments and documents; the founder is authoritative for horse
+    capacity and external owner terms in v1. Ledger views report **known system
+    exposure**, not a complete horse cap table, and say so.
+32. **Chunk 4 is locked tight (2026-11-11)** — see `STATE.md` § Rulings 32.
+33. **Closed means inactive (2026-11-11)** — a row with `closed_at` set is
+    inactive whatever its status. Every active-row predicate excludes it: the
+    dateless-draft index (`00028`), readiness and listing queries. A draft closes
+    in place (`00027`).
+34. **A closed row is immutable (2026-11-11)** — the `dsls_closed_immutable`
+    trigger refuses every update to a row with `closed_at` set. Resuming an
+    archived draft means creating a new one; `00028` allows it.
+35. **The horse-level 100-point cap is dropped in v1 (2026-11-11)** — no
+    system-enforced ceiling. The founder manages the sum externally; the ledger
+    reports known system exposure. Follow-on: remove the wizard's cap copy.
 
 ## Ready
 
-Chunks 1–1d are done. The next action is **`go chunk 2`** — H2 first.
+All four chunks are done, gate-green and merged on `dsl-sidequest`. Next: the
+Mulan walk, then F1–F5; the public wrap stays separate. Soft content is manual
+(ruling 27); the U16 prefill patch is parked.
