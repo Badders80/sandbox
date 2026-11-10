@@ -1,0 +1,148 @@
+# Chunk 3 — deal assembly (dispatch brief)
+
+Repo: /home/evo/evolution/engine_v2/website. Branch dsl-sidequest. Work ONLY in the dispatch worktree.
+Before the gate: copy /home/evo/evolution/engine_v2/website/engine/.env.local into the worktree at engine/.env.local (gitignored).
+Do not push, do not merge, do not commit. Leave the diff for review.
+
+Build order: Phase A backend first (00022, resolveNarrative, the SQL function, the check:db recipe and its assertion script), and do not start the wizard until that phase is green. Then Phase B wizard, then Phase C documents. The frozen DoD follows — it is the contract.
+
+Return format: files touched; gate output pasted; check:db output pasted; local↔hosted parity for 00022; what you did not do; open decisions.
+
+---
+
+# Chunk 3 — Deal assembly — DoD (re-run 2026-11-10)
+
+**Done when:** an operator creates or edits a DSL from existing Records through a
+four-step wizard that ends in the term sheet, writes one `dsls` row, and the
+PDS/SA compile from the deal's resolved soft content.
+
+Starting surface (verified): `DslForm.tsx` is 222 lines and attaches ids; latest
+migration is `00021`; no `narrative.ts`, no `resolveNarrative`, no `check:db`; the
+Justfile has `check` only.
+
+## Criteria
+
+1. **Wizard.** `/dsl/new` and `/dsl/[id]/edit`: **Parties → Commercials → Terms →
+   Narrative**, ending in the term-sheet **Review** (the Review is the popup, not
+   a fifth step). One `<form>`; steps shown/hidden client-side; one submit at
+   Confirm; the server re-validates and is authoritative. Step 1 selects an
+   existing horse, a trainer-role party and an owner-role party; shows the horse's
+   facts read-only; lists the horse's existing DSLs and `X% listed across N terms`
+   for the operator's manual 100% check (ruling 23). No exclusion; no authoring.
+2. **Commercials (U7).** Two-way price: wholesale ⇄ retail; retail stays a whole
+   dollar, rounded up; refuse when no whole-dollar wholesale reproduces it. Split,
+   listed stake, minimum, step. Live derived strip. The 100% wholesale total never
+   renders.
+3. **Terms — one date.** Creation asks **only for the expiry month**, stored as
+   its last day; the expiry is fixed. **No start field.** Show `Duration: N
+   months` (current month → expiry), recomputed on every view and never stored.
+   Payment-model options are filtered by `paymentModelAllowed` against that
+   duration; the sale (chunk 4)
+   stamps the buyer's start and prices the remaining months. Close style;
+   distribution. Label **Expiry**, never "End date".
+4. **Soft content (U14).** Records own the base text: one **Soft content** section
+   on the horse profile with `aboutHorse`, `racingOutlookAndPedigree` and
+   `raceExpectation` editable in place; the trainer bio is read-only there with a
+   link to its edit page. The wizard prefills all four. **Only the three horse
+   slots are overridable**, stored as deal-local text on `dsls`, never written
+   back. The trainer bio always resolves from the party. Untouched slots read
+   through from Records live. **One resolver** `resolveNarrative(horse, dsl,
+   party)` returns `{ text, overridden }` per slot and is imported by readiness,
+   the compiler, the term-sheet preview and the editor; a SQL function encodes the
+   same fallback for the trigger. Agreement is proven by **`just check:db`**.
+5. **Override warning.** Per slot store the Records source hash at edit time and
+   the dismissed hash. On `/dsl/[id]`, if the current source hash differs and is
+   not dismissed, one banner names the affected slots; one **Dismiss** action
+   stores the dismissed hash. Informational, never blocks. No model, no cron.
+6. **Approve.** Lives on the deal. Writes `narrative_signoff`,
+   `narrative_approved_at`, `narrative_approved_hash`; refused while any of the
+   four resolved slots is empty. The hash covers the four **resolved** texts,
+   canonicalised — never the raw Records values.
+7. **Review (U4).** Term sheet from `buildTermSheet`: parties, horse facts, every
+   commercial number, **Expiry and the auto-calculated Duration** (current month →
+   expiry, recomputed on view), resolved soft content, readiness gaps. Three
+   actions: Confirm · Edit · Close. Edit returns to the owning step; Close writes
+   nothing; Confirm performs one atomic `dsls` write (including the three override
+   columns) and lands on `/dsl/[id]`.
+8. **Draft documents (U10).** `/dsl/[id]/legal` gains the **DRAFT — not executed**
+   banner and the blocking-field list on refusal.
+9. **Migration `00022`.** Three nullable text columns on `dsls`
+   (`narrative_about_horse`, `narrative_racing_outlook`,
+   `narrative_race_expectation`), `narrative_override_meta jsonb` (source and
+   dismissed hashes; CHECK keys are a subset of the three),
+   `check (role in ('trainer','owner'))` on `party_roles`, a **partial unique
+   index** on `(horse_id) where end_date is null` — **one dateless draft per
+   horse**; dated terms stay unlimited (ruling 23) — and a redefined
+   `assert_dsl_available` that **requires `end_date` only, not `term_start`**.
+   TS `readiness.ts` drops the `termStart` requirement to match.
+   **No change needed to `assert_payment_model_eligible`:** since `00014:35-37`
+   it returns early when `term_start` is null, so a listing with no start is
+   legal; the sale (chunk 4) stamps the start and the update re-validates.
+   **H6 (sales append-only) moves to `00023`.**
+10. **The `/dsl` list** reads Horse · Price · Investor · Investor Return % ·
+    Expiry · Status (delivered, `0d912d9`/`779ffd6`). Investor is the **buyer**,
+    blank until a sale exists; chunk 4 joins it. Admin surfaces never show owner
+    retention. A deal is identified `Horse | Price | Investor Return % | Expiry`.
+11. **`just check:db`.** A local-only recipe plus a SQL assertion script proving
+    the TS resolver and the SQL function agree on one fixture set. It never runs
+    in `pnpm verify` (CI and worktrees may have no Postgres); its output goes in
+    the handback.
+
+## Build order (check:db cannot gate what it ships with)
+
+- **Phase A — backend first:** `00022` (columns, meta, role check, partial unique
+  index), `resolveNarrative`, the SQL function, the `check:db` recipe and its
+  assertion script. Commit only when `just check:db` is green.
+- **Phase B — the wizard:** steps, term sheet review, one `dsls` write.
+- **Phase C — documents:** the DRAFT banner and the blocking list.
+
+## Out of scope
+
+Public site, the sales ledger, the break-clause column (still open, still no
+column), generated prose, auth, R2/image work, the rename, `OUTCOME.md`
+reconciliation (at merge).
+
+## Gate
+
+`just check` (= `pnpm verify`) green; a full step-1→Review walk; a price
+round-trip both directions; an override that survives a Records edit plus its
+one-time warning; a rendered draft PDS/SA; SQL parity local ↔ hosted for `00022`;
+screenshots at 1440×900 and 390×844.
+
+**Handback artefact, not a gate:** `just check:db` runs against the local stack
+and its output belongs in the handback for the auditor. It never runs in CI.
+
+## DoD frozen 2026-11-10
+
+Further scope needs a ruling. The build proceeds in three phases.
+
+## Budget
+
+One dispatch seat, **180 tool calls**, hard stop at **2×**. Handback reviewed by
+the founder; merge is the founder's call.
+
+## Assurance
+
+**Tier A** — pricing on the money path, data writes, a schema migration and legal
+documents. One **kimi-code** audit on the mergeable diff, after the gate is green.
+No dispatch to completion on the executor's own word.
+
+## Tools
+
+Dispatch worktree off `dsl-sidequest`; executor `deepseek-flash`, auditor
+`kimi-code`; `just check`; `just check:db`; psql parity; browser screenshots.
+
+## Open
+
+- **Break clause** — no column; report as an open decision, do not resolve.
+- **H6 renumber** to `00023` accepted here.
+- **100%-listed cap** stays manual (ruling 23); the wizard surfaces the number.
+- **Sale-time start (chunk 4):** the sale path stamps `term_start` to the buyer's
+  month, prices the remaining months (five or fewer remaining = one-time
+  payment), and compiles the PDS/SA with that start. Chunk 3 only asks for the
+  expiry and shows today's Duration; it does not change the purchase path.
+- **Payment model at sale (chunk 4):** a `subscription_float` deal with five or
+  fewer months left is intended to price as a one-time payment, while
+  `00014:47-50` refuses float under six months. Chunk 4 must choose: rewrite the
+  model to `upfront` at sale, or refuse. Not chunk 3's call.
+- `STATE.md`/`PLAN.md` re-rules are written at merge, not during the build.
