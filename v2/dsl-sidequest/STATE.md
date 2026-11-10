@@ -74,8 +74,10 @@ on `dsl-sidequest`. Chunks 3–4 are LOCKED. Chunk 3 is next.**
     Unticking a role that a live DSL references is refused, never cascaded.
 23. **A horse may hold several DSLs** (2026-11-10) — different expiries,
     commercials and owners. Pin 3 is retired: `saveDsl` no longer refuses a horse
-    with an existing deal. The **100%-listed cap is a manual operator check** for
-    now, not a DB constraint. A deal is identified
+    with an existing deal. **One dateless draft per horse** (partial unique index
+    in `00022`); dated terms are unlimited. The **100%-listed cap is a manual
+    operator check owned by the founder**, not a DB constraint, surfaced in the
+    wizard step. A deal is identified
     `Horse | Price | Investor Return % | Expiry` (`Mulan The Brave $60 75%
     Jun2028`); the `/dsl` list reads Horse · Price · Investor · Investor Return
     % · Expiry · Status.
