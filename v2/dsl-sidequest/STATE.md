@@ -125,7 +125,8 @@ listing.** The rules hold whatever the source, in TS *and* in SQL.
    the column drop waits for P1.
 6. **U2 — `/dsl` list reads as a contract:** Horse · Price · Investor · Return
    % · Expiry · Status. Horse joins page-side; Price is retail per 1%/month;
-   Investor is the owner party; Return % is the split; status in plain words
+   Investor is the **buyer** (blank until a sale exists — the ledger joins it in
+   chunk 4); Return % is the investor split; status in plain words
    (done 2026-11-10, `0d912d9`).
 7. **R1 — Records shows the link, never authors it.** Remove the trainer from
    `HorseForm`, `/horses/new`, `/horses/[id]/edit` and `updateHorseAction`; the

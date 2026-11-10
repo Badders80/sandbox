@@ -281,7 +281,8 @@ status, trainer; links to the profile. ~1 h
 
 **U2 — `/dsl` list reads as a contract (done 2026-11-10).** Horse · Price ·
 Investor · Return % · Expiry · Status. Horse joins page-side; Price is retail per
-1%/month; Investor is the owner party; Return % is the split; status in words.
+1%/month; Investor is the **buyer** (blank until sold); Return % is the investor
+split; status in words.
 
 **U3 — Trainer/owner: three sections + socials + links (schema `00019`).**
 Confirmed 2026-11-09; folded into `parties` by P0 (2026-11-10) and carried over
