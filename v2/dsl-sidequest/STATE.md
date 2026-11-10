@@ -381,5 +381,6 @@ same branch, gate-green, and **has no separate audit pass** — the next audit
 
 ## Next action
 
-Walk chunk 3 on 3001 (`/dsl/new` → Review). Then say **`go chunk 4`** — the
-ledger, U15 and the append-only `sales` trigger (`00024`).
+Open the walk DSL on 3001 (`/dsl/2c2f45c9-23d4-44ae-8d99-b3765c21f71f`),
+Approve narrative, then Publish. Then say **`go chunk 4`** — the ledger, U15 and
+the append-only `sales` trigger (`00024`).
