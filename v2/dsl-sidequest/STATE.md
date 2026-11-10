@@ -10,10 +10,10 @@ on `dsl-sidequest`. Chunk 4 is LOCKED and next.**
 | Current chunk | **4 — ledger** — LOCKED, not started |
 | Status | **Chunks 1–3 done**; chunk 4 awaits the founder's go |
 | Branch | `dsl-sidequest` (off `main` @ `0095106`) — `main` untouched, nothing pushed or merged |
-| Gate | `pnpm verify` **green 2026-11-10** on the merged branch (`3dfdac6`) — engine **370/370**, website **54/54**, both builds; `just check-db` 6/6 |
+| Gate | `pnpm verify` **green 2026-11-10** on the merged branch — engine **371/371**, website **54/54**, both builds; `just check-db` 6/6 |
 | Plan | `PLAN.md` — what to build |
 | Run contract | `EXECUTION-DOD-2026-11-09.md` — branch, gate, decision policy, tools |
-| Target DB | `evolution-engine` (`rkcptsghxovoeaycabah`, Sydney) — **22 migrations (`00001`–`00022`)**; schema parity **335/335** manifest lines identical local ↔ hosted after `00022`; `engine/.env.local` points at it |
+| Target DB | `evolution-engine` (`rkcptsghxovoeaycabah`, Sydney) — **23 migrations (`00001`–`00023`)**; schema parity **335/335** manifest lines identical local ↔ hosted after `00023`; `engine/.env.local` points at it |
 | Public DB | old project `ejdenhlpvtldiljxawtd` — untouched until cutover |
 | Public flow-ons | `PUBLIC-WRAP.md` — no new rows from chunks 1–1d (`public-sweep: none`) |
 | Execution | Claude Code harness · DeepSeek V4.1 Flash (Ollama Cloud) · agent mode |
