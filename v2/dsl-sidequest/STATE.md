@@ -86,11 +86,15 @@ on `dsl-sidequest`. Chunks 3–4 are LOCKED. Chunk 3 is next.**
     **listed** DSL (`available` / `fully_allocated`) always carries a start and
     an expiry; a draft may be dateless, and readiness refuses Available without
     dates. The legal templates keep their full split wording.
-25. **Dates are whole months (2026-11-10)** — the term start is **the 1st of the
-    current month**, not a picker; "today" means the month we are in. The
-    operator chooses an **Expiry month**, stored as its last day. Length is
-    `termMonthsBetween`, inclusive of both months. Both dates stay editable until
-    the sale freezes the documents.
+25. **Dates are whole months, and the start rolls (2026-11-10)** — the term start
+    is **the 1st of the current month**, not a picker and not frozen at creation;
+    it **rolls forward each month**. The **Expiry is fixed** at the chosen month's
+    last day. Length is `termMonthsBetween(start, expiry)`, inclusive, so it
+    **shrinks** as months pass: created Nov 2026, sold Dec 2026, expiry Jun 2028 →
+    19 months, everything else identical. The stored `term_start` is a snapshot;
+    the sale path must re-stamp it to the sale month and re-check the payment
+    model against the shorter term before compiling documents. A term at its
+    expiry cannot be sold.
 
 ## Chunks
 
