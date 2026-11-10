@@ -76,7 +76,7 @@ fragile modal). Four steps, matching how a deal is actually assembled:
    profile may hold both roles, and may be both trainer and owner on one deal.
    A horse may hold several terms: the step lists its existing DSLs and the
    listed capacity so far, for the operator's manual 100% check (ruling 23).
-   Readiness badges say at once whether the horse (<3 images, missing prose,
+   Readiness badges say at once whether the horse (missing prose,
    unregistered) or the chosen trainer profile (missing bio) is ready, with a
    link to fix it in Records. **No inline creation, no edits** — this step
    attaches, never authors.
@@ -227,7 +227,7 @@ first. The `ENGINE_EXPIRE_*` secrets stay a checkout-hold concern only.
 **H3 — One readiness rule (HIGH).** `00015_owner_moves_to_dsl.sql` has already
 rewritten `assert_dsl_available` to check the full 17-field set on `dsls` —
 `00008` is superseded, not the live rule. The remaining hole is the child tables:
-blanking a horse paragraph, the image count, or a trainer bio *after* a DSL went
+blanking a horse paragraph or a trainer bio *after* a DSL went
 Available is not caught. Neither is moving a horse to a trainer with no bio. Add
 guard triggers on `horses`, `trainers` and `owners` that re-check every dependent
 Available DSL — including `horses.trainer_id` changes. Non-empty edits flow
@@ -250,7 +250,7 @@ so the image-count clobber cannot happen. It disappears with H1.
 **H6 — Sales are append-only in fact, not just in comment (MEDIUM).** `00007`
 calls the table read-only, but there is no policy or trigger, and `00013` grants
 the service role `update, delete`. Add a trigger refusing update and delete on
-`sales`. Migration `00023`.
+`sales`. Migration `00024`.
 
 ### Pins — defects to fix inside the named items
 
@@ -400,14 +400,14 @@ are role-filtered views of one profile table; `horses` stores no trainer.
 
 **Chunk 3 — Deal assembly** · **DONE 2026-11-10** (`73f65bb`, audit PASS)
 U4 → U7 → U11 → U14 → U10. Migration `00022` adds three narrative text columns,
-`narrative_override_meta` and the `party_roles.role` check; H6 moves to `00023`.
+`narrative_override_meta` and the `party_roles.role` check; H6 moves to `00024`.
 The pieces land before the wizard that uses them, so the review step is built
 against the final term sheet and price entry.
 Gate: `pnpm verify`; a full 2A walk ending in the term sheet review; 2B narration
 and sign-off; a rendered draft PDS/SA; two-way price round-trip.
 
 **Chunk 4 — Ledger** · LOCKED
-U15 + H6 (`00023`). Gate: `pnpm verify`; a ledger walk over the existing sale
+U15 + H6 (`00024`). Gate: `pnpm verify`; a ledger walk over the existing sale
 fixture; an update/delete on `sales` refused.
 
 ### After this quest — the public integration review
@@ -544,6 +544,11 @@ separate and not counted here.
     refuse/switch rule: the sale prices the remaining months. `term_start` is not
     a listing property; **readiness requires expiry only**. The **term sheet shows
     Duration** = current month → expiry, recomputed on every view, never stored.
+26. **Images never block a listing (2026-11-10)** — images are marketing, not a
+    legal precondition; the PDS/SA carry none. Readiness and the Available trigger
+    ignore `image_count` (`00023`). Images are authored on the horse's Records page
+    and flow through; the public card shows a templated "images coming soon"
+    placeholder while the folder is empty. H6 moves to `00024`.
 
 ## Ready
 

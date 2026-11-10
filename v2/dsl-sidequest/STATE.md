@@ -95,6 +95,11 @@ on `dsl-sidequest`. Chunk 4 is LOCKED and next.**
     refuse/switch rule: the sale prices the remaining months. `term_start` is not
     a listing property; **readiness requires expiry only**. The **term sheet shows
     Duration** = current month → expiry, recomputed on every view, never stored.
+26. **Images never block a listing (2026-11-10)** — images are marketing, not a
+    legal precondition; the PDS/SA carry none. Readiness and the Available trigger
+    ignore `image_count` (`00023`). Images are authored on the horse's Records page
+    and flow through; the public card shows a templated "images coming soon"
+    placeholder while the folder is empty. H6 moves to `00024`.
 
 ## Chunks
 
@@ -193,7 +198,7 @@ before committing, and the documents derive from what was stored.**
    **DRAFT — not executed** banner and the blocking-field list on refusal.
 6. **Migration `00022`.** Three text columns on `dsls` + `narrative_override_meta
    jsonb` (source/dismissed hashes, keys constrained to the three) + the
-   `party_roles.role` check. **H6 moves to `00023`.**
+   `party_roles.role` check. **H6 moves to `00024`.**
 
 Pins inside this chunk: Pin 1, Pin 2 (Coming Soon may have no owner; Available
 still requires one).
@@ -209,7 +214,7 @@ DoD: **a sold term is visible, closable and immutable.**
 1. **U15 — sales ledger.** Cap table per DSL (listed, sold, remaining, live
    holds, revenue, term end), investor rows with the frozen PDS/SA and hashes,
    and the manual term-close action.
-2. **H6 — sales are append-only.** `00023` adds a trigger refusing update and
+2. **H6 — sales are append-only.** `00024` adds a trigger refusing update and
    delete on `sales`.
 3. **Sale fixture** created deliberately before the proof.
 
@@ -377,4 +382,4 @@ same branch, gate-green, and **has no separate audit pass** — the next audit
 ## Next action
 
 Walk chunk 3 on 3001 (`/dsl/new` → Review). Then say **`go chunk 4`** — the
-ledger, U15 and the append-only `sales` trigger (`00023`).
+ledger, U15 and the append-only `sales` trigger (`00024`).
