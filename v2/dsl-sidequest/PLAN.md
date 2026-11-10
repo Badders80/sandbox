@@ -81,15 +81,14 @@ fragile modal). Four steps, matching how a deal is actually assembled:
    link to fix it in Records. **No inline creation, no edits** — this step
    attaches, never authors.
 2. **Commercials** — price entered as wholesale **or** retail with the other
-   derived, investor split, listed stake, minimum, step, stake remaining shown as
-   derived. The 100% wholesale total never renders.
-3. **Terms — one date** — **Expiry** is chosen as a month and stored as its last
-   day; it is fixed. There is no start field: the buyer's start is stamped at
-   sale, so the duration shortens each month. Show **Duration** (current month →
-   expiry) on the term sheet, recomputed on view. Payment model filtered against
-   that duration, close style (14-day notice or 3× remaining buyout),
-   distribution schedule, status and published, plus the readiness checklist
-   naming anything still missing before Available.
+   derived, the **Expiry month** on the same row (three-up), investor split,
+   listed stake, minimum, step, stake remaining shown as derived. The 100%
+   wholesale total never renders.
+3. **Terms** — **Duration** (current month → expiry, recomputed on view);
+   payment model filtered against that duration, close style (14-day notice or
+   3× remaining buyout), distribution schedule, status and published, plus the
+   readiness checklist naming anything still missing before Available. The
+   expiry itself is set on Commercials and fixed; there is no start field.
 4. **Narrative** — the four soft slots prefilled from Records; edits are
    deal-local overrides, untouched slots follow Records; *Copy the drafting
    brief*. Blank slots are readiness gaps, not errors.
