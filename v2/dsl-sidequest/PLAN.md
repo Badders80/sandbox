@@ -399,7 +399,7 @@ Gate: `pnpm verify`; psql parity; an unapproved DSL refused `available` by SQL;
 the status matrix test over all `from × to` pairs; `/trainers` and `/owners`
 are role-filtered views of one profile table; `horses` stores no trainer.
 
-**Chunk 3 — Deal assembly (2A → 2B → 2C)** · LOCKED
+**Chunk 3 — Deal assembly** · **DONE 2026-11-10** (`73f65bb`, audit PASS)
 U4 → U7 → U11 → U14 → U10. Migration `00022` adds three narrative text columns,
 `narrative_override_meta` and the `party_roles.role` check; H6 moves to `00023`.
 The pieces land before the wizard that uses them, so the review step is built

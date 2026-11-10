@@ -1,19 +1,19 @@
 # DSL Side Quest — state
 
-**Last updated: 2026-11-10. Chunks 1–2 are done, gate-green, audited and merged
-on `dsl-sidequest`. Chunks 3–4 are LOCKED. Chunk 3 is next.**
+**Last updated: 2026-11-10. Chunks 1–3 are done, gate-green, audited and merged
+on `dsl-sidequest`. Chunk 4 is LOCKED and next.**
 
 ## Position
 
 | Fact | Value |
 |---|---|
-| Current chunk | **3 — deal assembly** — LOCKED, not started |
-| Status | **Chunks 1–2 done**; chunk 3 awaits the founder's go |
+| Current chunk | **4 — ledger** — LOCKED, not started |
+| Status | **Chunks 1–3 done**; chunk 4 awaits the founder's go |
 | Branch | `dsl-sidequest` (off `main` @ `0095106`) — `main` untouched, nothing pushed or merged |
-| Gate | `pnpm verify` **green 2026-11-10** at `e1f12f9` — engine **345/345**, website **54/54**, both builds |
+| Gate | `pnpm verify` **green 2026-11-10** on the merged branch (`3dfdac6`) — engine **370/370**, website **54/54**, both builds; `just check-db` 6/6 |
 | Plan | `PLAN.md` — what to build |
 | Run contract | `EXECUTION-DOD-2026-11-09.md` — branch, gate, decision policy, tools |
-| Target DB | `evolution-engine` (`rkcptsghxovoeaycabah`, Sydney) — **21 migrations (`00001`–`00021`)**; schema parity **326/326** manifest lines identical local ↔ hosted after `00021`; `engine/.env.local` points at it |
+| Target DB | `evolution-engine` (`rkcptsghxovoeaycabah`, Sydney) — **22 migrations (`00001`–`00022`)**; schema parity **335/335** manifest lines identical local ↔ hosted after `00022`; `engine/.env.local` points at it |
 | Public DB | old project `ejdenhlpvtldiljxawtd` — untouched until cutover |
 | Public flow-ons | `PUBLIC-WRAP.md` — no new rows from chunks 1–1d (`public-sweep: none`) |
 | Execution | Claude Code harness · DeepSeek V4.1 Flash (Ollama Cloud) · agent mode |
@@ -100,7 +100,7 @@ on `dsl-sidequest`. Chunks 3–4 are LOCKED. Chunk 3 is next.**
 
 Done: **1** (`8b6baf4`) · **1b** (`e30e50c`, audit PASS) · **1c** (`82a702d`,
 audit PASS) · **1d** (`2bccb1b → d387225`, gate-green) · **2** (`e1f12f9`,
-audit PASS).
+audit PASS) · **3** (`73f65bb`, merged `3dfdac6`, audit PASS).
 
 The remaining chunks are **LOCKED 2026-11-10**. Their contents do not change
 without a ruling; work lands in this order, one chunk at a time.
@@ -164,7 +164,7 @@ authoring loses the trainer; admin stops quoting the wholesale total. Gate
 migrated to `00021`; dead `TrainerNames.tsx` removed. The break clause remains
 open — still no column.
 
-### Chunk 3 — Deal assembly · LOCKED
+### Chunk 3 — Deal assembly · DONE 2026-11-10 (`73f65bb`, merged `3dfdac6`, audit PASS)
 
 DoD: **an operator can create and edit a deal without getting lost, sees it
 before committing, and the documents derive from what was stored.**
@@ -376,6 +376,5 @@ same branch, gate-green, and **has no separate audit pass** — the next audit
 
 ## Next action
 
-Say **`go chunk 3`**. It starts at U4 (the term sheet), then U7, U11, U14 and
-U10 — the locked contract above is the whole scope. No migration: the sign-off
-columns landed in `00021`.
+Walk chunk 3 on 3001 (`/dsl/new` → Review). Then say **`go chunk 4`** — the
+ledger, U15 and the append-only `sales` trigger (`00023`).
