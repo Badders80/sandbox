@@ -93,7 +93,8 @@ on `dsl-sidequest`. Chunks 3–4 are LOCKED. Chunk 3 is next.**
     months (3-month deposit + the current month + one month in advance), so a
     purchase with **five months or fewer remaining is a one-time payment**. No
     refuse/switch rule: the sale prices the remaining months. `term_start` is not
-    a listing property; **readiness requires expiry only**.
+    a listing property; **readiness requires expiry only**. The **term sheet shows
+    Duration** = current month → expiry, recomputed on every view, never stored.
 
 ## Chunks
 

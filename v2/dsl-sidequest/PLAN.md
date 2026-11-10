@@ -85,8 +85,9 @@ fragile modal). Four steps, matching how a deal is actually assembled:
    derived. The 100% wholesale total never renders.
 3. **Terms — one date** — **Expiry** is chosen as a month and stored as its last
    day; it is fixed. There is no start field: the buyer's start is stamped at
-   sale, so the duration shortens each month. Payment model filtered against
-   today's length, close style (14-day notice or 3× remaining buyout),
+   sale, so the duration shortens each month. Show **Duration** (current month →
+   expiry) on the term sheet, recomputed on view. Payment model filtered against
+   that duration, close style (14-day notice or 3× remaining buyout),
    distribution schedule, status and published, plus the readiness checklist
    naming anything still missing before Available.
 4. **Narrative** — the four soft slots prefilled from Records; edits are
@@ -542,7 +543,8 @@ separate and not counted here.
     months (3-month deposit + the current month + one month in advance), so a
     purchase with **five months or fewer remaining is a one-time payment**. No
     refuse/switch rule: the sale prices the remaining months. `term_start` is not
-    a listing property; **readiness requires expiry only**.
+    a listing property; **readiness requires expiry only**. The **term sheet shows
+    Duration** = current month → expiry, recomputed on every view, never stored.
 
 ## Ready
 
