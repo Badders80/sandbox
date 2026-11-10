@@ -83,11 +83,12 @@ fragile modal). Four steps, matching how a deal is actually assembled:
 2. **Commercials** — price entered as wholesale **or** retail with the other
    derived, investor split, listed stake, minimum, step, stake remaining shown as
    derived. The 100% wholesale total never renders.
-3. **Terms** — start is the **1st of the current month**, read-only (whole months
-   only); **Expiry** is chosen as a month and stored as its last day; length is
-   inclusive. Payment model limited by term length, close style (14-day notice or
-   3× remaining buyout), distribution schedule, status and published, plus the
-   readiness checklist naming anything still missing before Available.
+3. **Terms — one date** — **Expiry** is chosen as a month and stored as its last
+   day; it is fixed. There is no start field: the buyer's start is stamped at
+   sale, so the duration shortens each month. Payment model filtered against
+   today's length, close style (14-day notice or 3× remaining buyout),
+   distribution schedule, status and published, plus the readiness checklist
+   naming anything still missing before Available.
 4. **Narrative** — the four soft slots prefilled from Records; edits are
    deal-local overrides, untouched slots follow Records; *Copy the drafting
    brief*. Blank slots are readiness gaps, not errors.
@@ -534,15 +535,14 @@ separate and not counted here.
     **listed** DSL always carries a start and an expiry; a draft may be dateless,
     and readiness refuses Available without dates. The legal templates keep their
     full split wording.
-25. **Dates are whole months, and the start rolls (2026-11-10)** — the term start
-    is **the 1st of the current month**, not a picker and not frozen at creation;
-    it **rolls forward each month**. The **Expiry is fixed** at the chosen month's
-    last day. Length is `termMonthsBetween(start, expiry)`, inclusive, so it
-    **shrinks** as months pass: created Nov 2026, sold Dec 2026, expiry Jun 2028 →
-    19 months, everything else identical. The stored `term_start` is a snapshot;
-    the sale path must re-stamp it to the sale month and re-check the payment
-    model against the shorter term before compiling documents. A term at its
-    expiry cannot be sold.
+25. **One date on the DSL: Expiry (2026-11-10)** — creation asks only for the
+    **expiry month**, stored as its last day; the expiry is fixed. The **term
+    start is the month the investor buys**, stamped per sale, so the duration
+    shortens every month that passes. The investor's initial payment covers five
+    months (3-month deposit + the current month + one month in advance), so a
+    purchase with **five months or fewer remaining is a one-time payment**. No
+    refuse/switch rule: the sale prices the remaining months. `term_start` is not
+    a listing property; **readiness requires expiry only**.
 
 ## Ready
 
