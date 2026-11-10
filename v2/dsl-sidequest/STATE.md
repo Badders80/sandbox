@@ -77,8 +77,13 @@ on `dsl-sidequest`. Chunks 3–4 are LOCKED. Chunk 3 is next.**
     with an existing deal. The **100%-listed cap is a manual operator check** for
     now, not a DB constraint. A deal is identified
     `Horse | Price | Investor Return % | Expiry` (`Mulan The Brave $60 75%
-    Jun2028`); the `/dsl` list reads Horse · Price · Investor · Return % ·
-    Expiry · Status.
+    Jun2028`); the `/dsl` list reads Horse · Price · Investor · Investor Return
+    % · Expiry · Status.
+24. **Investor vocabulary (2026-11-10)** — admin surfaces speak only of the
+    **investor return**; owner retention is assumed and never displayed. A
+    **listed** DSL (`available` / `fully_allocated`) always carries a start and
+    an expiry; a draft may be dateless, and readiness refuses Available without
+    dates. The legal templates keep their full split wording.
 
 ## Chunks
 
