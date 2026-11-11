@@ -47,7 +47,7 @@ state rulings, migrations, engine modules and legal files.
 |---|---|---|---|---|---|
 | `R-READY-01` | One readiness gate decides Available; it names missing fields rather than refusing bare. | TS + DB trigger | `readiness.ts`; `assert_dsl_available` | enforced (mirrored) | H3 |
 | `R-READY-02` | Available requires all four narrative slots approved with timestamp and hash. | DB trigger | `00021`; `00022` | enforced | H3 |
-| `R-READY-03` | Every listing carries three image slots; a generic placeholder satisfies them, so images never block readiness. Real images replace the placeholder from the horse record when available. | DB trigger + checkout + gallery | `00023`; `purchase.ts` (checkout no longer reads the bucket); `gallery.ts`; `engine/public/brand/coming-soon.jpg` | enforced | Ruling 26; founder 2026-11-11 |
+| `R-READY-03` | Images never block a listing. Marketing images are not a legal precondition, and the checkout path does not read the bucket. The gallery shows only real images; a missing image stays blank. | DB trigger + checkout | `00023`; `purchase.ts` (checkout no longer reads the bucket) | enforced | Ruling 26 |
 | `R-PUB-01` | Published is separate from status. Unpublished DSLs stay off the marketplace. | DB + public read layer | `00009`; `listings.ts` | enforced | OUTCOME § DSL |
 
 ## Allocation, holds and sales

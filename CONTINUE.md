@@ -9,8 +9,8 @@ vendor, WORM semantics, manifest shape.
 ## State — 2026-11-11
 
 - **All four chunks are closed** on `dsl-sidequest` in `engine_v2/website`;
-  branch tip `482b6d6`; `main` untouched; nothing pushed or merged.
-- Gate `pnpm verify` **395 engine / 1 skipped, 54 website**; `just verify-db`
+  branch tip `81b5f5d`; `main` untouched; nothing pushed or merged.
+- Gate `pnpm verify` **393 engine / 1 skipped, 54 website**; `just verify-db`
   **27 + 7 + 2 + 3 + 5 probes**, `check-db` 6/6. CI runs both on every PR and
   branch push.
 - Follow-ons landed this session: `00026` paid_unfulfilled resolution,
@@ -26,6 +26,7 @@ vendor, WORM semantics, manifest shape.
 
 | date | what | repo | commit | state |
 |---|---|---|---|---|
+| 2026-11-11 | Images — checkout unblocked; placeholder dropped | engine_v2/website | `81b5f5d` | done |
 | 2026-11-11 | DSL chunk 4 + follow-ons + SQL gate + CI + rulebook | engine_v2/website / sandbox | `482b6d6` / `0163348` | done |
 | 2026-11-09 | DSL side quest 1 / 1b / 1c + target Supabase | engine_v2/website | `8b6baf4`,`e30e50c`,`82a702d` | done |
 | 2026-11-09 | Wrap, docs committed to this repo | sandbox | — | done |

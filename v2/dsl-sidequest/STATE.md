@@ -10,7 +10,7 @@ merged on `dsl-sidequest`. The Mulan walk, F1–F5 and the public wrap remain.**
 | Current phase | **post-chunk 4** — re-walk Mulan, then F1–F5 |
 | Status | **Chunks 1–4 done**; branch green, unmerged to `main` |
 | Branch | `dsl-sidequest` (off `main` @ `0095106`) — `main` untouched, nothing pushed or merged |
-| Gate | `pnpm verify` **green 2026-11-11** — engine **395 passed / 1 skipped**, website **54/54**, both builds. SQL gate `just verify-db` **green**: probes **27 + 7 + 2 + 3 + 5**, `check-db` **6/6**. CI enforces both on every PR and branch push |
+| Gate | `pnpm verify` **green 2026-11-11** — engine **393 passed / 1 skipped**, website **54/54**, both builds. SQL gate `just verify-db` **green**: probes **27 + 7 + 2 + 3 + 5**, `check-db` **6/6**. CI enforces both on every PR and branch push |
 | Plan | `PLAN.md` — what to build |
 | Run contract | `EXECUTION-DOD-2026-11-09.md` — branch, gate, decision policy, tools |
 | Target DB | `evolution-engine` (`rkcptsghxovoeaycabah`, Sydney) — **29 migrations (`00001`–`00029`)**; parity re-proved per migration; `engine/.env.local` points at it |
@@ -295,11 +295,9 @@ local fixture sold a dateless listing (`termStart 2026-11-01`, 20 months,
 `subscription_float`). `deleteSaleById` is gone. Audit 12/12 PASS. **One
 verification is open:** MyStable's frozen-byte rendering.
 
-**Images, sale path included (2026-11-11, `567e052`).** The checkout bucket
-check is removed — ruling 26 now holds end to end. The horse gallery always
-renders three tiles; missing photos use `/brand/coming-soon.jpg`, labelled
-placeholder, while `image_count` stays truthful. The asset is on file at
-`engine/public/brand/` and `website/public/brand/`.
+**Images, sale path included (2026-11-11, `81b5f5d`).** The checkout bucket
+check is removed — ruling 26 now holds end to end. No generic placeholder: the
+gallery shows only real images and stays blank until they are added.
 
 **P0 follow-up fixed 2026-11-11 (`014ad4b`).** `00026` adds
 `resolve_paid_unfulfilled`; `close_dsl` counts only **unresolved** exceptions;
