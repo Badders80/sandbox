@@ -295,6 +295,12 @@ local fixture sold a dateless listing (`termStart 2026-11-01`, 20 months,
 `subscription_float`). `deleteSaleById` is gone. Audit 12/12 PASS. **One
 verification is open:** MyStable's frozen-byte rendering.
 
+**Images, sale path included (2026-11-11, `567e052`).** The checkout bucket
+check is removed — ruling 26 now holds end to end. The horse gallery always
+renders three tiles; missing photos use `/brand/coming-soon.jpg`, labelled
+placeholder, while `image_count` stays truthful. The asset is on file at
+`engine/public/brand/` and `website/public/brand/`.
+
 **P0 follow-up fixed 2026-11-11 (`014ad4b`).** `00026` adds
 `resolve_paid_unfulfilled`; `close_dsl` counts only **unresolved** exceptions;
 the ledger shows each one with a Resolve form and hides Close until it is clear.
