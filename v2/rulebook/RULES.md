@@ -74,7 +74,8 @@ state rulings, migrations, engine modules and legal files.
 | `R-DOC-04` | A contract ID is printed on both documents and indexed on the sale. | Legal templates + DB | F1 | locked | F1 |
 | `R-DOC-05` | An external immutable document archive with its own manifest is required before claiming document recovery. | External control | F3 | locked | F3; D1 |
 | `R-DOC-06` | Stored document bytes and hashes are verified; a hash that does not match the document is a defect. | Rulebook + evidence | F3 | locked | D1 |
-| `R-DOC-07` | The buyer email is a link to MyStable, not a copy. Recovery is database-only until F3. | Rulebook | `email.ts`; MyStable check | external | D1 |
+| `R-DOC-07` | Retired. The buyer email was a link to MyStable, not a copy; recovery was database-only. Superseded by `R-DOC-08`. | Rulebook | `email.ts` history | retired | D1; founder 2026-11-11 |
+| `R-DOC-08` | Every sale renders the PDS and SA to one combined PDF before the sale commits, stores both PDF hashes on the sale, and emails the PDF as an attachment with both hashes in the body. The same bytes are archived outside the database and served unchanged by MyStable. A sale without its documents is not a sale. | DB + TS + templates | `pdf_hash` columns; email attachment; archive copy; MyStable serves the same bytes | locked | Founder 2026-11-11 |
 
 ## External controls
 

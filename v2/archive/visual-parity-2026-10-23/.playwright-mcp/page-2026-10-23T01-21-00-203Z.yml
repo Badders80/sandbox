@@ -1,0 +1,100 @@
+- generic [ref=f5e1]:
+  - main [ref=f5e2]:
+    - heading "Mulan The Brave (NZ)" [level=1] [ref=f5e3]
+    - paragraph [ref=f5e4]:
+      - text: coming_soon, published ·
+      - link "Edit" [ref=f5e5] [cursor=pointer]:
+        - /url: /dsl/9185dd36-f5e8-4056-aebf-aa500d1abf78/edit
+      - text: ·
+      - link "Legal preview" [ref=f5e6] [cursor=pointer]:
+        - /url: /dsl/9185dd36-f5e8-4056-aebf-aa500d1abf78/legal
+      - text: ·
+      - link "New DSL" [ref=f5e7] [cursor=pointer]:
+        - /url: /dsl/new
+    - heading "Images" [level=2] [ref=f5e8]
+    - paragraph [ref=f5e9]: "0 in the bucket, numbered mulan-the-brave-nz/01 upward. Available needs 3. Images are public: KYC and proof of address never come through here."
+    - generic [ref=f5e10]:
+      - generic [ref=f5e11]: Add image number 1
+      - button "Add image number 1" [active] [ref=f5e12]
+      - button "Upload to mulan-the-brave-nz" [ref=f5e13]
+    - heading "Horse" [level=2] [ref=f5e14]
+    - generic [ref=f5e15]:
+      - term [ref=f5e16]: Slug
+      - definition [ref=f5e17]: mulan-the-brave-nz
+      - term [ref=f5e18]: Foaling date
+      - definition [ref=f5e19]: 2023-08-17
+      - term [ref=f5e20]: Sex
+      - definition [ref=f5e21]: filly
+      - term [ref=f5e22]: Colour
+      - definition [ref=f5e23]: bay
+      - term [ref=f5e24]: Breeder
+      - definition [ref=f5e25]: C W Kwok
+      - term [ref=f5e26]: Sire
+      - definition [ref=f5e27]: Turn Me Loose (NZ)
+      - term [ref=f5e28]: Dam
+      - definition [ref=f5e29]: Yearn (NZ)
+      - term [ref=f5e30]: Microchip
+      - definition [ref=f5e31]: "985125000128426"
+      - term [ref=f5e32]: Life number
+      - definition [ref=f5e33]: NZ00460867
+      - term [ref=f5e34]: Loveracing id
+      - definition [ref=f5e35]: "460867"
+      - term [ref=f5e36]: Registered
+      - definition [ref=f5e37]: "yes"
+    - heading "Soft slots" [level=2] [ref=f5e38]
+    - generic [ref=f5e39]:
+      - term [ref=f5e40]: About the horse
+      - definition [ref=f5e41]: Mulan The Brave (NZ) is a bay two-year-old filly by triple Group 1-winning miler Turn Me Loose out of Group 2 Auckland Thoroughbred Breeders' Stakes winner Yearn, by Savabeel. She was foaled on 17 August 2023 and is in early education with Stephen Gray at Copper Belt Lodge, Palmerston North.
+      - term [ref=f5e42]: Racing outlook and pedigree
+      - definition [ref=f5e43]: By Turn Me Loose, a three-time Group 1 winner in New Zealand and Australia, out of Yearn, a seven-win mare by Savabeel. The pedigree combines a Group 1 sire with a Group 2-winning dam.
+      - term [ref=f5e44]: Race expectation
+      - definition [ref=f5e45]: Unraced. In early education at Copper Belt Lodge; first start to be scheduled by the trainer.
+    - generic [ref=f5e46]: "{ \"notes\": \"2YO filly in early education with Stephen Gray at Copper Belt Lodge. No starts yet.\", \"source\": \"loveracing_nz\", \"starts\": [], \"verified\": true, \"microchip\": \"985125000128426\", \"horse_name\": \"Mulan The Brave (NZ)\", \"horse_slug\": \"mulan-the-brave\", \"total_wins\": 0, \"verified_at\": \"2026-07-08\", \"total_starts\": 0, \"total_thirds\": 0, \"loveracing_id\": 460867, \"total_seconds\": 0, \"total_prizemoney_nzd\": 0 }"
+    - heading "Trainer" [level=2] [ref=f5e47]
+    - generic [ref=f5e48]:
+      - term [ref=f5e49]: Name
+      - definition [ref=f5e50]: Stephen Gray
+      - term [ref=f5e51]: Stable
+      - definition [ref=f5e52]: Stephen Gray Racing
+      - term [ref=f5e53]: Location
+      - definition [ref=f5e54]: Copper Belt Lodge, Palmerston North
+      - term [ref=f5e55]: Website
+      - definition [ref=f5e56]: https://stephengrayracing.com
+    - heading "Owner" [level=2] [ref=f5e57]
+    - generic [ref=f5e58]:
+      - term [ref=f5e59]: Entity
+      - definition [ref=f5e60]: Stephen Gray Racing
+      - term [ref=f5e61]: Contact
+      - definition [ref=f5e62]: Stephen Gray
+      - term [ref=f5e63]: Website
+      - definition [ref=f5e64]: https://stephengrayracing.com
+    - heading "Terms" [level=2] [ref=f5e65]
+    - generic [ref=f5e66]:
+      - term [ref=f5e67]: Wholesale per 1% per month
+      - definition [ref=f5e68]: "60"
+      - term [ref=f5e69]: Listed price per 1% per month
+      - definition [ref=f5e70]: "65"
+      - term [ref=f5e71]: Wholesale total at 100%
+      - definition [ref=f5e72]: "6000"
+      - term [ref=f5e73]: Investor split
+      - definition [ref=f5e74]: —
+      - term [ref=f5e75]: Payment style
+      - definition [ref=f5e76]: subscription_float
+      - term [ref=f5e77]: Close style
+      - definition [ref=f5e78]: fourteen_day
+      - term [ref=f5e79]: Listed stake
+      - definition [ref=f5e80]: "5"
+      - term [ref=f5e81]: Stake remaining
+      - definition [ref=f5e82]: "5"
+      - term [ref=f5e83]: Minimum stake
+      - definition [ref=f5e84]: "1"
+      - term [ref=f5e85]: Step
+      - definition [ref=f5e86]: "0.1"
+      - term [ref=f5e87]: Term start
+      - definition [ref=f5e88]: 2026-09-01
+      - term [ref=f5e89]: End date
+      - definition [ref=f5e90]: 2028-06-30
+      - term [ref=f5e91]: Distribution schedule
+      - definition [ref=f5e92]: —
+  - button "Open Next.js Dev Tools" [ref=f5e99] [cursor=pointer]
+  - alert [ref=f5e93]

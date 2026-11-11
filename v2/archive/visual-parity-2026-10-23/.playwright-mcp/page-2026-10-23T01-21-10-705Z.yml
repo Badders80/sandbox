@@ -1,0 +1,13 @@
+- generic [active] [ref=f5e1]:
+  - generic [ref=f5e98] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=f5e99]
+    - generic [ref=f5e103]:
+      - button "Open issues overlay" [ref=f5e104]:
+        - generic [ref=f5e105]:
+          - generic [aria-hidden] [ref=f5e106]: "0"
+          - generic [ref=f5e107]: "1"
+        - generic [ref=f5e108]: Issue
+      - button "Collapse issues badge" [ref=f5e109]
+  - generic [ref=f5e113]:
+    - 'heading "Application error: a server-side exception has occurred while loading 127.0.0.1 (see the server logs for more information)." [level=2] [ref=f5e114]'
+    - paragraph [ref=f5e115]: "Digest: 240730912@E394"

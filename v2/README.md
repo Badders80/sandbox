@@ -9,6 +9,7 @@ Verified 2026-11-09, in one line: code green at `0095106` (339 engine / 54 websi
 | Role | Path |
 |---|---|
 | **Current state + recap protocol** | `/home/evo/sandbox/v2/STATE.md` |
+| **DSL side quest (admin only, standalone)** | `/home/evo/sandbox/v2/dsl-sidequest/` → `STATE.md`, then `PLAN.md` |
 | Working plan | `/home/evo/sandbox/v2/PLAN.md` (this folder) |
 | Locked brief | `/home/evo/sandbox/v2/OUTCOME.md`, then `/home/evo/evolution/engine_v2/CONTINUE.md` |
 | Step-10 plan + status | `/home/evo/sandbox/v2/STEP10-PLAN-2026-11-07.md` |

@@ -1,0 +1,100 @@
+- generic [active] [ref=f6e1]:
+  - button "Open Next.js Dev Tools" [ref=f6e98] [cursor=pointer]
+  - alert [ref=f6e102]
+  - main [ref=f6e103]:
+    - heading "Mulan The Brave (NZ)" [level=1] [ref=f6e104]
+    - paragraph [ref=f6e105]:
+      - text: coming_soon, published ·
+      - link "Edit" [ref=f6e106] [cursor=pointer]:
+        - /url: /dsl/9185dd36-f5e8-4056-aebf-aa500d1abf78/edit
+      - text: ·
+      - link "Legal preview" [ref=f6e107] [cursor=pointer]:
+        - /url: /dsl/9185dd36-f5e8-4056-aebf-aa500d1abf78/legal
+      - text: ·
+      - link "New DSL" [ref=f6e108] [cursor=pointer]:
+        - /url: /dsl/new
+    - heading "Images" [level=2] [ref=f6e109]
+    - paragraph [ref=f6e110]: "1 in the bucket, numbered mulan-the-brave-nz/01 upward. Available needs 3. Images are public: KYC and proof of address never come through here."
+    - generic [ref=f6e111]:
+      - generic [ref=f6e112]: Add image number 2
+      - button "Add image number 2" [ref=f6e113]
+      - button "Upload to mulan-the-brave-nz" [ref=f6e114]
+    - heading "Horse" [level=2] [ref=f6e115]
+    - generic [ref=f6e116]:
+      - term [ref=f6e117]: Slug
+      - definition [ref=f6e118]: mulan-the-brave-nz
+      - term [ref=f6e119]: Foaling date
+      - definition [ref=f6e120]: 2023-08-17
+      - term [ref=f6e121]: Sex
+      - definition [ref=f6e122]: filly
+      - term [ref=f6e123]: Colour
+      - definition [ref=f6e124]: bay
+      - term [ref=f6e125]: Breeder
+      - definition [ref=f6e126]: C W Kwok
+      - term [ref=f6e127]: Sire
+      - definition [ref=f6e128]: Turn Me Loose (NZ)
+      - term [ref=f6e129]: Dam
+      - definition [ref=f6e130]: Yearn (NZ)
+      - term [ref=f6e131]: Microchip
+      - definition [ref=f6e132]: "985125000128426"
+      - term [ref=f6e133]: Life number
+      - definition [ref=f6e134]: NZ00460867
+      - term [ref=f6e135]: Loveracing id
+      - definition [ref=f6e136]: "460867"
+      - term [ref=f6e137]: Registered
+      - definition [ref=f6e138]: "yes"
+    - heading "Soft slots" [level=2] [ref=f6e139]
+    - generic [ref=f6e140]:
+      - term [ref=f6e141]: About the horse
+      - definition [ref=f6e142]: Mulan The Brave (NZ) is a bay two-year-old filly by triple Group 1-winning miler Turn Me Loose out of Group 2 Auckland Thoroughbred Breeders' Stakes winner Yearn, by Savabeel. She was foaled on 17 August 2023 and is in early education with Stephen Gray at Copper Belt Lodge, Palmerston North.
+      - term [ref=f6e143]: Racing outlook and pedigree
+      - definition [ref=f6e144]: By Turn Me Loose, a three-time Group 1 winner in New Zealand and Australia, out of Yearn, a seven-win mare by Savabeel. The pedigree combines a Group 1 sire with a Group 2-winning dam.
+      - term [ref=f6e145]: Race expectation
+      - definition [ref=f6e146]: Unraced. In early education at Copper Belt Lodge; first start to be scheduled by the trainer.
+    - generic [ref=f6e147]: "{ \"notes\": \"2YO filly in early education with Stephen Gray at Copper Belt Lodge. No starts yet.\", \"source\": \"loveracing_nz\", \"starts\": [], \"verified\": true, \"microchip\": \"985125000128426\", \"horse_name\": \"Mulan The Brave (NZ)\", \"horse_slug\": \"mulan-the-brave\", \"total_wins\": 0, \"verified_at\": \"2026-07-08\", \"total_starts\": 0, \"total_thirds\": 0, \"loveracing_id\": 460867, \"total_seconds\": 0, \"total_prizemoney_nzd\": 0 }"
+    - heading "Trainer" [level=2] [ref=f6e148]
+    - generic [ref=f6e149]:
+      - term [ref=f6e150]: Name
+      - definition [ref=f6e151]: Stephen Gray
+      - term [ref=f6e152]: Stable
+      - definition [ref=f6e153]: Stephen Gray Racing
+      - term [ref=f6e154]: Location
+      - definition [ref=f6e155]: Copper Belt Lodge, Palmerston North
+      - term [ref=f6e156]: Website
+      - definition [ref=f6e157]: https://stephengrayracing.com
+    - heading "Owner" [level=2] [ref=f6e158]
+    - generic [ref=f6e159]:
+      - term [ref=f6e160]: Entity
+      - definition [ref=f6e161]: Stephen Gray Racing
+      - term [ref=f6e162]: Contact
+      - definition [ref=f6e163]: Stephen Gray
+      - term [ref=f6e164]: Website
+      - definition [ref=f6e165]: https://stephengrayracing.com
+    - heading "Terms" [level=2] [ref=f6e166]
+    - generic [ref=f6e167]:
+      - term [ref=f6e168]: Wholesale per 1% per month
+      - definition [ref=f6e169]: "60"
+      - term [ref=f6e170]: Listed price per 1% per month
+      - definition [ref=f6e171]: "65"
+      - term [ref=f6e172]: Wholesale total at 100%
+      - definition [ref=f6e173]: "6000"
+      - term [ref=f6e174]: Investor split
+      - definition [ref=f6e175]: —
+      - term [ref=f6e176]: Payment style
+      - definition [ref=f6e177]: subscription_float
+      - term [ref=f6e178]: Close style
+      - definition [ref=f6e179]: fourteen_day
+      - term [ref=f6e180]: Listed stake
+      - definition [ref=f6e181]: "5"
+      - term [ref=f6e182]: Stake remaining
+      - definition [ref=f6e183]: "5"
+      - term [ref=f6e184]: Minimum stake
+      - definition [ref=f6e185]: "1"
+      - term [ref=f6e186]: Step
+      - definition [ref=f6e187]: "0.1"
+      - term [ref=f6e188]: Term start
+      - definition [ref=f6e189]: 2026-09-01
+      - term [ref=f6e190]: End date
+      - definition [ref=f6e191]: 2028-06-30
+      - term [ref=f6e192]: Distribution schedule
+      - definition [ref=f6e193]: —

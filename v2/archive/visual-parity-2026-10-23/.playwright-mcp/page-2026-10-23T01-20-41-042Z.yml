@@ -1,0 +1,95 @@
+- generic [active] [ref=f4e1]:
+  - banner [ref=f4e2]:
+    - generic [ref=f4e3]:
+      - link [ref=f4e4] [cursor=pointer]:
+        - /url: /
+        - img "Evolution Stables" [ref=f4e5]
+      - navigation "Main Navigation" [ref=f4e6]:
+        - link "About" [ref=f4e7] [cursor=pointer]:
+          - /url: /#about
+        - link "Mission" [ref=f4e8] [cursor=pointer]:
+          - /url: /#mission
+        - link "Model" [ref=f4e9] [cursor=pointer]:
+          - /url: /#digital-syndication
+        - link "Marketplace" [ref=f4e10] [cursor=pointer]:
+          - /url: /marketplace
+        - link "MyStable" [ref=f4e11] [cursor=pointer]:
+          - /url: /mystable
+        - link "FAQ" [ref=f4e12] [cursor=pointer]:
+          - /url: /#faq
+      - link "Get Started" [ref=f4e14] [cursor=pointer]:
+        - /url: /marketplace
+  - main [ref=f4e16]:
+    - generic [ref=f4e17]:
+      - link "Marketplace" [ref=f4e18] [cursor=pointer]:
+        - /url: /marketplace
+      - heading "Mulan The Brave (NZ)" [level=1] [ref=f4e19]
+    - generic [ref=f4e21]:
+      - generic [ref=f4e22]:
+        - heading "Offer" [level=2] [ref=f4e23]
+        - generic [ref=f4e24]: COMING SOON
+      - generic [ref=f4e26]:
+        - generic [ref=f4e27]:
+          - term [ref=f4e28]: Listed stake
+          - definition [ref=f4e29]:
+            - generic [ref=f4e30]: 5%
+          - paragraph [ref=f4e31]: Of the horse, in total
+        - generic [ref=f4e32]:
+          - term [ref=f4e33]: Minimum stake
+          - definition [ref=f4e34]:
+            - generic [ref=f4e35]: 1%
+        - generic [ref=f4e36]:
+          - term [ref=f4e37]: Step
+          - definition [ref=f4e38]:
+            - generic [ref=f4e39]: 0.1%
+          - paragraph [ref=f4e40]: Each additional stake moves in steps of this size
+        - generic [ref=f4e41]:
+          - term [ref=f4e42]: Remaining
+          - definition [ref=f4e43]:
+            - generic [ref=f4e44]: 5%
+          - paragraph [ref=f4e45]: Not yet taken
+        - generic [ref=f4e46]:
+          - term [ref=f4e47]: Retail rate
+          - definition [ref=f4e48]:
+            - generic [ref=f4e49]: $65
+            - generic [ref=f4e50]: per 1% / month
+        - generic [ref=f4e51]:
+          - term [ref=f4e52]: Wholesale
+          - definition [ref=f4e53]:
+            - generic [ref=f4e54]: $6000
+            - generic [ref=f4e55]: at 100%
+        - generic [ref=f4e56]:
+          - term [ref=f4e57]: Term start
+          - definition [ref=f4e58]:
+            - generic [ref=f4e59]: 2026-09-01
+        - generic [ref=f4e60]:
+          - term [ref=f4e61]: End date
+          - definition [ref=f4e62]:
+            - generic [ref=f4e63]: 2028-06-30
+        - generic [ref=f4e64]:
+          - term [ref=f4e65]: Payment model
+          - definition [ref=f4e66]:
+            - generic [ref=f4e67]: subscription_float
+        - generic [ref=f4e68]:
+          - term [ref=f4e69]: Close style
+          - definition [ref=f4e70]:
+            - generic [ref=f4e71]: fourteen_day
+  - contentinfo [ref=f4e72]:
+    - generic [ref=f4e73]:
+      - generic [ref=f4e74]:
+        - link "Privacy Policy" [ref=f4e75] [cursor=pointer]:
+          - /url: /privacy
+        - generic [aria-hidden] [ref=f4e76]: •
+        - link "Terms of Service" [ref=f4e77] [cursor=pointer]:
+          - /url: /terms
+        - generic [aria-hidden] [ref=f4e78]: •
+        - paragraph [ref=f4e79]: © 2026 Evolution Stables
+      - generic [ref=f4e80]:
+        - link "Evolution Stables on X" [ref=f4e81] [cursor=pointer]:
+          - /url: https://x.com/EvolutionStable
+        - link "Evolution Stables on Instagram" [ref=f4e84] [cursor=pointer]:
+          - /url: https://instagram.com
+        - link "Evolution Stables on LinkedIn" [ref=f4e88] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "Evolution Stables on YouTube" [ref=f4e91] [cursor=pointer]:
+          - /url: https://youtube.com

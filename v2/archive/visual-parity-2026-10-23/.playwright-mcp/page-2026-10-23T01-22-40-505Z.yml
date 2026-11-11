@@ -1,0 +1,148 @@
+- generic [active] [ref=f8e1]:
+  - button "Open Next.js Dev Tools" [ref=f8e108] [cursor=pointer]
+  - alert [ref=f8e112]
+  - main [ref=f8e113]:
+    - heading "Edit Mulan The Brave (NZ)" [level=1] [ref=f8e114]
+    - paragraph [ref=f8e115]:
+      - link "Back to the DSL" [ref=f8e116] [cursor=pointer]:
+        - /url: /dsl/9185dd36-f5e8-4056-aebf-aa500d1abf78
+    - paragraph [ref=f8e117]: A rename changes the slug and the image folder, and a second horse holding that slug is refused. The stake remaining is left where the sales put it.
+    - generic [ref=f8e118]:
+      - alert [ref=f8e119]: "dsls: dsl 9185dd36-f5e8-4056-aebf-aa500d1abf78 cannot be available: investor_split is null"
+      - group "Horse" [ref=f8e120]:
+        - generic [ref=f8e122]:
+          - text: Legal name
+          - textbox "Legal name" [ref=f8e123]: Mulan The Brave (NZ)
+        - generic [ref=f8e124]:
+          - text: Foaling date
+          - textbox "Foaling date" [ref=f8e125]: 2023-08-17
+        - generic [ref=f8e126]:
+          - text: Sex
+          - textbox "Sex" [ref=f8e127]: filly
+        - generic [ref=f8e128]:
+          - text: Colour
+          - textbox "Colour" [ref=f8e129]: bay
+        - generic [ref=f8e130]:
+          - text: Breeder
+          - textbox "Breeder" [ref=f8e131]: C W Kwok
+        - generic [ref=f8e132]:
+          - text: Sire, entered by hand
+          - textbox "Sire, entered by hand" [ref=f8e133]: Turn Me Loose (NZ)
+        - generic [ref=f8e134]:
+          - text: Dam, entered by hand
+          - textbox "Dam, entered by hand" [ref=f8e135]: Yearn (NZ)
+        - generic [ref=f8e136]:
+          - text: Microchip
+          - textbox "Microchip" [ref=f8e137]: "985125000128426"
+        - generic [ref=f8e138]:
+          - text: Life number
+          - textbox "Life number" [ref=f8e139]: NZ00460867
+        - generic [ref=f8e140]:
+          - text: Loveracing id
+          - textbox "Loveracing id" [ref=f8e141]: "460867"
+        - generic [ref=f8e142]:
+          - checkbox "Registered with loveracing.nz" [checked] [ref=f8e143]
+          - text: Registered with loveracing.nz
+        - generic [ref=f8e144]:
+          - text: Images already in the bucket
+          - spinbutton "Images already in the bucket" [ref=f8e145]: "3"
+        - generic [ref=f8e146]:
+          - text: Race record, one json object
+          - textbox "Race record, one json object" [ref=f8e147]: "{ \"notes\": \"2YO filly in early education with Stephen Gray at Copper Belt Lodge. No starts yet.\", \"source\": \"loveracing_nz\", \"starts\": [], \"verified\": true, \"microchip\": \"985125000128426\", \"horse_name\": \"Mulan The Brave (NZ)\", \"horse_slug\": \"mulan-the-brave\", \"total_wins\": 0, \"verified_at\": \"2026-07-08\", \"total_starts\": 0, \"total_thirds\": 0, \"loveracing_id\": 460867, \"total_seconds\": 0, \"total_prizemoney_nzd\": 0 }"
+      - group "The three soft slots, written by hand" [ref=f8e148]:
+        - generic [ref=f8e150]:
+          - text: About the horse
+          - textbox "About the horse" [ref=f8e151]: Mulan The Brave (NZ) is a bay two-year-old filly by triple Group 1-winning miler Turn Me Loose out of Group 2 Auckland Thoroughbred Breeders' Stakes winner Yearn, by Savabeel. She was foaled on 17 August 2023 and is in early education with Stephen Gray at Copper Belt Lodge, Palmerston North.
+        - generic [ref=f8e152]:
+          - text: Racing outlook and pedigree
+          - textbox "Racing outlook and pedigree" [ref=f8e153]: By Turn Me Loose, a three-time Group 1 winner in New Zealand and Australia, out of Yearn, a seven-win mare by Savabeel. The pedigree combines a Group 1 sire with a Group 2-winning dam.
+        - generic [ref=f8e154]:
+          - text: Race expectation
+          - textbox "Race expectation" [ref=f8e155]: Unraced. In early education at Copper Belt Lodge; first start to be scheduled by the trainer.
+      - group "Trainer" [ref=f8e156]:
+        - generic [ref=f8e158]:
+          - text: Name
+          - textbox "Name" [ref=f8e159]: Stephen Gray
+        - generic [ref=f8e160]:
+          - text: Stable
+          - textbox "Stable" [ref=f8e161]: Stephen Gray Racing
+        - generic [ref=f8e162]:
+          - text: Location
+          - textbox "Location" [ref=f8e163]: Copper Belt Lodge, Palmerston North
+        - generic [ref=f8e164]:
+          - text: Website
+          - textbox "Website" [ref=f8e165]: https://stephengrayracing.com
+        - generic [ref=f8e166]:
+          - text: Bio
+          - textbox "Bio" [ref=f8e167]: Stephen Gray is a Group 1-winning trainer with more than 825 career wins, including six in Singapore. He now trains from Copper Belt Lodge near Palmerston North.
+      - group "Owner" [ref=f8e168]:
+        - generic [ref=f8e170]:
+          - text: Entity
+          - textbox "Entity" [ref=f8e171]: Stephen Gray Racing
+        - generic [ref=f8e172]:
+          - text: Contact
+          - textbox "Contact" [ref=f8e173]: Stephen Gray
+        - generic [ref=f8e174]:
+          - text: Website
+          - textbox "Website" [ref=f8e175]: https://stephengrayracing.com
+        - generic [ref=f8e176]:
+          - text: Profile
+          - textbox "Profile" [ref=f8e177]: Stephen Gray Racing operates from Copper Belt Lodge in Awahuri near Palmerston North, the private training centre Stephen Gray owns with his father, Kevin Gray.
+      - group "Commercial terms" [ref=f8e178]:
+        - generic [ref=f8e180]:
+          - text: Wholesale cost per 1%, per month
+          - spinbutton "Wholesale cost per 1%, per month" [ref=f8e181]: "60"
+        - paragraph [ref=f8e182]: "The engine derives the listed price from that one figure: wholesale times 1.05 times 1.03, rounded up to the next whole dollar."
+        - generic [ref=f8e183]:
+          - text: Investor split, 50 to 85
+          - spinbutton "Investor split, 50 to 85" [ref=f8e184]
+        - generic [ref=f8e185]:
+          - text: Payment style
+          - combobox "Payment style" [ref=f8e186]:
+            - option "subscription_float" [selected]
+            - option "upfront"
+        - generic [ref=f8e187]:
+          - text: Close style
+          - combobox "Close style" [ref=f8e188]:
+            - option "fourteen_day" [selected]
+            - option "three_x_remaining"
+        - generic [ref=f8e189]:
+          - text: Status
+          - combobox "Status" [ref=f8e190]:
+            - option "coming_soon" [selected]
+            - option "available"
+            - option "fully_allocated"
+            - option "completed"
+        - generic [ref=f8e191]:
+          - checkbox "Published" [checked] [ref=f8e192]
+          - text: Published
+        - generic [ref=f8e193]:
+          - text: Listed stake
+          - spinbutton "Listed stake" [ref=f8e194]: "5"
+        - generic [ref=f8e195]:
+          - text: Minimum stake
+          - spinbutton "Minimum stake" [ref=f8e196]: "1"
+        - generic [ref=f8e197]:
+          - text: Step
+          - spinbutton "Step" [ref=f8e198]: "0.1"
+        - generic [ref=f8e199]:
+          - text: Term start
+          - textbox "Term start" [ref=f8e200]: 2026-09-01
+        - generic [ref=f8e201]:
+          - text: End date
+          - textbox "End date" [ref=f8e202]: 2028-06-30
+        - generic [ref=f8e203]:
+          - text: Distribution schedule
+          - textbox "Distribution schedule" [ref=f8e204]
+      - group "Branding" [ref=f8e205]:
+        - paragraph [ref=f8e207]: These choices show on this page and go no further. No branding field is stored, so none of the controls below carries a name and none of them is submitted.
+        - generic [ref=f8e208]:
+          - text: Primary colour
+          - textbox "Primary colour" [ref=f8e209]: "#1b3a2f"
+        - generic [ref=f8e210]:
+          - text: Accent colour
+          - textbox "Accent colour" [ref=f8e211]: "#c8a24a"
+        - generic [ref=f8e212]:
+          - checkbox "Show the trainer panel on the listing" [checked] [ref=f8e213]
+          - text: Show the trainer panel on the listing
+      - button "Save changes" [ref=f8e214]

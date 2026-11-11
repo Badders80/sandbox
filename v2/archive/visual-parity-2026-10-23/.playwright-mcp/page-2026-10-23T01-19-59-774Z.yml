@@ -1,0 +1,154 @@
+- main [ref=f2e2]:
+  - heading "New DSL" [level=1] [ref=f2e3]
+  - paragraph [ref=f2e4]:
+    - link "Back" [ref=f2e5] [cursor=pointer]:
+      - /url: /
+  - generic [ref=f2e6]:
+    - heading "Start from a loveracing.nz link" [level=2] [ref=f2e7]
+    - generic [ref=f2e8]:
+      - generic [ref=f2e9]:
+        - text: loveracing.nz link
+        - textbox "loveracing.nz link" [ref=f2e10]:
+          - /placeholder: https://loveracing.nz/...
+      - button "Load" [ref=f2e11]
+  - generic [ref=f2e12]:
+    - heading "Type the horse in by hand" [level=2] [ref=f2e13]
+    - paragraph [ref=f2e14]: An unregistered horse is typed here, with its sire and dam entered by hand. It saves at Coming Soon and no further until it is registered.
+    - generic [ref=f2e15]:
+      - group "Horse" [ref=f2e16]:
+        - generic [ref=f2e18]:
+          - text: Legal name
+          - textbox "Legal name" [ref=f2e19]
+        - generic [ref=f2e20]:
+          - text: Foaling date
+          - textbox "Foaling date" [ref=f2e21]
+        - generic [ref=f2e22]:
+          - text: Sex
+          - textbox "Sex" [ref=f2e23]
+        - generic [ref=f2e24]:
+          - text: Colour
+          - textbox "Colour" [ref=f2e25]
+        - generic [ref=f2e26]:
+          - text: Breeder
+          - textbox "Breeder" [ref=f2e27]
+        - generic [ref=f2e28]:
+          - text: Sire, entered by hand
+          - textbox "Sire, entered by hand" [ref=f2e29]
+        - generic [ref=f2e30]:
+          - text: Dam, entered by hand
+          - textbox "Dam, entered by hand" [ref=f2e31]
+        - generic [ref=f2e32]:
+          - text: Microchip
+          - textbox "Microchip" [ref=f2e33]
+        - generic [ref=f2e34]:
+          - text: Life number
+          - textbox "Life number" [ref=f2e35]
+        - generic [ref=f2e36]:
+          - text: Loveracing id
+          - textbox "Loveracing id" [ref=f2e37]
+        - generic [ref=f2e38]:
+          - checkbox "Registered with loveracing.nz" [ref=f2e39]
+          - text: Registered with loveracing.nz
+        - generic [ref=f2e40]:
+          - text: Images already in the bucket
+          - spinbutton "Images already in the bucket" [ref=f2e41]: "0"
+        - generic [ref=f2e42]:
+          - text: Race record, one json object
+          - textbox "Race record, one json object" [ref=f2e43]: "{}"
+      - group "The three soft slots, written by hand" [ref=f2e44]:
+        - generic [ref=f2e46]:
+          - text: About the horse
+          - textbox "About the horse" [ref=f2e47]
+        - generic [ref=f2e48]:
+          - text: Racing outlook and pedigree
+          - textbox "Racing outlook and pedigree" [ref=f2e49]
+        - generic [ref=f2e50]:
+          - text: Race expectation
+          - textbox "Race expectation" [ref=f2e51]
+      - group "Trainer" [ref=f2e52]:
+        - generic [ref=f2e54]:
+          - text: Name
+          - textbox "Name" [ref=f2e55]
+        - generic [ref=f2e56]:
+          - text: Stable
+          - textbox "Stable" [ref=f2e57]
+        - generic [ref=f2e58]:
+          - text: Location
+          - textbox "Location" [ref=f2e59]
+        - generic [ref=f2e60]:
+          - text: Website
+          - textbox "Website" [ref=f2e61]
+        - generic [ref=f2e62]:
+          - text: Bio
+          - textbox "Bio" [ref=f2e63]
+      - group "Owner" [ref=f2e64]:
+        - generic [ref=f2e66]:
+          - text: Entity
+          - textbox "Entity" [ref=f2e67]
+        - generic [ref=f2e68]:
+          - text: Contact
+          - textbox "Contact" [ref=f2e69]
+        - generic [ref=f2e70]:
+          - text: Website
+          - textbox "Website" [ref=f2e71]
+        - generic [ref=f2e72]:
+          - text: Profile
+          - textbox "Profile" [ref=f2e73]
+      - group "Commercial terms" [ref=f2e74]:
+        - generic [ref=f2e76]:
+          - text: Wholesale cost per 1%, per month
+          - spinbutton "Wholesale cost per 1%, per month" [ref=f2e77]
+        - paragraph [ref=f2e78]: "The engine derives the listed price from that one figure: wholesale times 1.05 times 1.03, rounded up to the next whole dollar."
+        - generic [ref=f2e79]:
+          - text: Investor split, 50 to 85
+          - spinbutton "Investor split, 50 to 85" [ref=f2e80]
+        - generic [ref=f2e81]:
+          - text: Payment style
+          - combobox "Payment style" [ref=f2e82]:
+            - option "subscription_float" [selected]
+            - option "upfront"
+        - generic [ref=f2e83]:
+          - text: Close style
+          - combobox "Close style" [ref=f2e84]:
+            - option "fourteen_day" [selected]
+            - option "three_x_remaining"
+        - generic [ref=f2e85]:
+          - text: Status
+          - combobox "Status" [ref=f2e86]:
+            - option "coming_soon" [selected]
+            - option "available"
+            - option "fully_allocated"
+            - option "completed"
+        - generic [ref=f2e87]:
+          - checkbox "Published" [ref=f2e88]
+          - text: Published
+        - generic [ref=f2e89]:
+          - text: Listed stake
+          - spinbutton "Listed stake" [ref=f2e90]
+        - generic [ref=f2e91]:
+          - text: Minimum stake
+          - spinbutton "Minimum stake" [ref=f2e92]
+        - generic [ref=f2e93]:
+          - text: Step
+          - spinbutton "Step" [ref=f2e94]
+        - generic [ref=f2e95]:
+          - text: Term start
+          - textbox "Term start" [ref=f2e96]
+        - generic [ref=f2e97]:
+          - text: End date
+          - textbox "End date" [ref=f2e98]
+        - generic [ref=f2e99]:
+          - text: Distribution schedule
+          - textbox "Distribution schedule" [ref=f2e100]
+      - group "Branding" [ref=f2e101]:
+        - paragraph [ref=f2e103]: These choices show on this page and go no further. No branding field is stored, so none of the controls below carries a name and none of them is submitted.
+        - generic [ref=f2e104]:
+          - text: Primary colour
+          - textbox "Primary colour" [ref=f2e105]: "#1b3a2f"
+        - generic [ref=f2e106]:
+          - text: Accent colour
+          - textbox "Accent colour" [ref=f2e107]: "#c8a24a"
+        - generic [ref=f2e108]:
+          - checkbox "Show the trainer panel on the listing" [checked] [ref=f2e109]
+          - text: Show the trainer panel on the listing
+      - button "Save the DSL" [ref=f2e110]
