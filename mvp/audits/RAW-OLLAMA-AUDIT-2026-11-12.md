@@ -1,7 +1,7 @@
 # Raw Ollama audit — PDS/SA package
 
-**Date:** 2026-11-12  
-**Auditor:** `kimi-k2.7-code` via direct Ollama `/api/chat` tool loop  
+**Date:** 2026-11-12
+**Auditor:** `kimi-k2.7-code` via direct Ollama `/api/chat` tool loop
 **Target:** engine_v2 headless legal package diff
 
 ## Initial verdict — WARN

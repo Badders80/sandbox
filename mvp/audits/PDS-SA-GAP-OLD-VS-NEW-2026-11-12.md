@@ -1,8 +1,8 @@
 # PDS/SA gap analysis — old test trade vs new package
 
-**Old PDS:** `/mnt/c/Users/Evo/Downloads/mulan-the-brave-pds-fbd0ba0c (2).pdf`  
-**Old SA:** `/mnt/c/Users/Evo/Downloads/mulan-the-brave-sa-a31a955c (1).pdf`  
-**New package:** `/home/evo/sandbox/mvp/out/legal/ES-DSL-2026-900005/contract.pdf`  
+**Old PDS:** `/mnt/c/Users/Evo/Downloads/mulan-the-brave-pds-fbd0ba0c (2).pdf`
+**Old SA:** `/mnt/c/Users/Evo/Downloads/mulan-the-brave-sa-a31a955c (1).pdf`
+**New package:** `/home/evo/sandbox/mvp/out/legal/ES-DSL-2026-900006/contract.pdf`
 **Date:** 2026-11-12
 
 ## Improvements in the new package
