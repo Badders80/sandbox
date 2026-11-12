@@ -3,14 +3,14 @@
 > Shape: **Next action · State · Ledger · Blocked**.
 
 **Next action:** open `audits/landing-parity-2026-11-12/EVIDENCE.md` and founder
-walk V2 branch `landing-parity-2026-11-12` (`73dd144`) at 1440 and 390. After the
+walk V2 branch `landing-parity-2026-11-12` (code `5726a51`) at 1440 and 390. After the
 merge decision, resume F1: carry the contract ID through checkout and sale.
 
 ## State — 2026-11-12
 
 - The V2 landing page is visually aligned to production on branch
-  `landing-parity-2026-11-12` (code `5726a51`, wrap tip `73dd144`); the branch is
-  pushed and not merged.
+  `landing-parity-2026-11-12` at code `5726a51`; the branch and its wrap notes
+  are pushed and not merged.
 - Final landing refinements: wordmark-only nav, no divider, masked glass fade,
   112px visual nav height with the 80px content row unchanged, hero image
   restored, and a 300ms FAQ grid transition with reduced-motion fallback.
@@ -91,7 +91,7 @@ merge decision, resume F1: carry the contract ID through checkout and sale.
 | 2026-11-12 | wrap — model, legal package and audit evidence committed | done |
 | 2026-11-12 | V2 landing parity built, refined, gated and audited (`5726a51`) | done; founder walk pending |
 | 2026-11-12 | Production motion audit captured (1 Critical / 4 Important / 6 Opportunities) | done |
-| 2026-11-12 | wrap notes committed and branch published (`73dd144`) | done |
+| 2026-11-12 | wrap notes committed and branch published | done |
 | next | persist the contract ID through checkout and sale (F1) | ready |
 
 ## Blocked
