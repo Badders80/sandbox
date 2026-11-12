@@ -20,6 +20,9 @@
 - [Production mobile, 390×844](./production-mobile-390.png)
 - [V2 mobile, 390×844](./v2-mobile-390.png)
 
+The V2 screenshots were recaptured from the final `5726a51` build after the
+hero, wordmark, FAQ motion, blended nav fade and nav breathing-room refinements.
+
 ## Geometry
 
 | Viewport | Production height | V2 height | Difference | Horizontal overflow |
