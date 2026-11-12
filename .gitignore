@@ -2,4 +2,5 @@ rebuild/
 node_modules/
 __pycache__/
 *.log
+mvp/out/
 audit/corpus-deep-dive/out_run.log

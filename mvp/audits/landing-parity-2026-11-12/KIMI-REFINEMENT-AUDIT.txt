@@ -1,0 +1,16 @@
+Latest refinement passes all source and test checks; the build step of `just check` was skipped under the read-only rule.
+
+| # | Claim | Result | Evidence / Fix Required |
+|---|-------|--------|------------------------|
+| 1 | Navbar renders only the standalone muted-grey monogram and no combined lockup/wordmark | PASS | `website/src/components/NavBar.tsx:43-49` uses only `/brand/monogram/monogram-muted-grey.svg`; no wordmark element. |
+| 2 | Navbar has no bottom divider or border line | PASS | `website/src/components/NavBar.tsx:35` header has no `border-b`; the only border is `border-t` on the mobile menu at `website/src/components/NavBar.tsx:103`. |
+| 3 | FAQ panel uses a state-driven 300ms grid-row/opacity transition plus a 4px content settle, not hidden/unhidden or keyframes | PASS | `website/src/components/FaqAccordion.tsx:52-53` uses `transition-[grid-template-rows,opacity] duration-collapse ease-enter`; `duration-collapse` is `300ms` at `website/src/app/globals.css:155-156`; the 4px settle is `-translate-y-1`/`translate-y-0` at `website/src/components/FaqAccordion.tsx:58-59`. |
+| 4 | FAQ animation is interruptible, opens and closes correctly, and has matching aria-expanded/aria-controls/region labelling | PASS | Button has `aria-expanded={isOpen}` and `aria-controls={`faq-panel-${index}`}` at `website/src/components/FaqAccordion.tsx:27-28`; panel has `role="region"`, `aria-labelledby={`faq-trigger-${index}`}`, and matching `id` at `website/src/components/FaqAccordion.tsx:48-50`; state class swaps make it interruptible. |
+| 5 | Reduced motion remains handled by the global prefers-reduced-motion rule | PASS | `website/src/app/globals.css:264-273` zeroes transition/animation durations under `@media (prefers-reduced-motion: reduce)`. |
+| 6 | The refinement changes only NavBar.tsx and FaqAccordion.tsx | PASS | `git show --stat HEAD` for `9e4244e` shows only `website/src/components/FaqAccordion.tsx` and `website/src/components/NavBar.tsx` changed. |
+| 7 | `just check` exits 0 with 393 engine tests passed, 1 skipped, 54 website tests passed, and both builds | WARN | `pnpm run test` output: engine 393 passed / 1 skipped, website 54 passed; `pnpm run lint` passed in both packages. The Next.js build step was not run because the read-only instruction forbids commands that write files. |
+| 8 | Adversarial: closed panel has no visible height, open panel reaches full content height, rapid toggling needs no keyframe restart | PASS | Closed `grid-rows-[0fr]` with `min-h-0 overflow-hidden` at `website/src/components/FaqAccordion.tsx:52-53` and `website/src/components/FaqAccordion.tsx:56` collapses to zero; open `grid-rows-[1fr]` expands to content height; no keyframes are used, so rapid toggling is a class transition. |
+
+Fix for #7: Run `just check` (or `pnpm run build` in both packages) in a throwaway copy to confirm both builds exit 0; the working tree was kept read-only.
+
+VERDICT: WARN

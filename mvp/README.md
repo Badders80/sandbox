@@ -46,9 +46,11 @@ do not restate them here.
 
 ## Reading order
 
-1. `SCOPE.md` — the three buckets, and the decisions still open.
-2. `DOD.md` — the one walk that closes it.
-3. `appendix/` — the full-phase design, kept but explicitly not on the path.
+1. `CONTINUE.md` — current state, work queue and blockers.
+2. `MODEL.md` — the locked commercial and legal model.
+3. `SCOPE.md` — the three buckets and remaining scope decisions.
+4. `DOD.md` — the one walk that closes it.
+5. `appendix/` — the full-phase design, kept but explicitly not on the path.
 
 ## Rules for this folder
 
