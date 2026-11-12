@@ -114,10 +114,12 @@ merged on `dsl-sidequest`. The Mulan walk, F1–F5 and the public wrap remain.**
 29. **Two SSOTs (2026-11-11)** — the structured investment row is the operational
     SSOT; the executed PDS/SA is the legal SSOT and wins on conflict. Hashes bind
     the two. A DSL is a contract series; the cap table is derived, never stored.
-30. **Horse percentage points only (2026-11-11)** — stakes are stored, transmitted,
-    contracted and displayed in points of the horse. Contract percentage is
-    derived display only: never stored, never printed in the PDS/SA, never used
-    in a calculation. Every "100%" names its scope.
+30. **Horse points and percentage-stake wording (amended 2026-11-12)** — one
+    horse point equals a 1% stake. Stakes remain calculated and stored in horse
+    points against the full-horse 100-point denominator. Investor-facing PDS/SA
+    wording may use `1% stake`, `Stake Percentage` and `0.5% shares`, provided
+    the equivalence and 100-point denominator are defined once. Percentage
+    wording never creates a second pricing rate.
 31. **Founder owns external capacity (2026-11-11)** — the system is authoritative
     for executed investments and documents; the founder is authoritative for
     horse capacity and external owner terms in v1. Ledger views report **known

@@ -33,7 +33,8 @@ evidence exists:
 
 - `R-DOC-04` — contract ID test.
 - `R-DOC-05` to `R-DOC-06` — archive, hash verification and recovery test.
-- `R-UNIT-02` — UI/source check that contract percentage is display-only.
+- `R-UNIT-02` — one horse point equals a 1% stake; percentage wording is
+  investor-facing language and the 100-point denominator is stated once.
 - `R-DISP-01` to `R-DISP-03` — formatter audit and rendered-output checks.
 
 ## Deferred public work
@@ -95,7 +96,8 @@ risk: money and legal first, then allocation, then process.
 - `stake_remaining` between zero and `listed_stake`; no oversell — `R-ALLOC-02`.
 - `listed = sold + open holds + held paid_unfulfilled + remaining`, and the cap table is derived rather than stored — `R-ALLOC-01`.
 - Sale snapshot, sale-time start and the atomic sale-plus-hold claim — `R-SALE-02` to `R-SALE-04`.
-- Contract percentage never stored, printed or calculated — `R-UNIT-02`.
+- One horse point equals a 1% stake; percentage wording is permitted —
+  `R-UNIT-02`.
 - Published is separate from status — `R-PUB-01`.
 
 ### Contradictions found

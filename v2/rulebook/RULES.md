@@ -19,7 +19,7 @@ state rulings, migrations, engine modules and legal files.
 | `R-DSL-04` | `closed_at` marks a row inactive regardless of status. Every active-row predicate — unique indexes, readiness, listing queries — excludes closed rows. | DB + rulebook | `00028` (index only); readiness and listings not yet filtered | locked | Ruling 33 |
 | `R-DSL-05` | A closed row is immutable. Any update to a row with `closed_at` set is refused, including un-closing and a status change. | DB trigger | `00029`; `probe-00029` 5/5 | enforced | Ruling 34 |
 | `R-UNIT-01` | Stakes are stored, transmitted, contracted and displayed in horse percentage points. | DB columns | `listed_stake`, `stake`, `stake_remaining` | enforced | Ruling 30 |
-| `R-UNIT-02` | Contract percentage is derived display only: never stored, never printed in legal documents, never used in a calculation. | Rulebook | UI rule | locked | Ruling 30 |
+| `R-UNIT-02` | One horse point equals a 1% stake. Investor-facing documents may use percentage-stake wording, provided they define the 100-point full-horse denominator once and use it in the return formula. Percentage wording never creates a second pricing rate. | Rulebook | PDS/SA wording and UI vocabulary | locked | Ruling 30, amended 2026-11-12 |
 
 ## Display and precision
 
