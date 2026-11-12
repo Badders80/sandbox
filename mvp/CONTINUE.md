@@ -98,6 +98,8 @@ merge decision, resume F1: carry the contract ID through checkout and sale.
 
 - **Landing parity merge:** waiting on the founder visual walk at 1440 and 390;
   the branch is pushed and must not merge until that gate is cleared.
+- **Preview environment:** the landing renders without env, but marketplace and
+  sitemap need the main checkout's `.env.local` in the parity worktree.
 - **Commercial terms:** final Mulan values are saved: $60 wholesale / $65 retail
   per 1% per month, 75% investor return, 5% listed, 1% minimum, 0.5% steps,
   subscription float, 14-day break, quarterly distributions and Jun 2028 expiry.
