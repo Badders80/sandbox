@@ -2,9 +2,9 @@
 
 > Shape: **Next action · State · Ledger · Blocked**.
 
-**Next action:** founder visual walk of the Marketplace horse-page checkpoint at
-`audits/horse-page-parity-2026-11-14/`. Accept or redirect the page before the
-checkout scroll-mapping work begins.
+**Next action:** open `sessions/active/2026-11-13-checkout-scroll-mapping.md` and
+map the PDS/SA scroll locks and post-sale pack/email against the current checkout
+contracts before changing implementation.
 
 ## State — 2026-11-13
 
@@ -42,7 +42,7 @@ checkout scroll-mapping work begins.
   detail tabs, public offer rail and fixed mobile ownership action. Evidence is
   in `audits/horse-page-parity-2026-11-14/`. Gate: engine 401 passed / 1 skipped,
   website 69 passed, both builds; desktop and mobile axe reports have zero
-  violations; founder visual walk remains pending.
+  violations. Founder visual walk **accepted**.
 - Final landing refinements: monogram nav, gold wordmark hero aligned to the
   copy edge, masked glass fade, mobile drawer lifecycle motion, 750ms
   reveal-once scroll motion, no page-level separator lines and reduced-motion
@@ -193,8 +193,8 @@ KYC evidence and the full checkout/sale chain remain open.
 | 2026-11-13 | F1 acceptance persistence: immutable PDS/SA declarations, typed signature and checkout binding | done |
 | 2026-11-13 | Checkout scroll-mapping next-session plan created | ready |
 | 2026-11-13 | Checkout source audit and legacy/rebuild freeze created | done |
-| 2026-11-14 | Marketplace production audit and V2 local-fixture implementation | built; founder walk pending |
-| 2026-11-14 | Marketplace horse-page audit and V2 Mulan fixture implementation | built; founder walk pending |
+| 2026-11-14 | Marketplace production audit and V2 local-fixture implementation | done; founder accepted |
+| 2026-11-14 | Marketplace horse-page audit and V2 Mulan fixture implementation | done; founder accepted |
 | next | F1: contract ID plus executed date / selectable term-start mapping | ready |
 
 ## Blocked

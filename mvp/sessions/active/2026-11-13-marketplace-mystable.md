@@ -60,8 +60,8 @@ Production is the content, hierarchy and trust reference. V2 owns the implementa
 - Gate: engine 401 passed / 1 skipped, website 69 passed, both builds. Desktop
   and mobile axe reports show zero violations; gallery, tabs, keyboard, 44px
   controls, reduced motion and the fixed conversion-bar/footer clearance pass.
-- Remaining Session 2 gate: founder approval of the horse-page result before
-  checkout implementation starts.
+- Session 2 gate: founder approved the horse-page result. Checkout work may now
+  begin from the accepted horse-page branch and the checkout scroll-mapping plan.
 
 ## Session 1 — Lock the Marketplace Initial Page
 
