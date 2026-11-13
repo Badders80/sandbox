@@ -44,8 +44,24 @@ Production is the content, hierarchy and trust reference. V2 owns the implementa
 - Gate: engine 401 passed / 1 skipped, website 66 passed, both builds. Desktop
   and mobile axe reports show zero violations; filters, keyboard order, 44px
   page controls and reduced motion were walked.
-- Remaining Session 1 gate: founder approval of the recorded visual direction
-  and V2 desktop/mobile walk. Do not begin Session 2 before that ruling.
+- Session 1 gate: founder approved the Marketplace visual direction and
+  desktop/mobile result.
+
+### Session 2 checkpoint — 2026-11-14
+
+- Production Mulan was audited read-only at `1440×1000` and `390×844`, including
+  gallery, facts, story, five detail tabs, public offer, legal access and mobile
+  conversion behaviour.
+- V2 `/marketplace/mulan-the-brave` is implemented on isolated branch
+  `horse-page-parity-2026-11-14` from accepted Marketplace commit `ec725c1`.
+  Mulan remains a local fixture; no listing, schema or Marketplace data changed.
+- Evidence and the carry/adapt/reject decisions are in
+  `mvp/audits/horse-page-parity-2026-11-14/EVIDENCE.md`.
+- Gate: engine 401 passed / 1 skipped, website 69 passed, both builds. Desktop
+  and mobile axe reports show zero violations; gallery, tabs, keyboard, 44px
+  controls, reduced motion and the fixed conversion-bar/footer clearance pass.
+- Remaining Session 2 gate: founder approval of the horse-page result before
+  checkout implementation starts.
 
 ## Session 1 — Lock the Marketplace Initial Page
 

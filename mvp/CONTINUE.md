@@ -2,11 +2,9 @@
 
 > Shape: **Next action · State · Ledger · Blocked**.
 
-**Next action:** open
-`sessions/active/2026-11-13-checkout-scroll-mapping.md` and review
-`/home/evo/sandbox/rebuild/purchase-flow-v2-with-deck.html` against the current
-checkout contracts. Map the PDS/SA scroll locks and post-sale pack/email before
-changing implementation.
+**Next action:** founder visual walk of the Marketplace horse-page checkpoint at
+`audits/horse-page-parity-2026-11-14/`. Accept or redirect the page before the
+checkout scroll-mapping work begins.
 
 ## State — 2026-11-13
 
@@ -37,6 +35,13 @@ changing implementation.
   published and no Marketplace data was written. Evidence is in
   `audits/marketplace-parity-2026-11-14/`. Gate: engine 401 passed / 1 skipped,
   website 66 passed, both builds; desktop and mobile axe reports have zero
+  violations. Founder visual walk **accepted**.
+- **Marketplace horse-page Session 2 visual proof is built** on
+  `horse-page-parity-2026-11-14` from accepted Marketplace commit `ec725c1`.
+  Mulan is a local fixture with a three-image gallery, campaign story, five
+  detail tabs, public offer rail and fixed mobile ownership action. Evidence is
+  in `audits/horse-page-parity-2026-11-14/`. Gate: engine 401 passed / 1 skipped,
+  website 69 passed, both builds; desktop and mobile axe reports have zero
   violations; founder visual walk remains pending.
 - Final landing refinements: monogram nav, gold wordmark hero aligned to the
   copy edge, masked glass fade, mobile drawer lifecycle motion, 750ms
@@ -150,6 +155,8 @@ KYC evidence and the full checkout/sale chain remain open.
   `audits/EVOLUTION-STABLES-MOTION-AUDIT-2026-11-12.html`.
 - [x] Audit and implement the Marketplace initial page as a local visual proof.
   Result: `audits/marketplace-parity-2026-11-14/EVIDENCE.md`.
+- [x] Audit and implement the Marketplace horse page as a local visual proof.
+  Result: `audits/horse-page-parity-2026-11-14/EVIDENCE.md`.
 - [x] Audit legacy production checkout and `sandbox/rebuild`, extract only the
   reusable behaviours, and freeze both old builds as reference-only. Result:
   `audits/CHECKOUT-SOURCE-AUDIT-2026-11-13.md`.
@@ -187,6 +194,7 @@ KYC evidence and the full checkout/sale chain remain open.
 | 2026-11-13 | Checkout scroll-mapping next-session plan created | ready |
 | 2026-11-13 | Checkout source audit and legacy/rebuild freeze created | done |
 | 2026-11-14 | Marketplace production audit and V2 local-fixture implementation | built; founder walk pending |
+| 2026-11-14 | Marketplace horse-page audit and V2 Mulan fixture implementation | built; founder walk pending |
 | next | F1: contract ID plus executed date / selectable term-start mapping | ready |
 
 ## Blocked
