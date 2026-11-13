@@ -2,10 +2,9 @@
 
 > Shape: **Next action · State · Ledger · Blocked**.
 
-**Next action:** open
-`sessions/active/2026-11-13-marketplace-mystable.md` and run the read-only
-production Marketplace audit from a clean worktree based on
-`origin/dsl-sidequest`.
+**Next action:** founder visual walk of the Marketplace checkpoint evidence at
+`audits/marketplace-parity-2026-11-14/`, then accept or redirect the recorded
+visual direction before any horse-page work starts.
 
 ## State — 2026-11-13
 
@@ -25,6 +24,13 @@ production Marketplace audit from a clean worktree based on
   `sessions/active/2026-11-13-marketplace-mystable.md`. It sequences Marketplace
   initial page, horse page, checkout and MyStable, with Session 1 limited to the
   Marketplace audit/design lock/implementation walk.
+- **Marketplace Session 1 visual proof is built** on
+  `marketplace-parity-2026-11-14` from `origin/dsl-sidequest` at `e74b725`.
+  Mulan is the available lead card in a local six-card fixture; nothing was
+  published and no Marketplace data was written. Evidence is in
+  `audits/marketplace-parity-2026-11-14/`. Gate: engine 401 passed / 1 skipped,
+  website 66 passed, both builds; desktop and mobile axe reports have zero
+  violations; founder visual walk remains pending.
 - Final landing refinements: monogram nav, gold wordmark hero aligned to the
   copy edge, masked glass fade, mobile drawer lifecycle motion, 750ms
   reveal-once scroll motion, no page-level separator lines and reduced-motion
@@ -130,6 +136,8 @@ KYC evidence and the full checkout/sale chain remain open.
   Result: `audits/landing-parity-2026-11-12/EVIDENCE.md`.
 - [x] Audit production motion. Result:
   `audits/EVOLUTION-STABLES-MOTION-AUDIT-2026-11-12.html`.
+- [x] Audit and implement the Marketplace initial page as a local visual proof.
+  Result: `audits/marketplace-parity-2026-11-14/EVIDENCE.md`.
 
 ## Ledger
 
@@ -160,6 +168,7 @@ KYC evidence and the full checkout/sale chain remain open.
 | 2026-11-13 | Investor Pack presentation baseline checkpointed at legal pack 1.0.3 | done |
 | 2026-11-13 | Legal pack 1.0.4 aligned SA and checkout declarations; KYC and proof of address deferred as future obligations | done |
 | 2026-11-13 | Legal authority boundary locked: upstream authority external and recorded at publish; Evolution-to-Investor in system | done |
+| 2026-11-14 | Marketplace production audit and V2 local-fixture implementation | built; founder walk pending |
 | next | F1: contract ID plus executed date / selectable term-start mapping | ready |
 
 ## Blocked
