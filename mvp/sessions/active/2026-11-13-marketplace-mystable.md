@@ -32,6 +32,21 @@ Production is the content, hierarchy and trust reference. V2 owns the implementa
   - both builds pass.
 - The current worktree also contains unrelated uncommitted legal/checkout work. Do not stage, discard, reformat or overwrite it.
 
+### Execution checkpoint — 2026-11-14
+
+- Production Marketplace was audited read-only at `1440×1000` and `390×844`.
+- V2 `/marketplace` is implemented on isolated branch
+  `marketplace-parity-2026-11-14` from `e74b725`, using a local six-card
+  visual fixture with Mulan as the available lead card. Nothing was published
+  and no Marketplace data was written.
+- Evidence, geometry, card anatomy and the carry/adapt/reject decisions are in
+  `mvp/audits/marketplace-parity-2026-11-14/EVIDENCE.md`.
+- Gate: engine 401 passed / 1 skipped, website 66 passed, both builds. Desktop
+  and mobile axe reports show zero violations; filters, keyboard order, 44px
+  page controls and reduced motion were walked.
+- Remaining Session 1 gate: founder approval of the recorded visual direction
+  and V2 desktop/mobile walk. Do not begin Session 2 before that ruling.
+
 ## Session 1 — Lock the Marketplace Initial Page
 
 ### Goal
