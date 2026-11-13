@@ -174,7 +174,7 @@ MyStable must never present a pending checkout as owned. Frozen document hashes 
 
 Start the next session from a clean worktree based on:
 
-`origin/dsl-sidequest` at `ade0cc3`
+`origin/dsl-sidequest` at `e74b725` (wrap commit; foundation code is `ade0cc3`)
 
 Suggested worktree:
 
