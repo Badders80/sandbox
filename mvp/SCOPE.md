@@ -11,21 +11,25 @@ with a reason.
 | Three image slots, placeholder allowed | Ruling 26; the page must render |
 | Series with owner, price, split, expiry, listed stake | The offer has no terms otherwise |
 | Readiness → publish | A public page must not show an unready offer |
+| Recorded upstream authority check | A listing cannot be published until an operator records that Owner-to-Evolution authority exists and permits the listed terms |
 | Public horse page and offer page | The entry point |
 | Checkout, KYC if required | The money path |
 | Reserve on checkout, sweep on expiry | No oversell |
-| PDS/SA compiled at sale | The legal artefact |
+| Investor Pack (PDS + SA) compiled at sale | The legal artefact |
+| Investor Pack acceptance evidence | PDS and SA scroll/accept, SA declarations, typed signature, document hashes and timestamps must be recorded against the checkout and sale |
 | Sale row, append-only | The record |
 | Ledger over the sale snapshot | The operator's truth |
 | Email with the MyStable link | The investor must receive it |
-| One combined PDS+SA PDF, attached to the sale email, both hashes in the body | The investor must hold the document, not a link to it |
-| MyStable showing the stored document | The document must be readable |
+| One Investor Pack PDF (PDS + SA), attached to the sale email, both hashes in the body | The investor must hold the document, not a link to it |
+| MyStable showing the stored Investor Pack | The document must be readable |
 
 ## Can be manual
 
 | Item | Manual form |
 |---|---|
 | Capacity across several DSLs on one horse | Founder check; ruling 35 |
+| Owner-to-Evolution authority and lease terms | Founder/operator records the check, date and internal reference before publish; contracts remain outside the MVP |
+| Proof of address | Handled and verified manually outside the workflow; the system records `pending` until an operator updates the evidence reference and outcome |
 | Term close | Operator action, recorded reason |
 | `paid_unfulfilled` resolution | Operator action, recorded who/when/why |
 | Refunds | Stripe dashboard, noted in the ledger |
@@ -43,6 +47,9 @@ with a reason.
 | Multiple horses, owners or trainers beyond the pilot | When the second is real |
 | Media layer, studio integration, generated assets | Post-sale |
 | Greenfield restructure (`appendix/GREENFIELDS.md`) | Only if duplication is hurting weekly |
+| Owner-to-Evolution contract storage or diligence in the app | Post-sale unless operating volume makes external handling unsafe |
+| Separate declaration document | Declarations stay inside the SA signing flow; revisit only if counsel requires a standalone instrument |
+| Automated proof-of-address request or upload | Manual external handling; revisit after the pilot |
 | Public self-service beyond buying | Never in this phase |
 | Admin breadth: three sections, filters, bulk actions | When volume demands it |
 

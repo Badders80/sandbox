@@ -2,9 +2,11 @@
 
 > Shape: **Next action · State · Ledger · Blocked**.
 
-**Next action:** founder visual walk of the Marketplace checkpoint evidence at
-`audits/marketplace-parity-2026-11-14/`, then accept or redirect the recorded
-visual direction before any horse-page work starts.
+**Next action:** open
+`sessions/active/2026-11-13-checkout-scroll-mapping.md` and review
+`/home/evo/sandbox/rebuild/purchase-flow-v2-with-deck.html` against the current
+checkout contracts. Map the PDS/SA scroll locks and post-sale pack/email before
+changing implementation.
 
 ## State — 2026-11-13
 
@@ -20,10 +22,10 @@ visual direction before any horse-page work starts.
 - The shared page foundation is locked/pushed at `ade0cc3`: global scroll reveal,
   `--duration-reveal: 750ms`, shared page primitives, no page-level separator
   rule and client-navigation-safe reveal re-arming.
-- The active next-session plan is
-  `sessions/active/2026-11-13-marketplace-mystable.md`. It sequences Marketplace
-  initial page, horse page, checkout and MyStable, with Session 1 limited to the
-  Marketplace audit/design lock/implementation walk.
+- The Marketplace plan remains active at
+  `sessions/active/2026-11-13-marketplace-mystable.md`. The next focused session
+  is `sessions/active/2026-11-13-checkout-scroll-mapping.md`, which maps the
+  checkout prototype and scroll locks to the persisted acceptance contract.
 - **Marketplace Session 1 visual proof is built** on
   `marketplace-parity-2026-11-14` from `origin/dsl-sidequest` at `e74b725`.
   Mulan is the available lead card in a local six-card fixture; nothing was
@@ -62,6 +64,11 @@ visual direction before any horse-page work starts.
   outside the MVP and recorded manually before publish. Evolution-to-Investor
   offer, acceptance, KYC, sale, Investor Pack and ledger execution remain in
   system. The Investor Pack does not claim to prove the upstream lease or title.
+- **F1 acceptance persistence — done:** checkout sessions store PDS/SA acceptance
+  timestamps, the canonical declaration snapshot, typed signature and recording
+  time. The declaration and signature evidence is immutable, and Stripe cannot
+  bind a checkout until acceptance is recorded. The sale remains linked through
+  `checkout_session_id`.
 - Supabase owns structured state; Stripe supplies payment/KYC signals; the local
   private vault stores retained investor/KYC/legal evidence; a second immutable
   copy provides durability; email is delivery only.
@@ -168,6 +175,8 @@ KYC evidence and the full checkout/sale chain remain open.
 | 2026-11-13 | Investor Pack presentation baseline checkpointed at legal pack 1.0.3 | done |
 | 2026-11-13 | Legal pack 1.0.4 aligned SA and checkout declarations; KYC and proof of address deferred as future obligations | done |
 | 2026-11-13 | Legal authority boundary locked: upstream authority external and recorded at publish; Evolution-to-Investor in system | done |
+| 2026-11-13 | F1 acceptance persistence: immutable PDS/SA declarations, typed signature and checkout binding | done |
+| 2026-11-13 | Checkout scroll-mapping next-session plan created | ready |
 | 2026-11-14 | Marketplace production audit and V2 local-fixture implementation | built; founder walk pending |
 | next | F1: contract ID plus executed date / selectable term-start mapping | ready |
 

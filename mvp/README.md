@@ -34,7 +34,7 @@ the sale a prototype:
 1. No oversell.
 2. No silent sale — every payment either writes one sale or is recorded as an
    exception.
-3. A document that is frozen and can be proven unchanged.
+3. An Investor Pack (PDS + SA) that is frozen and can be proven unchanged.
 4. A ledger that agrees with the money.
 5. One price authority.
 

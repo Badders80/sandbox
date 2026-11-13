@@ -13,8 +13,8 @@ Evidence, not assertion. Every row needs a captured result.
 | 2 | Open the offer | Stake, price, split and expiry match the engine row exactly |
 | 3 | Start checkout | Stake is reserved; remaining drops by the amount |
 | 4 | Pay | Exactly one sale row is written |
-| 5 | Read MyStable | The stored PDF is served, its hash matches the sale row |
-| 6 | Check the investor's inbox | One combined PDF attachment arrived; both hashes in the body match the sale |
+| 5 | Read MyStable | The stored Investor Pack (PDS + SA) is served, and its hash matches the sale row |
+| 6 | Check the investor's inbox | One Investor Pack PDF attachment arrived; both hashes in the body match the sale |
 | 7 | Read the ledger | Sold, remaining, revenue and term end agree with the sale |
 
 ## The four refusals
@@ -30,7 +30,7 @@ Evidence, not assertion. Every row needs a captured result.
 
 - the sale row, exported
 - the ledger view for that series
-- the document hash and the document
+- the Investor Pack hash and the Investor Pack
 - the four refusal outputs
 - the exact commit the walk ran against
 

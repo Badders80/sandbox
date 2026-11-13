@@ -3,7 +3,8 @@
 **Status:** LOCKED 2026-11-11.
 
 This document defines the stake and the commercial model. It is not legal
-prose, an implementation plan, or a replacement for the executed PDS and SA.
+prose, an implementation plan, or a replacement for the executed Investor Pack
+(PDS + SA).
 
 ## Root requirement
 
@@ -11,6 +12,52 @@ prose, an implementation plan, or a replacement for the executed PDS and SA.
 > NZTR-registered horse, offered by Evolution Stables as an authorised
 > syndicator acting for the owner, in compliance with the Rules of Racing, and
 > receive a durable record of that interest.
+
+### Investor Pack — LOCKED 2026-11-13
+
+**Investor Pack = PDS + SA.**
+
+The Investor Pack is the single investor-facing PDF artifact. It contains the
+Product Disclosure Statement followed by the Syndicate Agreement. Use “Investor
+Pack” for the combined artifact in product copy, email, MyStable, support and
+operational documentation. Keep “PDS” and “SA” as the names of the two legal
+components and preserve their separate acceptance controls. Internal names such
+as `LegalPack` and `legal_pack_version` may remain where they describe legal
+compilation and versioning.
+
+#### PDF assembly — LOCKED 2026-11-13
+
+1. A formal cover page identifies the Investor Pack, contract, horse, investor,
+   dates and legal-pack version.
+2. One contents page identifies Section 1: Product Disclosure Statement and
+   Section 2: Syndicate Agreement, including every subsection and its actual PDF
+   page number.
+3. The PDS starts on a fresh page.
+4. The SA starts on another fresh page after the PDS.
+
+The page numbers on the contents page are generated from the final pagination,
+not maintained by hand.
+
+Body prose is justified; headings, bullets and table cells remain left-aligned.
+The document uses three hierarchy levels, restrained rules, a running section
+header and `Page N of M` page furniture.
+
+### Legal authority boundary — LOCKED 2026-11-13
+
+The authority chain has two distinct layers:
+
+1. **Owner → Evolution:** the Owner's lease and consent for Evolution to offer
+   fractional stakes are executed and managed outside this MVP. Their validity
+   and the listed commercial terms are assumed before a listing is entered.
+2. **Evolution → Investor:** this system owns the public offer, PDS/SA,
+   declarations, electronic acceptance, KYC gate, payment, sale snapshot,
+   Investor Pack, ledger, email and MyStable record.
+
+Before publishing a listing, an operator must record that the upstream
+Owner-to-Evolution authority check is complete, with who checked it, when, and
+an internal reference. The upstream contracts and diligence remain outside the
+application unless a later phase brings them in. The Investor Pack must not
+claim to prove the upstream lease or the Owner's title.
 
 A **stake** is one purchasable unit of that fractional leasehold interest.
 
@@ -238,16 +285,16 @@ The sale record should make the document, sale and money point to each other:
 
 - Generate a stable, unique contract ID before rendering and print it in both
   the PDS and SA. Do not derive it from mutable horse names or buyer details.
-- Compile the PDS and SA from the frozen sale snapshot and combine them into one
+- Compile the Investor Pack (PDS + SA) from the frozen sale snapshot into one
   PDF.
 - Store the SHA-256 hash of the exact combined PDF bytes on the sale. Store the
   template versions and sale snapshot identifiers with it.
 - Store the PDF in immutable object storage and record its object key on the
   sale.
-- Email the exact PDF as an attachment. Include the contract ID and document
-  hash in the email body.
-- Serve the exact stored bytes from MyStable. Never recompile a document for
-  historical display.
+- Email the exact Investor Pack as an attachment. Include the contract ID and
+  document hash in the email body.
+- Serve the exact stored Investor Pack bytes from MyStable. Never recompile a
+  document for historical display.
 - Write the contract ID, sale ID, hash, object key, template versions and
   creation time to an external archive manifest. Use the sale and contract IDs
   as the linkage; do not duplicate investor identity data in the manifest.
@@ -276,8 +323,8 @@ The external archive manifest contains exactly:
   is an input to eligibility, not a complete NZTR compliance decision.
 - **Local private vault:** server-only storage on local ext4 for retained
   investor records, KYC evidence where legally retained, accepted declarations,
-  and the exact executed PDS/SA PDFs. Directories are keyed by opaque account
-  and contract IDs, never by investor names.
+  and the exact executed Investor Packs (PDS + SA). Directories are keyed by
+  opaque account and contract IDs, never by investor names.
 - **Immutable second copy:** exact document bytes and the manifest mirrored to a
   separate non-overwriting location. A mutable local filesystem is not, by
   itself, WORM storage.
@@ -315,14 +362,15 @@ and NZTR eligibility obligation.
 - One horse, one offer, and one public sale page.
 - Horse points, minimum, increment, price, investor split, expiry, and
   remaining inventory.
-- PDS/SA compilation with aligned declarations and an explicit return formula.
+- Investor Pack (PDS + SA) compilation with aligned declarations and an explicit
+  return formula.
 - Eligibility and electronic acceptance gate.
 - Checkout reservation and no-oversell enforcement.
 - One compliant payment path.
 - Atomic, idempotent sale with an immutable sale snapshot.
 - A ledger that agrees with held, sold, and remaining points.
-- Combined PDS/SA PDF, both hashes, attachment delivery, and frozen-byte
-  retrieval.
+- Investor Pack PDF (PDS + SA), both hashes, attachment delivery, and
+  frozen-byte retrieval.
 - Recorded handling for paid-but-unfulfilled exceptions.
 
 ### Manual controls
@@ -362,8 +410,8 @@ The following must be corrected or explicitly accepted before a compliant sale:
 5. A stable contract ID must be printed and indexed.
 6. PDS/SA must explain the pro-rata purchase month and whole-month references
    using `Mon YYYY`.
-7. The combined PDF, email attachment, frozen-byte MyStable display, and
-   external archive must exist before the first sale.
+7. The Investor Pack (PDS + SA), email attachment, frozen-byte MyStable display,
+   and external archive must exist before the first sale.
 8. Subscription Float legal copy must state that the retained four months cover
    the last four months and that the balance reaches zero at expiry.
 9. The link-only email wording in `O-02` must be corrected. Investor-facing
