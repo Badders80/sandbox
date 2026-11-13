@@ -2,10 +2,26 @@
 
 > Shape (LOCKED): **Next action · State · Ledger · Blocked**. Chat is not storage.
 
-**Next action:** founder-walk V2 branch `landing-parity-2026-11-12`
-(code `5726a51`)
-using `mvp/audits/landing-parity-2026-11-12/EVIDENCE.md`; then decide integration
-and resume F1 before the F3 archive design.
+**Next action:** open
+`mvp/sessions/active/2026-11-13-marketplace-mystable.md` and begin the read-only
+production Marketplace audit from a clean website worktree based on
+`origin/dsl-sidequest`.
+
+## State — 2026-11-13
+
+- **Landing parity is merged and pushed** on `dsl-sidequest` at `03ea397`; the
+  founder accepted the result at desktop and mobile widths.
+- **Shared page foundation is locked and pushed** at `ade0cc3`: global
+  `ScrollReveal`, `--duration-reveal: 750ms`, `PageShell`, `PageContainer`,
+  `PageIntro`, `PageSection`, no page-level separator rule, and pathname-scoped
+  reveal re-arming.
+- Marketplace, Marketplace horse page and MyStable consume the shared
+  primitives. The next job is the production Marketplace audit and visual lock,
+  not implementation of the later surfaces.
+- Integrated gate: **402 engine passed / 1 skipped, 63 website passed**, both
+  builds.
+- Unrelated legal/checkout work remains uncommitted in the shared website
+  checkout. New website work must use an isolated worktree.
 
 ## State — 2026-11-12
 
@@ -35,6 +51,7 @@ and resume F1 before the F3 archive design.
 
 | date | what | repo | commit | state |
 |---|---|---|---|---|
+| 2026-11-13 | Landing merged; shared page foundation locked; next-session plan created | engine_v2/website / sandbox | `03ea397`, `ade0cc3`, this commit | done; pushed |
 | 2026-11-12 | V2 landing parity + final visual refinements | engine_v2/website | `c1ca04e`…`5726a51` | done; founder walk pending |
 | 2026-11-12 | wrap notes and branch publication | engine_v2/website | — | pushed |
 | 2026-11-11 | Images — checkout unblocked; placeholder dropped | engine_v2/website | `81b5f5d` | done |
@@ -44,8 +61,6 @@ and resume F1 before the F3 archive design.
 
 ## Blocked
 
-- **Landing parity:** founder visual walk at 1440 and 390, then integration
-  decision; no merge before that gate. Branch is already pushed.
 - **Cloudflare Access** on the engine host — `/sales` has no in-app auth; do not
   expose the host without it.
 - **F3** — external immutable document archive + manifest. **Priority.**
