@@ -39,7 +39,7 @@ contradiction is found.
 
 ## Read First
 
-1. `/home/evo/sandbox/rebuild/purchase-flow-v2-with-deck.html`
+1. `/home/evo/sandbox/mvp/audits/CHECKOUT-SOURCE-AUDIT-2026-11-13.md`
 2. `/home/evo/sandbox/mvp/CONTINUE.md`
 3. `/home/evo/sandbox/mvp/DOD.md`
 4. `/home/evo/sandbox/mvp/SCOPE.md`
@@ -47,6 +47,10 @@ contradiction is found.
 6. `/home/evo/evolution/engine_v2/website/website/src/components/BuyFlowModal.tsx`
 7. `/home/evo/evolution/engine_v2/website/engine/src/lib/purchase.ts`
 8. `/home/evo/evolution/engine_v2/website/supabase/migrations/00031_checkout_acceptance.sql`
+
+The source audit is the extraction boundary. Use the prototype as visual
+reference only; do not reopen legacy production or `sandbox/rebuild` to
+rediscover requirements.
 
 ## Required Review
 

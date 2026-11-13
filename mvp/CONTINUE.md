@@ -26,6 +26,11 @@ changing implementation.
   `sessions/active/2026-11-13-marketplace-mystable.md`. The next focused session
   is `sessions/active/2026-11-13-checkout-scroll-mapping.md`, which maps the
   checkout prototype and scroll locks to the persisted acceptance contract.
+- **Checkout source boundary is locked:** legacy production and
+  `sandbox/rebuild` are reference-only after
+  `audits/CHECKOUT-SOURCE-AUDIT-2026-11-13.md`. New checkout work starts from
+  that audit plus the current V2 contracts; no old component, legal copy,
+  fixture, price model or migration instruction is carried forward as debt.
 - **Marketplace Session 1 visual proof is built** on
   `marketplace-parity-2026-11-14` from `origin/dsl-sidequest` at `e74b725`.
   Mulan is the available lead card in a local six-card fixture; nothing was
@@ -145,6 +150,9 @@ KYC evidence and the full checkout/sale chain remain open.
   `audits/EVOLUTION-STABLES-MOTION-AUDIT-2026-11-12.html`.
 - [x] Audit and implement the Marketplace initial page as a local visual proof.
   Result: `audits/marketplace-parity-2026-11-14/EVIDENCE.md`.
+- [x] Audit legacy production checkout and `sandbox/rebuild`, extract only the
+  reusable behaviours, and freeze both old builds as reference-only. Result:
+  `audits/CHECKOUT-SOURCE-AUDIT-2026-11-13.md`.
 
 ## Ledger
 
@@ -177,6 +185,7 @@ KYC evidence and the full checkout/sale chain remain open.
 | 2026-11-13 | Legal authority boundary locked: upstream authority external and recorded at publish; Evolution-to-Investor in system | done |
 | 2026-11-13 | F1 acceptance persistence: immutable PDS/SA declarations, typed signature and checkout binding | done |
 | 2026-11-13 | Checkout scroll-mapping next-session plan created | ready |
+| 2026-11-13 | Checkout source audit and legacy/rebuild freeze created | done |
 | 2026-11-14 | Marketplace production audit and V2 local-fixture implementation | built; founder walk pending |
 | next | F1: contract ID plus executed date / selectable term-start mapping | ready |
 
