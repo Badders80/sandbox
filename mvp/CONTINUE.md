@@ -2,9 +2,21 @@
 
 > Shape: **Next action · State · Ledger · Blocked**.
 
-**Next action:** open `sessions/active/2026-11-13-checkout-scroll-mapping.md` and
-map the PDS/SA scroll locks and post-sale pack/email against the current checkout
-contracts before changing implementation.
+**Next action:** open
+`/home/evo/evolution/engine_v2/website/CONTINUE.md` and review Mulan's draft
+Investor Pack PDF page by page.
+
+## State — 2026-11-22
+
+- Mulan draft DSL `ff316bf4-dce2-4160-b502-c89b58adf632` is compiled locally
+  with Stephen Gray Racing as both trainer and owner.
+- Current locked Mulan terms: $60 wholesale / $65 retail per 1% per month, 5%
+  listed, 0.5% minimum, 0.5% step, 75% investor split, Subscription Float,
+  quarterly distributions, 14-day close style and Jun 2027 expiry.
+- The legal preview now renders a real 15-page Investor Pack PDF with cover,
+  indexed contents, PDS, SA and declarations. It displays the exact PDF hash,
+  page count and draft download; it writes no sale and stores no document.
+- Implementation lives in `engine_v2/website` at commit `8efdbeb`.
 
 ## State — 2026-11-13
 
@@ -165,6 +177,7 @@ KYC evidence and the full checkout/sale chain remain open.
 
 | date | what | state |
 |---|---|---|
+| 2026-11-22 | Mulan draft DSL, owner/trainer content and real Investor Pack PDF preview completed locally | done; `engine_v2/website@8efdbeb`; terms now 0.5% minimum and Jun 2027 expiry |
 | 2026-11-13 | Landing merged; shared V2 page foundation locked; Marketplace→MyStable next-session plan created | done; pushed (`03ea397`, `ade0cc3`) |
 | 2026-11-11 | MVP scope and DoD created | done |
 | 2026-11-11 | `MODEL.md` commercial/legal model locked | done |
@@ -200,8 +213,8 @@ KYC evidence and the full checkout/sale chain remain open.
 ## Blocked
 
 - **Commercial terms:** final Mulan values are saved: $60 wholesale / $65 retail
-  per 1% per month, 75% investor return, 5% listed, 1% minimum, 0.5% steps,
-  subscription float, 14-day break, quarterly distributions and Jun 2028 expiry.
+  per 1% per month, 75% investor return, 5% listed, 0.5% minimum, 0.5% steps,
+  subscription float, 14-day break, quarterly distributions and Jun 2027 expiry.
 - **Legally final documents:** current Rules source is not verified locally and
   the documents still require legal sign-off.
 - **KYC evidence:** proof-of-address and NZTR eligibility evidence are not yet
