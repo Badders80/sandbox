@@ -3,8 +3,16 @@
 > Shape: **Next action · State · Ledger · Blocked**.
 
 **Next action:** open
-`/home/evo/evolution/engine_v2/website/engine/public/soft-content-guide.md` and
-draft Hottathanafantasy's three missing PDS soft-content blocks.
+`/home/evo/evolution/engine_v2/website/CONTINUE.md` and re-enter the approved
+Hottathanafantasy soft-content blocks preserved there.
+
+## State — 2026-11-24
+
+- Hottathanafantasy's three soft-content blocks were founder-approved, but the
+  interrupted browser save did not reach the database. All three fields remain
+  null; the exact approved copy is preserved in the engine CONTINUE.
+- The other five horses have soft content. Totals remain six horses, three
+  trainer roles, two owner roles, one Published DSL and zero sales.
 
 ## State — 2026-11-23
 
@@ -196,6 +204,7 @@ KYC evidence and the full checkout/sale chain remain open.
 
 | date | what | state |
 |---|---|---|
+| 2026-11-24 | Wrap after interrupted Hottathanafantasy soft-content save | approved copy preserved; DB remains unfilled |
 | 2026-11-23 | I Stole A Manolo soft content approved and saved | done; 112 / 139 / 52 words |
 | 2026-11-23 | Six-horse local seed, canonical covers and approved First Gear soft content | done; one published DSL, zero sales; cloud replay pending |
 | 2026-11-23 | DSL lifecycle terminology wired through DSL list, term sheet, horse profile and sales ledger | done; `pnpm verify` passed, 434 engine tests / 1 skipped, 66 website tests, both builds |
