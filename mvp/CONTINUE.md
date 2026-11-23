@@ -4,7 +4,7 @@
 
 **Next action:** open
 `/home/evo/evolution/engine_v2/website/engine/public/soft-content-guide.md` and
-draft I Stole A Manolo's three missing PDS soft-content blocks.
+draft Hottathanafantasy's three missing PDS soft-content blocks.
 
 ## State — 2026-11-23
 
@@ -13,8 +13,9 @@ draft I Stole A Manolo's three missing PDS soft-content blocks.
   Prudentia.
 - Current role and listing counts: three trainer roles, two owner roles across
   four party rows, one **Published DSL** (Mulan), zero sales and zero checkouts.
-- First Gear's three soft-content paragraphs are founder-approved and saved.
-  Manolo and Hottathanafantasy still need soft content and DSLs.
+- First Gear's and Manolo's three soft-content paragraphs are founder-approved
+  and saved. Hottathanafantasy still needs soft content; both Manolo and
+  Hottathanafantasy still need DSLs.
 - Every horse's R2 image `01` is byte-identical to the production cover in
   `evolution/engine/website/apps/web/public/images/content/horses`; gallery
   counts and order are stored on the horse rows.
@@ -195,6 +196,7 @@ KYC evidence and the full checkout/sale chain remain open.
 
 | date | what | state |
 |---|---|---|
+| 2026-11-23 | I Stole A Manolo soft content approved and saved | done; 112 / 139 / 52 words |
 | 2026-11-23 | Six-horse local seed, canonical covers and approved First Gear soft content | done; one published DSL, zero sales; cloud replay pending |
 | 2026-11-23 | DSL lifecycle terminology wired through DSL list, term sheet, horse profile and sales ledger | done; `pnpm verify` passed, 434 engine tests / 1 skipped, 66 website tests, both builds |
 | 2026-11-22 | Mulan DSL, owner/trainer content and real Investor Pack PDF preview completed locally | done; `engine_v2/website@8efdbeb`; terms now 0.5% minimum and Jun 2027 expiry |
