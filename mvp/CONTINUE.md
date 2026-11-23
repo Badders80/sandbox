@@ -3,13 +3,31 @@
 > Shape: **Next action · State · Ledger · Blocked**.
 
 **Next action:** open
-`/home/evo/evolution/engine_v2/website/CONTINUE.md` and review Mulan's draft
-Investor Pack PDF page by page.
+`/home/evo/evolution/engine_v2/website/engine/public/soft-content-guide.md` and
+draft I Stole A Manolo's three missing PDS soft-content blocks.
+
+## State — 2026-11-23
+
+- The local V2 database now holds all six production horses: First Gear,
+  Hottathanafantasy, I Stole A Manolo, Lady Ketchikan, Mulan The Brave and
+  Prudentia.
+- Current role and listing counts: three trainer roles, two owner roles across
+  four party rows, one **Published DSL** (Mulan), zero sales and zero checkouts.
+- First Gear's three soft-content paragraphs are founder-approved and saved.
+  Manolo and Hottathanafantasy still need soft content and DSLs.
+- Every horse's R2 image `01` is byte-identical to the production cover in
+  `evolution/engine/website/apps/web/public/images/content/horses`; gallery
+  counts and order are stored on the horse rows.
+- The pilot operating rule is **one horse, one DSL**. No schema constraint is
+  being added for the deferred multi-owner case.
 
 ## State — 2026-11-22
 
-- Mulan draft DSL `ff316bf4-dce2-4160-b502-c89b58adf632` is compiled locally
+- Mulan DSL `ff316bf4-dce2-4160-b502-c89b58adf632` is compiled locally
   with Stephen Gray Racing as both trainer and owner.
+- Operator lifecycle terminology is locked: **DSL** is the assembled,
+  unpublished offer; **Published DSL** is live on the website; **Executed DSL**
+  means at least one completed investment has written a sale for that DSL.
 - Current locked Mulan terms: $60 wholesale / $65 retail per 1% per month, 5%
   listed, 0.5% minimum, 0.5% step, 75% investor split, Subscription Float,
   quarterly distributions, 14-day close style and Jun 2027 expiry.
@@ -177,7 +195,9 @@ KYC evidence and the full checkout/sale chain remain open.
 
 | date | what | state |
 |---|---|---|
-| 2026-11-22 | Mulan draft DSL, owner/trainer content and real Investor Pack PDF preview completed locally | done; `engine_v2/website@8efdbeb`; terms now 0.5% minimum and Jun 2027 expiry |
+| 2026-11-23 | Six-horse local seed, canonical covers and approved First Gear soft content | done; one published DSL, zero sales; cloud replay pending |
+| 2026-11-23 | DSL lifecycle terminology wired through DSL list, term sheet, horse profile and sales ledger | done; `pnpm verify` passed, 434 engine tests / 1 skipped, 66 website tests, both builds |
+| 2026-11-22 | Mulan DSL, owner/trainer content and real Investor Pack PDF preview completed locally | done; `engine_v2/website@8efdbeb`; terms now 0.5% minimum and Jun 2027 expiry |
 | 2026-11-13 | Landing merged; shared V2 page foundation locked; Marketplace→MyStable next-session plan created | done; pushed (`03ea397`, `ade0cc3`) |
 | 2026-11-11 | MVP scope and DoD created | done |
 | 2026-11-11 | `MODEL.md` commercial/legal model locked | done |
