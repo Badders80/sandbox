@@ -2,9 +2,23 @@
 
 > Shape: **Next action · State · Ledger · Blocked**.
 
-**Next action:** resume the MVP work queue — assemble Hottathanafantasy's DSL
-when commercial terms are ready, and merge `origin/website-visual-polish`
-(`63ff803`) into `dsl-sidequest` once the cloud Supabase migration completes.
+**Next action:** open the engine-v2 Chunk 6 result, then rerun the fixed
+`scripts/run-chunk.sh 6` durability proof; cloud Chunks 4 and 5 are already accepted.
+
+## State — 2026-11-25
+
+- **Cloud pilot accepted through Chunk 5.** Active pilot
+  `sjzhbssggonojtodcuzb` is healthy with 6 horses, 4 parties, 5 roles, 1
+  Published DSL, 0 sales and 0 checkouts. Chunk 4 passes 18/18 checks; Chunk 5
+  passes 27/27 including browser smoke, Mulan-only visibility, private-row denial,
+  disabled buying and a draft Investor Pack PDF.
+- **Chunk 6 is the current gate.** PITR and preview branches are unavailable on
+  the free plan, so the runner uses a logical data backup plus disposable project
+  `bnxytinikttypaxixemw`. The session was wrapped mid-proof; the pilot was
+  recovered and relinked, and the disposable project is paused.
+- Evidence and exact resume state:
+  `/home/evo/evolution/engine_v2/website/audits/cloud-supabase-pilot-2026-11-24/`.
+  Protected local checksum remains unchanged.
 
 ## State — 2026-11-24
 
@@ -223,6 +237,7 @@ KYC evidence and the full checkout/sale chain remain open.
 
 | date | what | state |
 |---|---|---|
+| 2026-11-25 | Cloud pilot Chunks 4–5 accepted; Chunk 6 durability proof wrapped mid-run | Chunk 5 PASS 27/27; pilot healthy; Chunk 6 blocked pending rerun; engine-v2 handoff `bb242a5` |
 | 2026-11-24 | V2 Marketplace & horse-page production visual alignment, 4-gen pedigree tree, global `DESIGN.md` Rules 26–27 & `.listing-aperture` | done; `origin/website-visual-polish` (`63ff803`, `aeedb15`); `pnpm verify` exit 0 (73 website tests, both builds); awaiting merge to `dsl-sidequest` post cloud DB migration |
 | 2026-11-24 | Hottathanafantasy soft content founder-approved and saved | done locally; 105 / 127 / 58 words; hosted replay pending |
 | 2026-11-24 | Wrap after interrupted Hottathanafantasy soft-content save | approved copy preserved; DB remains unfilled |
@@ -264,10 +279,13 @@ KYC evidence and the full checkout/sale chain remain open.
 
 ## Blocked
 
+- **Cloud durability proof is incomplete.** Chunk 6 must rerun from the fixed
+  data-only restore path. Do not start Chunk 7 or claim the cloud pilot durable
+  until Chunk 6 passes and is accepted.
 - **V2 website merge & live Trainer tab:** merge `origin/website-visual-polish`
-  (`63ff803`) into `dsl-sidequest` after cloud Supabase migration completes;
+  (`63ff803`) into `dsl-sidequest` once the founder accepts the cloud pilot gate;
   Trainer tab uses a clean placeholder until an `anon` read policy is added on
-  public `parties` fields.
+  public `parties` fields. Cloud migration replay and Chunk 5 are complete.
 - **Commercial terms:** final Mulan values are saved: $60 wholesale / $65 retail
   per 1% per month, 75% investor return, 5% listed, 0.5% minimum, 0.5% steps,
   subscription float, 14-day break, quarterly distributions and Jun 2027 expiry.
