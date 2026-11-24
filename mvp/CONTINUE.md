@@ -2,15 +2,34 @@
 
 > Shape: **Next action · State · Ledger · Blocked**.
 
-**Next action:** open
-`/home/evo/evolution/engine_v2/website/CONTINUE.md` and re-enter the approved
-Hottathanafantasy soft-content blocks preserved there.
+**Next action:** resume the MVP work queue — assemble Hottathanafantasy's DSL
+when commercial terms are ready, and merge `origin/website-visual-polish`
+(`63ff803`) into `dsl-sidequest` once the cloud Supabase migration completes.
 
 ## State — 2026-11-24
 
-- Hottathanafantasy's three soft-content blocks were founder-approved, but the
-  interrupted browser save did not reach the database. All three fields remain
-  null; the exact approved copy is preserved in the engine CONTINUE.
+- **V2 website visual alignment committed & pushed on `origin/website-visual-polish`**
+  (`63ff803`, wrap `aeedb15`, worktree
+  `/home/evo/evolution/engine_v2-worktrees/website-visual-polish`):
+  `/marketplace` and `/marketplace/[slug]` now render production visual parity
+  on live `dsls` -> `horses!inner` reads (`.listing-aperture` /
+  `.listing-aperture-stage` fluid-width fixed-height card window, zero-to-four
+  `rounded-pill` highlight tags, `shadow-card-hover` lift, stretched
+  single-anchor click-through, `HorseGallery` with brightness-only active
+  thumbnails, untruncated 5-fact strip, live 15-node 4-gen `PedigreeTree`, live
+  `race_record`, reactive `flex-wrap` detail tabs with zero scrollbars, sticky
+  desktop `HorseOfferRail`, and fixed mobile conversion bar). Gate:
+  `pnpm run verify` exit 0 (all 8 assert scripts, 73 website tests, both builds).
+  Zero `supabase/` or `engine/` changes; zero conflicts with `dsl-sidequest`.
+- **Single global `DESIGN.md` seam locked:**
+  `/home/evo/evolution/engine_v2/website/website/DESIGN.md` (updated through
+  Rules 26–27 on `website-visual-polish`) is the **sole** V2 design authority.
+  Do not create duplicate `DESIGN.md` files or copy from reference-only
+  `/home/evo/audit/website/`. Global visual behaviours live in `website/DESIGN.md`
+  and `website/src/app/globals.css`, and are pinned in
+  `website/tests/page-foundation.test.ts`.
+- Hottathanafantasy's three soft-content blocks are founder-approved and saved
+  in the local V2 database. The saved fields match the approved source hashes.
 - The other five horses have soft content. Totals remain six horses, three
   trainer roles, two owner roles, one Published DSL and zero sales.
 
@@ -204,6 +223,8 @@ KYC evidence and the full checkout/sale chain remain open.
 
 | date | what | state |
 |---|---|---|
+| 2026-11-24 | V2 Marketplace & horse-page production visual alignment, 4-gen pedigree tree, global `DESIGN.md` Rules 26–27 & `.listing-aperture` | done; `origin/website-visual-polish` (`63ff803`, `aeedb15`); `pnpm verify` exit 0 (73 website tests, both builds); awaiting merge to `dsl-sidequest` post cloud DB migration |
+| 2026-11-24 | Hottathanafantasy soft content founder-approved and saved | done locally; 105 / 127 / 58 words; hosted replay pending |
 | 2026-11-24 | Wrap after interrupted Hottathanafantasy soft-content save | approved copy preserved; DB remains unfilled |
 | 2026-11-23 | I Stole A Manolo soft content approved and saved | done; 112 / 139 / 52 words |
 | 2026-11-23 | Six-horse local seed, canonical covers and approved First Gear soft content | done; one published DSL, zero sales; cloud replay pending |
@@ -243,6 +264,10 @@ KYC evidence and the full checkout/sale chain remain open.
 
 ## Blocked
 
+- **V2 website merge & live Trainer tab:** merge `origin/website-visual-polish`
+  (`63ff803`) into `dsl-sidequest` after cloud Supabase migration completes;
+  Trainer tab uses a clean placeholder until an `anon` read policy is added on
+  public `parties` fields.
 - **Commercial terms:** final Mulan values are saved: $60 wholesale / $65 retail
   per 1% per month, 75% investor return, 5% listed, 0.5% minimum, 0.5% steps,
   subscription float, 14-day break, quarterly distributions and Jun 2027 expiry.
